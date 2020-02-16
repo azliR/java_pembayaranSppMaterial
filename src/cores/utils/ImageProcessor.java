@@ -12,6 +12,11 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -83,5 +88,17 @@ public class ImageProcessor {
         buffImage.getGraphics().drawImage(img, 0, 0, null);
 
         return buffImage;
+    }
+
+    public static File imageToFile(Image image) {
+        try {
+            File resizedImageFile = new File(System.getProperty("user.dir") + "/bin.png");
+            ImageIO.write(toBufferedImage(image), "png", resizedImageFile);
+
+            return resizedImageFile;
+        } catch (IOException ex) {
+            Logger.getLogger(ImageProcessor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }

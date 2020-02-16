@@ -2,10 +2,10 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="pembayaran_sppPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>features.auth.entities.Petugas</class>
-    <class>features.student.entities.Siswa</class>
-    <class>features.student.entities.Spp</class>
-    <class>features.student.entities.Kelas</class>
+    <class>features.student.data.entities.Kelas</class>
+    <class>features.student.data.entities.Siswa</class>
+    <class>features.student.data.entities.Spp</class>
+    <class>features.auth.data.entities.Petugas</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/pembayaran_spp?zeroDateTimeBehavior=CONVERT_TO_NULL&amp;serverTimezone=UTC"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

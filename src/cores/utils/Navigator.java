@@ -16,6 +16,13 @@ public class Navigator {
         MainFrame.content.revalidate();
     }
 
+    public static void push(JPanel content, JPanel page) {
+        content.removeAll();
+        content.add(page);
+        content.repaint();
+        content.revalidate();
+    }
+
     public static void push(JPanel page, boolean isBarVisible) {
         MainFrame.sideBar.setVisible(isBarVisible);
         MainFrame.topBar.setVisible(isBarVisible);

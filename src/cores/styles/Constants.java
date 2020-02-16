@@ -13,6 +13,8 @@ public class Constants {
 
     public static final int BORDER_RADIUS = 8;
     public static final int MEDIUM_BORDER_RADIUS = 16;
+    public static final int LARGE_BORDER_RADIUS = 24;
+    public static final int XLARGE_BORDER_RADIUS = 36;
     public static final int SIDEBAR_RADIUS = 48;
 
     public static final int[] ZERO_BORDER_INSETS = {0, 0, 0, 0};

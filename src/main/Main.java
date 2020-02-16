@@ -2,10 +2,16 @@ package main;
 
 import cores.connection.PersistenceManager;
 import cores.styles.Fonts;
-import features.auth.entities.PetugasJpaController;
-import features.auth.repositories.AuthRepositoryImpl;
-import features.student.entities.SiswaJpaController;
-import features.student.repositories.SiswaRepositoryImpl;
+import features.auth.data.datasources.AuthRemoteDataSource;
+import features.auth.data.datasources.AuthRemoteDataSourceImpl;
+import features.auth.data.repositories.AuthRepository;
+import features.auth.data.repositories.AuthRepositoryImpl;
+import features.student.data.datasources.SiswaLocalDataSource;
+import features.student.data.datasources.SiswaLocalDataSourceImpl;
+import features.student.data.datasources.SiswaRemoteDataSource;
+import features.student.data.datasources.SiswaRemoteDataSourceImpl;
+import features.student.data.repositories.SiswaRepository;
+import features.student.data.repositories.SiswaRepositoryImpl;
 import javax.persistence.EntityManagerFactory;
 
 /**
@@ -13,22 +19,31 @@ import javax.persistence.EntityManagerFactory;
  * @author rizal
  */
 public class Main {
-
     public static EntityManagerFactory entityManagerFactory;
-    public static PetugasJpaController petugasJpaController;
-    public static SiswaJpaController siswaJpaController;
-    public static AuthRepositoryImpl authRepositoryImpl;
-    public static SiswaRepositoryImpl siswaRepositoryImpl;
+
+    public static AuthRemoteDataSource authRemoteDataSource;
+    public static SiswaLocalDataSource siswaLocalDataSource;
+    public static SiswaRemoteDataSource siswaRemoteDataSource;
+
+    public static AuthRepository authRepository;
+    public static SiswaRepository siswaRepository;
 
     public static void main(String[] args) {
         Fonts.registerFont(Main.class);
 
-        entityManagerFactory = PersistenceManager.instance.getEntityManagerFactory();
-        petugasJpaController = new PetugasJpaController(entityManagerFactory);
-        siswaJpaController = new SiswaJpaController(entityManagerFactory);
-        authRepositoryImpl = new AuthRepositoryImpl(petugasJpaController);
-        siswaRepositoryImpl = new SiswaRepositoryImpl(siswaJpaController);
+        entityManagerFactory = PersistenceManager.instance
+                .getEntityManagerFactory();
 
-        new MainFrame(authRepositoryImpl, siswaRepositoryImpl).setVisible(true);
+        authRemoteDataSource
+                = new AuthRemoteDataSourceImpl(entityManagerFactory);
+        siswaLocalDataSource = new SiswaLocalDataSourceImpl();
+        siswaRemoteDataSource = new SiswaRemoteDataSourceImpl(
+                entityManagerFactory);
+
+        authRepository = new AuthRepositoryImpl(authRemoteDataSource);
+        siswaRepository = new SiswaRepositoryImpl(siswaRemoteDataSource,
+                siswaLocalDataSource);
+
+        new MainFrame(authRepository, siswaRepository).setVisible(true);
     }
 }
