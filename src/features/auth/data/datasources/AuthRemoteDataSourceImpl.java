@@ -1,8 +1,9 @@
 package features.auth.data.datasources;
 
+import cores.entities.Petugas;
+import cores.entities.Petugas_;
 import cores.exceptions.ServerException;
 import cores.styles.Strings;
-import features.auth.data.entities.Petugas;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 
@@ -26,9 +27,11 @@ public class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
             final var criteriaQuery = criteriaBuilder.createQuery(Petugas.class);
             final var root = criteriaQuery.from(Petugas.class);
             criteriaQuery.select(root);
-            criteriaQuery.where(criteriaBuilder.equal(root.get("namaPengguna"),
+            criteriaQuery.where(criteriaBuilder.equal(root.get(
+                    Petugas_.namaPengguna),
                     namaPengguna));
-            criteriaQuery.where(criteriaBuilder.equal(root.get("kataSandi"),
+            criteriaQuery.where(criteriaBuilder.equal(root.get(
+                    Petugas_.kataSandi),
                     kataSandi));
             TypedQuery<Petugas> q = entityManager.createQuery(criteriaQuery);
 
@@ -37,7 +40,7 @@ public class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
             }
             return q.getSingleResult();
         } catch (Exception ex) {
-            throw new ServerException(Strings.ERROR_DIALOG_CONNECTION_MESSAGE,
+            throw new ServerException(Strings.ERROR_DIALOG_CONNECTION,
                     ex);
         } finally {
             entityManager.close();

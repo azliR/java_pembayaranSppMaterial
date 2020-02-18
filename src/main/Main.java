@@ -6,12 +6,12 @@ import features.auth.data.datasources.AuthRemoteDataSource;
 import features.auth.data.datasources.AuthRemoteDataSourceImpl;
 import features.auth.data.repositories.AuthRepository;
 import features.auth.data.repositories.AuthRepositoryImpl;
-import features.student.data.datasources.SiswaLocalDataSource;
-import features.student.data.datasources.SiswaLocalDataSourceImpl;
-import features.student.data.datasources.SiswaRemoteDataSource;
-import features.student.data.datasources.SiswaRemoteDataSourceImpl;
-import features.student.data.repositories.SiswaRepository;
-import features.student.data.repositories.SiswaRepositoryImpl;
+import features.siswa.data.datasources.SiswaLocalDataSource;
+import features.siswa.data.datasources.SiswaLocalDataSourceImpl;
+import features.siswa.data.datasources.SiswaRemoteDataSource;
+import features.siswa.data.datasources.SiswaRemoteDataSourceImpl;
+import features.siswa.data.repositories.SiswaRepository;
+import features.siswa.data.repositories.SiswaRepositoryImpl;
 import javax.persistence.EntityManagerFactory;
 
 /**

@@ -9,9 +9,6 @@ import javax.swing.JOptionPane;
  */
 public class AlertDialog {
 
-    private AlertDialog() {
-    }
-
     public static void showErrorDialog(String message) {
         JOptionPane.showMessageDialog(
                 null,
@@ -28,5 +25,8 @@ public class AlertDialog {
                 title,
                 JOptionPane.INFORMATION_MESSAGE
         );
+    }
+
+    private AlertDialog() {
     }
 }

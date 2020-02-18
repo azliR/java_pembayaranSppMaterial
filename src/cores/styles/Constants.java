@@ -18,6 +18,9 @@ public class Constants {
     public static final int SIDEBAR_RADIUS = 48;
 
     public static final int[] ZERO_BORDER_INSETS = {0, 0, 0, 0};
-    public static final int[] LIGHT_BORDER_INSETS = {2, 8, 2, 8};
+    public static final int[] ALL_4_BORDER_INSETS = {4, 4, 4, 4};
+    public static final int[] ALL_8_BORDER_INSETS = {8, 8, 8, 8};
 
+    private Constants() {
+    }
 }

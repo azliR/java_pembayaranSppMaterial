@@ -33,4 +33,7 @@ public class Navigator {
         MainFrame.content.repaint();
         MainFrame.content.revalidate();
     }
+
+    private Navigator() {
+    }
 }

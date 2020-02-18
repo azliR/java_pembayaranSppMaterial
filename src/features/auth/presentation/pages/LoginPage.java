@@ -40,10 +40,18 @@ public class LoginPage extends javax.swing.JPanel {
 
         jPanel1.setBackground(Colors.BACKGROUND_COLOR);
         jPanel1.setForeground(new java.awt.Color(104, 87, 176));
+        jPanel1.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                jPanel1ComponentResized(evt);
+            }
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                jPanel1ComponentShown(evt);
+            }
+        });
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jPanel4.setBackground(Colors.CARD_COLOR);
-        jPanel4.setBorder(new RoundedBorder(12, Constants.LIGHT_BORDER_INSETS, Colors.BORDER_COLOR));
+        jPanel4.setBorder(new RoundedBorder(12, Constants.ALL_8_BORDER_INSETS, Colors.BORDER_COLOR));
         jPanel4.setPreferredSize(new java.awt.Dimension(460, 540));
 
         b_login.setBackground(Colors.PRIMARY_COLOR);
@@ -160,6 +168,14 @@ public class LoginPage extends javax.swing.JPanel {
     private void et_kataSandiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_et_kataSandiActionPerformed
         b_login.doClick();
     }//GEN-LAST:event_et_kataSandiActionPerformed
+
+    private void jPanel1ComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jPanel1ComponentResized
+        et_namaPengguna.requestFocus();
+    }//GEN-LAST:event_jPanel1ComponentResized
+
+    private void jPanel1ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jPanel1ComponentShown
+        System.out.println(getHeight());
+    }//GEN-LAST:event_jPanel1ComponentShown
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton b_login;

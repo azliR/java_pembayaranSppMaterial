@@ -9,8 +9,8 @@ import cores.widgets.a_SideNavigation;
 import features.auth.data.repositories.AuthRepository;
 import features.auth.presentation.pages.LoginPage;
 import features.home.pages.HomePage;
-import features.student.data.repositories.SiswaRepository;
-import features.student.presentation.pages.WrapperStudent;
+import features.siswa.data.repositories.SiswaRepository;
+import features.siswa.presentation.pages.WrapperStudent;
 import java.awt.Frame;
 import javax.swing.JFrame;
 
@@ -159,7 +159,7 @@ public class MainFrame extends javax.swing.JFrame {
         nav_laporan.setBackground(Colors.BACKGROUND_COLOR);
         sideBarGroup.add(nav_laporan);
         nav_laporan.setForeground(Colors.GREY_TEXT_COLOR);
-        nav_laporan.setText("Laporan");
+        nav_laporan.setText("Siswa");
         nav_laporan.setBorder(null);
         nav_laporan.setIconTextGap(20);
         nav_laporan.addActionListener(new java.awt.event.ActionListener() {
@@ -196,9 +196,9 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(111, 112, 112));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_magnify.png"))); // NOI18N
 
-        et_search.setFont(Fonts.GOOGLE_SANS.deriveFont(17f));
+        et_search.setFont(Fonts.GOOGLE_SANS.deriveFont(16f));
         et_search.setForeground(Colors.GREY_TEXT_COLOR);
-        et_search.setText("Telusuri Pesanan");
+        et_search.setText("Cari Siswa dan mulai pembayaran");
         et_search.setBorder(null);
         et_search.setOpaque(false);
         et_search.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -237,7 +237,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jSeparator1.setForeground(Colors.BORDER_COLOR);
 
-        jLabel2.setFont(Fonts.PRODUCT_SANS_REGULAR.deriveFont(30f)
+        jLabel2.setFont(Fonts.PRODUCT_SANS_REGULAR.deriveFont(24f)
         );
         jLabel2.setForeground(Colors.TEXT_COLOR);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/a_ logo.png"))); // NOI18N

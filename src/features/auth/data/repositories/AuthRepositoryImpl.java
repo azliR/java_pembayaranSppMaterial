@@ -14,9 +14,11 @@ import java.util.logging.Logger;
  * @author rizal
  */
 public class AuthRepositoryImpl implements AuthRepository {
+    private static final Logger LOG
+            = Logger.getLogger(AuthRepositoryImpl.class.getName());
 
     final AuthRemoteDataSource authRemoteDataSource;
-    
+
     public AuthRepositoryImpl(AuthRemoteDataSource authRemoteDataSource) {
         this.authRemoteDataSource = authRemoteDataSource;
     }
@@ -29,13 +31,11 @@ public class AuthRepositoryImpl implements AuthRepository {
             if (result != null) {
                 Navigator.push(new HomePage(), true);
             } else {
-                AlertDialog.showErrorDialog(
-                        Strings.ERROR_DIALOG_WRONG_PASSWORD_MESSAGE);
+                AlertDialog.showErrorDialog(Strings.ERROR_DIALOG_WRONG_PASSWORD);
             }
         } catch (ServerException ex) {
             AlertDialog.showErrorDialog(ex.getMessage());
-            Logger.getLogger(AuthRepositoryImpl.class.getName()).log(
-                    Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         }
     }
 }

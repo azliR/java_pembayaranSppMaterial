@@ -1,7 +1,7 @@
 package features.auth.data.datasources;
 
+import cores.entities.Petugas;
 import cores.exceptions.ServerException;
-import features.auth.data.entities.Petugas;
 
 /**
  *
