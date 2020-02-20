@@ -8,7 +8,6 @@ import features.siswa.presentation.widgets.SiswaTile;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.ImageIcon;
 import main.MainFrame;
 
 /**
@@ -28,15 +27,14 @@ public class ListSiswaPage extends javax.swing.JPanel {
     public boolean isLasIndex = false;
     public int currentIndex = 0;
 
-    public ListSiswaPage(SiswaRepository siswaRepository) {
-        this.repository = siswaRepository;
+    public ListSiswaPage(SiswaRepository repository) {
+        this.repository = repository;
         initComponents();
         init();
     }
 
     private void init() {
-        final var screenHeigth
-                = Toolkit.getDefaultToolkit().getScreenSize().height;
+        final var screenHeigth = Toolkit.getDefaultToolkit().getScreenSize().height;
         final var appBarHeight = screenHeigth - MainFrame.content.getHeight();
 
         scrollPane.getVerticalScrollBar().addAdjustmentListener((e) -> {
@@ -47,21 +45,17 @@ public class ListSiswaPage extends javax.swing.JPanel {
             final var loadingArea = max - extent - 20;
 
             if (e.getValue() > loadingArea && !isLoading) {
-                repository.getListSiswaWithoutThumbnail(
+                repository.initListSiswaWithoutThumbnail(
                         this, maxResult, currentIndex);
             }
 
-            listSiswaTiles.forEach((siswaTiles) -> {
-                final var location = siswaTiles.getLocationOnScreen().y
+            listSiswaTiles.forEach((siswaTile) -> {
+                final var location = siswaTile.getLocationOnScreen().y
                         - appBarHeight - 49;
 
-                if (siswaTiles.siswa.getFoto() == null && location >= 0
+                if (siswaTile.siswa.getFoto() == null && location >= 0
                         && location <= screenHeigth) {
-                    final var foto = repository.getSiswaThumbnail(
-                            siswaTiles.siswa.getNisn());
-                    siswaTiles.tv_image.setIcon(new ImageIcon(foto));
-                    siswaTiles.siswa.setFoto(foto);
-                    siswaTiles.setFoto(foto);
+                    repository.initSiswaThumbnail(siswaTile);
                 }
             });
         });

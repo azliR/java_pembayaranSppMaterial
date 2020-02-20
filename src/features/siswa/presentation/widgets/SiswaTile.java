@@ -7,6 +7,7 @@ import cores.styles.Fonts;
 import cores.utils.ImageProcessor;
 import cores.widgets.RoundedBorder;
 import cores.widgets.RoundedPanel;
+import features.siswa.data.repositories.SiswaRepository;
 import java.awt.image.BufferedImageOp;
 import javax.swing.ImageIcon;
 import org.imgscalr.Scalr;
@@ -18,10 +19,13 @@ import org.imgscalr.Scalr;
 public class SiswaTile extends RoundedPanel {
     private static final long serialVersionUID = 1L;
 
+    private final SiswaRepository repository;
     public final Siswa siswa;
 
-    public SiswaTile(Siswa siswa) {
+    public SiswaTile(SiswaRepository repository,
+            Siswa siswa) {
         super(Constants.MEDIUM_BORDER_RADIUS);
+        this.repository = repository;
         this.siswa = siswa;
         initComponents();
         init();
@@ -31,9 +35,9 @@ public class SiswaTile extends RoundedPanel {
         if (siswa.getFoto() != null) {
             setFoto(siswa.getFoto());
         }
-        tv_namaBarang.setText(siswa.getNama());
+        tv_namaSiswa.setText("<html>" + siswa.getNama() + "</html>");
         tv_nisn.setText(siswa.getNisn());
-        tv_bulanIni.setText(siswa.getBulanIni());
+        tv_bulanIni.setText(siswa.getSppBulanIni());
     }
 
     public void setFoto(byte[] foto) {
@@ -41,17 +45,15 @@ public class SiswaTile extends RoundedPanel {
         final var maxHeight = 120;
 
         var image = ImageProcessor.byteArrayToBufferedImage(foto);
-        if (image.getWidth(null) > maxWidth || image.getHeight(null)
-                > maxHeight) {
+        if (image.getWidth(null) > maxWidth
+                || image.getHeight(null) > maxHeight) {
             image = Scalr.resize(image, Scalr.Mode.FIT_TO_WIDTH, maxWidth,
-                    maxHeight,
-                    (BufferedImageOp) null);
+                    maxHeight, (BufferedImageOp) null);
         }
         final var croppedImage = Scalr.crop(image, maxWidth, maxHeight,
                 (BufferedImageOp) null);
         final var roundedImage = ImageProcessor.roundImage(
-                croppedImage,
-                Constants.MEDIUM_BORDER_RADIUS);
+                croppedImage, Constants.MEDIUM_BORDER_RADIUS);
 
         tv_image.setIcon(new ImageIcon(roundedImage));
     }
@@ -63,7 +65,7 @@ public class SiswaTile extends RoundedPanel {
                 Constants.MEDIUM_BORDER_RADIUS,
                 Constants.ALL_4_BORDER_INSETS,
                 isSelected ? Colors.ACTIVE_BORDER_COLOR : Colors.BORDER_COLOR));
-        tv_namaBarang.setForeground(isSelected ? Colors.ACTIVE_TEXT_COLOR
+        tv_namaSiswa.setForeground(isSelected ? Colors.ACTIVE_TEXT_COLOR
                 : Colors.TEXT_COLOR);
     }
 
@@ -72,7 +74,7 @@ public class SiswaTile extends RoundedPanel {
     private void initComponents() {
 
         tv_image = new javax.swing.JLabel();
-        tv_namaBarang = new javax.swing.JLabel();
+        tv_namaSiswa = new javax.swing.JLabel();
         tv_nisn = new javax.swing.JLabel();
         jTextView = new javax.swing.JLabel();
         tv_bulanIni = new javax.swing.JLabel();
@@ -99,10 +101,10 @@ public class SiswaTile extends RoundedPanel {
     tv_image.setIconTextGap(0);
     tv_image.setMaximumSize(new java.awt.Dimension(260, 140));
 
-    tv_namaBarang.setFont(Fonts.ROBOTO_MEDIUM.deriveFont(16f)
+    tv_namaSiswa.setFont(Fonts.ROBOTO_MEDIUM.deriveFont(16f)
     );
-    tv_namaBarang.setForeground(Colors.TEXT_COLOR);
-    tv_namaBarang.setText("Rizal Hadiyansah");
+    tv_namaSiswa.setForeground(Colors.TEXT_COLOR);
+    tv_namaSiswa.setText("Rizal Hadiyansah");
 
     tv_nisn.setFont(Fonts.ROBOTO_REGULAR.deriveFont(14f)
     );
@@ -125,28 +127,28 @@ public class SiswaTile extends RoundedPanel {
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(layout.createSequentialGroup()
             .addComponent(tv_image, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(24, 24, 24)
+            .addGap(16, 16, 16)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(tv_nisn)
-                .addComponent(tv_namaBarang)
+                .addComponent(tv_namaSiswa)
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(jTextView)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(tv_bulanIni)))
-            .addContainerGap(233, Short.MAX_VALUE))
+            .addContainerGap(241, Short.MAX_VALUE))
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
             .addGap(12, 12, 12)
-            .addComponent(tv_namaBarang)
+            .addComponent(tv_namaSiswa)
             .addGap(8, 8, 8)
             .addComponent(tv_nisn)
-            .addGap(22, 22, 22)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jTextView)
                 .addComponent(tv_bulanIni))
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGap(20, 20, 20))
         .addGroup(layout.createSequentialGroup()
             .addComponent(tv_image, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(0, 0, Short.MAX_VALUE))
@@ -172,14 +174,14 @@ public class SiswaTile extends RoundedPanel {
     }//GEN-LAST:event_formMouseExited
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-
+        repository.initDetailSiswa(siswa.getNisn());
     }//GEN-LAST:event_formMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jTextView;
     private javax.swing.JLabel tv_bulanIni;
     public javax.swing.JLabel tv_image;
-    private javax.swing.JLabel tv_namaBarang;
+    private javax.swing.JLabel tv_namaSiswa;
     private javax.swing.JLabel tv_nisn;
     // End of variables declaration//GEN-END:variables
 }

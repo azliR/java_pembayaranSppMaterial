@@ -17,6 +17,8 @@ public interface SiswaRemoteDataSource {
 
     public abstract byte[] getSiswaThumbnail(String nisn) throws ServerException;
 
+    public abstract Siswa getSiswa(String nisn) throws ServerException;
+
     public abstract List<Kelas> getListKelas() throws ServerException;
 
     public abstract List<Spp> getListSpp() throws ServerException;

@@ -26,6 +26,14 @@ public class Strings {
     public static final String SUCCESS_DIALOG_DEFAULT = "Berhasil";
     public static final String SUCCESS_DIALOG_INSERT = "Data berhasil disimpan!";
 
+    public static final char DATABASE_JENIS_KELAMIN_L = 'L';
+    public static final char DATABASE_JENIS_KELAMIN_P = 'p';
+    public static final String DATABASE_BELUM_DIBAYAR = "Belum dibayar";
+    public static final String DATABASE_TELAH_DIBAYAR = "Telah dibayar";
+
+    public static final String LAKI_LAKI = "Laki-laki";
+    public static final String PEREMPUAN = "Perempuan";
+
     private Strings() {
     }
 }

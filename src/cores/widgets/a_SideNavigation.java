@@ -9,7 +9,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.Collections;
-import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -21,11 +20,19 @@ import main.MainFrame;
  * @author a_lpha
  */
 public class a_SideNavigation extends JRadioButton {
+    private static final long serialVersionUID = 1L;
 
     private final int borderRadius = Constants.SIDEBAR_RADIUS;
 
+    private final ButtonGroup sideBarGroup;
+
     public a_SideNavigation(ButtonGroup sideBarGroup) {
         super();
+        this.sideBarGroup = sideBarGroup;
+        init();
+    }
+
+    private void init() {
         setCursor(new Cursor(Cursor.HAND_CURSOR));
         setContentAreaFilled(false);
         setOpaque(false);
@@ -35,7 +42,8 @@ public class a_SideNavigation extends JRadioButton {
         setFont(Fonts.ROBOTO_MEDIUM.deriveFont(13f));
         setBorder(BorderFactory.createMatteBorder(0, 36, 0, 0, getBackground()));
         addActionListener((e) -> {
-            List<AbstractButton> listButtons = Collections.list(sideBarGroup.getElements());
+            final var listButtons = Collections.list(sideBarGroup
+                    .getElements());
 
             listButtons.forEach((button) -> {
                 setColor(button);
@@ -46,7 +54,8 @@ public class a_SideNavigation extends JRadioButton {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 if (!isSelected()) {
                     setBackground(Colors.GREY_BACKGROUND_COLOR);
-                    setBorder(BorderFactory.createMatteBorder(0, 36, 0, 0, Colors.GREY_BACKGROUND_COLOR));
+                    setBorder(BorderFactory.createMatteBorder(0, 36, 0, 0,
+                            Colors.GREY_BACKGROUND_COLOR));
                 }
             }
 
@@ -54,7 +63,8 @@ public class a_SideNavigation extends JRadioButton {
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 if (!isSelected()) {
                     setBackground(Colors.BACKGROUND_COLOR);
-                    setBorder(BorderFactory.createMatteBorder(0, 36, 0, 0, Colors.BACKGROUND_COLOR));
+                    setBorder(BorderFactory.createMatteBorder(0, 36, 0, 0,
+                            Colors.BACKGROUND_COLOR));
                 }
             }
         });
@@ -65,12 +75,14 @@ public class a_SideNavigation extends JRadioButton {
             MainFrame.tv_title.setText(button.getText());
             button.setForeground(Colors.ACTIVE_TEXT_COLOR);
             button.setBackground(Colors.BLUE_BACKGROUND_COLOR);
-            button.setBorder(BorderFactory.createMatteBorder(0, 36, 0, 0, Colors.BLUE_BACKGROUND_COLOR));
+            button.setBorder(BorderFactory.createMatteBorder(0, 36, 0, 0,
+                    Colors.BLUE_BACKGROUND_COLOR));
 
         } else {
             button.setForeground(Colors.GREY_TEXT_COLOR);
             button.setBackground(Colors.BACKGROUND_COLOR);
-            button.setBorder(BorderFactory.createMatteBorder(0, 36, 0, 0, Colors.BACKGROUND_COLOR));
+            button.setBorder(BorderFactory.createMatteBorder(0, 36, 0, 0,
+                    Colors.BACKGROUND_COLOR));
         }
     }
 
@@ -78,10 +90,13 @@ public class a_SideNavigation extends JRadioButton {
     protected void paintComponent(Graphics g) {
         Dimension arcs = new Dimension(borderRadius, borderRadius);
         Graphics2D graphics = (Graphics2D) g;
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
 
         graphics.setColor(getBackground());
-        graphics.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, arcs.width, arcs.height);
+        graphics
+                .fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, arcs.width,
+                        arcs.height);
         graphics.setColor(getForeground());
         super.paintComponent(g);
     }

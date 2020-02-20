@@ -36,8 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
             = "SELECT p FROM Petugas p WHERE p.namaPetugas = :namaPetugas"),
     @NamedQuery(name = "Petugas.findByNamaPengguna", query
             = "SELECT p FROM Petugas p WHERE p.namaPengguna = :namaPengguna"),
-    @NamedQuery(name = "Petugas.findByLevel", query
-            = "SELECT p FROM Petugas p WHERE p.level = :level")})
+    @NamedQuery(name = "Petugas.findByHakAkses", query
+            = "SELECT p FROM Petugas p WHERE p.hakAkses = :hakAkses")})
 public class Petugas implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -64,8 +64,8 @@ public class Petugas implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 7)
-    @Column(name = "level", nullable = false, length = 7)
-    private String level;
+    @Column(name = "hak_akses", nullable = false, length = 7)
+    private String hakAkses;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPetugas", fetch
             = FetchType.LAZY)
     private List<Pembayaran> pembayaranList;
@@ -78,12 +78,12 @@ public class Petugas implements Serializable {
     }
 
     public Petugas(Integer id, String namaPetugas, String namaPengguna,
-            String kataSandi, String level) {
+            String kataSandi, String hakAkses) {
         this.id = id;
         this.namaPetugas = namaPetugas;
         this.namaPengguna = namaPengguna;
         this.kataSandi = kataSandi;
-        this.level = level;
+        this.hakAkses = hakAkses;
     }
 
     public Integer getId() {
@@ -118,12 +118,12 @@ public class Petugas implements Serializable {
         this.kataSandi = kataSandi;
     }
 
-    public String getLevel() {
-        return level;
+    public String getHakAkses() {
+        return hakAkses;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    public void setHakAkses(String hakAkses) {
+        this.hakAkses = hakAkses;
     }
 
     @XmlTransient

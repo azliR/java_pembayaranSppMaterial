@@ -9,6 +9,7 @@
     <class>cores.entities.Pembayaran</class>
     <class>cores.entities.Siswa</class>
     <class>features.siswa.data.entities.Petugas</class>
+    <class>cores.entities.Jurusan</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/pembayaran_spp?zeroDateTimeBehavior=CONVERT_TO_NULL&amp;serverTimezone=UTC"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

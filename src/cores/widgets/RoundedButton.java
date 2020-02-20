@@ -11,6 +11,7 @@ import javax.swing.JButton;
  * @author a_lpha
  */
 public class RoundedButton extends JButton {
+    private static final long serialVersionUID = 1L;
 
     private int borderRadius = 15;
 
@@ -28,10 +29,13 @@ public class RoundedButton extends JButton {
     protected void paintComponent(Graphics g) {
         Dimension arcs = new Dimension(borderRadius, borderRadius);
         Graphics2D graphics = (Graphics2D) g;
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
 
         graphics.setColor(getBackground());
-        graphics.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, arcs.width, arcs.height);
+        graphics
+                .fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, arcs.width,
+                        arcs.height);
         graphics.setColor(getForeground());
         super.paintComponent(g);
     }

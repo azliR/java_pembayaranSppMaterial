@@ -1,7 +1,9 @@
 package cores.entities;
 
+import cores.styles.Strings;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -38,10 +40,12 @@ import javax.xml.bind.annotation.XmlTransient;
             = "SELECT s FROM Siswa s WHERE s.nis = :nis"),
     @NamedQuery(name = "Siswa.findByNama", query
             = "SELECT s FROM Siswa s WHERE s.nama = :nama"),
+    @NamedQuery(name = "Siswa.findByJenisKelamin", query
+            = "SELECT s FROM Siswa s WHERE s.jenisKelamin = :jenisKelamin"),
     @NamedQuery(name = "Siswa.findByNoTelepon", query
             = "SELECT s FROM Siswa s WHERE s.noTelepon = :noTelepon"),
-    @NamedQuery(name = "Siswa.findByBulanIni", query
-            = "SELECT s FROM Siswa s WHERE s.bulanIni = :bulanIni")})
+    @NamedQuery(name = "Siswa.findBySppBulanIni", query
+            = "SELECT s FROM Siswa s WHERE s.sppBulanIni = :sppBulanIni")})
 public class Siswa implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -65,6 +69,10 @@ public class Siswa implements Serializable {
     private String nama;
     @Basic(optional = false)
     @NotNull
+    @Column(name = "jenis_kelamin", nullable = false)
+    private Character jenisKelamin;
+    @Basic(optional = false)
+    @NotNull
     @Size(min = 1, max = 13)
     @Column(name = "no_telepon", nullable = false, length = 13)
     private String noTelepon;
@@ -77,8 +85,8 @@ public class Siswa implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 13)
-    @Column(name = "bulan_ini", nullable = false, length = 13)
-    private String bulanIni;
+    @Column(name = "spp_bulan_ini", nullable = false, length = 13)
+    private String sppBulanIni;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "nisn", fetch
             = FetchType.LAZY)
     private List<Pembayaran> pembayaranList;
@@ -96,14 +104,15 @@ public class Siswa implements Serializable {
         this.nisn = nisn;
     }
 
-    public Siswa(String nisn, String nis, String nama, String noTelepon,
-            String alamat, String bulanIni) {
+    public Siswa(String nisn, String nis, String nama, Character jenisKelamin,
+            String noTelepon, String alamat, String sppBulanIni) {
         this.nisn = nisn;
         this.nis = nis;
         this.nama = nama;
+        this.jenisKelamin = jenisKelamin;
         this.noTelepon = noTelepon;
         this.alamat = alamat;
-        this.bulanIni = bulanIni;
+        this.sppBulanIni = sppBulanIni;
     }
 
     public String getNisn() {
@@ -138,6 +147,15 @@ public class Siswa implements Serializable {
         this.nama = nama;
     }
 
+    public String getJenisKelamin() {
+        return Objects.equals(jenisKelamin, Strings.DATABASE_JENIS_KELAMIN_L)
+                ? Strings.LAKI_LAKI : Strings.PEREMPUAN;
+    }
+
+    public void setJenisKelamin(Character jenisKelamin) {
+        this.jenisKelamin = jenisKelamin;
+    }
+
     public String getNoTelepon() {
         return noTelepon;
     }
@@ -154,12 +172,12 @@ public class Siswa implements Serializable {
         this.alamat = alamat;
     }
 
-    public String getBulanIni() {
-        return bulanIni;
+    public String getSppBulanIni() {
+        return sppBulanIni;
     }
 
-    public void setBulanIni(String bulanIni) {
-        this.bulanIni = bulanIni;
+    public void setSppBulanIni(String sppBulanIni) {
+        this.sppBulanIni = sppBulanIni;
     }
 
     @XmlTransient
@@ -201,8 +219,8 @@ public class Siswa implements Serializable {
             return false;
         }
         Siswa other = (Siswa) object;
-        if ((this.nisn == null && other.nisn != null) ||
-                (this.nisn != null && !this.nisn.equals(other.nisn))) {
+        if ((this.nisn == null && other.nisn != null) || (this.nisn != null
+                && !this.nisn.equals(other.nisn))) {
             return false;
         }
         return true;

@@ -31,8 +31,8 @@ public class SiswaRemoteDataSourceImpl implements SiswaRemoteDataSource {
             final var criteriaQuery = criteriaBuilder.createTupleQuery();
             final var root = criteriaQuery.from(Siswa.class);
             criteriaQuery.multiselect(root.get(nisn).alias(nisn.getName()), root
-                    .get(nama).alias(nama.getName()), root.get(bulanIni).alias(
-                    bulanIni.getName()));
+                    .get(nama).alias(nama.getName()), root.get(sppBulanIni)
+                    .alias(sppBulanIni.getName()));
             criteriaQuery.orderBy(criteriaBuilder.asc(root.get(nama)));
 
             final var query = entityManager.createQuery(criteriaQuery);
@@ -43,7 +43,8 @@ public class SiswaRemoteDataSourceImpl implements SiswaRemoteDataSource {
                 final var siswa = new Siswa();
                 siswa.setNama(tuple.get(nama.getName(), String.class));
                 siswa.setNisn(tuple.get(nisn.getName(), String.class));
-                siswa.setBulanIni(tuple.get(bulanIni.getName(), String.class));
+                siswa.setSppBulanIni(tuple.get(sppBulanIni.getName(),
+                        String.class));
                 listSiswa.add(siswa);
             });
             return listSiswa;
@@ -67,6 +68,19 @@ public class SiswaRemoteDataSourceImpl implements SiswaRemoteDataSource {
 
             final var query = entityManager.createQuery(criteriaQuery);
             return query.getSingleResult().get(foto.getName(), byte[].class);
+        } catch (Exception ex) {
+            throw new ServerException(Strings.ERROR_DIALOG_CONNECTION,
+                    ex);
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public Siswa getSiswa(String nisn) throws ServerException {
+        final var entityManager = entityManagerFactory.createEntityManager();
+        try {
+            return entityManager.find(Siswa.class, nisn);
         } catch (Exception ex) {
             throw new ServerException(Strings.ERROR_DIALOG_CONNECTION,
                     ex);

@@ -1,5 +1,6 @@
 package cores.entities;
 
+import cores.utils.Intl;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -10,13 +11,13 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -25,20 +26,14 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author rizal
  */
 @Entity
-@Table(name = "kelas", catalog = "pembayaran_spp", schema = "",
-        uniqueConstraints
-        = {@UniqueConstraint(columnNames = {"nama_kelas"})})
+@Table(name = "kelas", catalog = "pembayaran_spp", schema = "")
 @XmlRootElement
 @NamedQueries({@NamedQuery(name = "Kelas.findAll", query
             = "SELECT k FROM Kelas k"),
     @NamedQuery(name = "Kelas.findById", query
             = "SELECT k FROM Kelas k WHERE k.id = :id"),
-    @NamedQuery(name = "Kelas.findByNamaKelas", query
-            = "SELECT k FROM Kelas k WHERE k.namaKelas = :namaKelas"),
-    @NamedQuery(name = "Kelas.findByTingkat", query
-            = "SELECT k FROM Kelas k WHERE k.tingkat = :tingkat"),
-    @NamedQuery(name = "Kelas.findByKompetensiKeahlian", query
-            = "SELECT k FROM Kelas k WHERE k.kompetensiKeahlian = :kompetensiKeahlian"),
+    @NamedQuery(name = "Kelas.findByKelas", query
+            = "SELECT k FROM Kelas k WHERE k.kelas = :kelas"),
     @NamedQuery(name = "Kelas.findByNoKelas", query
             = "SELECT k FROM Kelas k WHERE k.noKelas = :noKelas"),
     @NamedQuery(name = "Kelas.findByJumlahSiswa", query
@@ -52,18 +47,8 @@ public class Kelas implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 10)
-    @Column(name = "nama_kelas", nullable = false, length = 10)
-    private String namaKelas;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "tingkat", nullable = false)
-    private int tingkat;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 48)
-    @Column(name = "kompetensi_keahlian", nullable = false, length = 48)
-    private String kompetensiKeahlian;
+    @Column(name = "kelas", nullable = false)
+    private int kelas;
     @Basic(optional = false)
     @NotNull
     @Column(name = "no_kelas", nullable = false)
@@ -75,6 +60,10 @@ public class Kelas implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idKelas", fetch
             = FetchType.LAZY)
     private List<Siswa> siswaList;
+    @JoinColumn(name = "id_jurusan", referencedColumnName = "id", nullable
+            = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Jurusan idJurusan;
 
     public Kelas() {
     }
@@ -83,12 +72,9 @@ public class Kelas implements Serializable {
         this.id = id;
     }
 
-    public Kelas(Integer id, String namaKelas, int tingkat,
-            String kompetensiKeahlian, int noKelas, int jumlahSiswa) {
+    public Kelas(Integer id, int kelas, int noKelas, int jumlahSiswa) {
         this.id = id;
-        this.namaKelas = namaKelas;
-        this.tingkat = tingkat;
-        this.kompetensiKeahlian = kompetensiKeahlian;
+        this.kelas = kelas;
         this.noKelas = noKelas;
         this.jumlahSiswa = jumlahSiswa;
     }
@@ -101,28 +87,12 @@ public class Kelas implements Serializable {
         this.id = id;
     }
 
-    public String getNamaKelas() {
-        return namaKelas;
+    public int getKelas() {
+        return kelas;
     }
 
-    public void setNamaKelas(String namaKelas) {
-        this.namaKelas = namaKelas;
-    }
-
-    public int getTingkat() {
-        return tingkat;
-    }
-
-    public void setTingkat(int tingkat) {
-        this.tingkat = tingkat;
-    }
-
-    public String getKompetensiKeahlian() {
-        return kompetensiKeahlian;
-    }
-
-    public void setKompetensiKeahlian(String kompetensiKeahlian) {
-        this.kompetensiKeahlian = kompetensiKeahlian;
+    public void setKelas(int kelas) {
+        this.kelas = kelas;
     }
 
     public int getNoKelas() {
@@ -150,6 +120,14 @@ public class Kelas implements Serializable {
         this.siswaList = siswaList;
     }
 
+    public Jurusan getIdJurusan() {
+        return idJurusan;
+    }
+
+    public void setIdJurusan(Jurusan idJurusan) {
+        this.idJurusan = idJurusan;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -164,16 +142,13 @@ public class Kelas implements Serializable {
             return false;
         }
         Kelas other = (Kelas) object;
-        if ((this.id == null && other.id != null) || (this.id != null
-                && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null
+                && !this.id.equals(other.id)));
     }
 
     @Override
     public String toString() {
-        return namaKelas;
+        return Intl.toRoman(kelas) + " " + idJurusan.getAlias() + " " + noKelas;
     }
 
 }

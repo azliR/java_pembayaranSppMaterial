@@ -13,6 +13,7 @@ import features.siswa.data.datasources.SiswaRemoteDataSourceImpl;
 import features.siswa.data.repositories.SiswaRepository;
 import features.siswa.data.repositories.SiswaRepositoryImpl;
 import javax.persistence.EntityManagerFactory;
+import javax.swing.UIManager;
 
 /**
  *
@@ -45,5 +46,20 @@ public class Main {
                 siswaLocalDataSource);
 
         new MainFrame(authRepository, siswaRepository).setVisible(true);
+
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager
+                    .getInstalledLookAndFeels()) {
+                if ("Windows".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException | InstantiationException
+                | IllegalAccessException
+                | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Main.class.getName()).log(
+                    java.util.logging.Level.SEVERE, null, ex);
+        }
     }
 }

@@ -16,6 +16,7 @@ import javax.swing.border.TitledBorder;
  * @author a_lpha
  */
 public class a_PasswordField extends JPasswordField {
+    private static final long serialVersionUID = 1L;
 
     private final Color focusGainedColor = Colors.ACTIVE_BORDER_COLOR;
     private final Color focusLostColor = Colors.BORDER_COLOR;
@@ -23,9 +24,16 @@ public class a_PasswordField extends JPasswordField {
     private final int borderRadius = Constants.BORDER_RADIUS;
     private final int inset[] = {2, 8, 2, 8};
 
-    public a_PasswordField(String name) {
+    private final String label;
+
+    public a_PasswordField(String label) {
         super();
-        changeBorderColor(name, focusLostColor, focusLostTextColor);
+        this.label = label;
+        init();
+    }
+
+    private void init() {
+        changeBorderColor(label, focusLostColor, focusLostTextColor);
         setFont(new Font("Times New Roman", 0, 16));
         setForeground(new Color(0, 0, 0));
         setCaretColor(new Color(0, 0, 0));
@@ -33,18 +41,22 @@ public class a_PasswordField extends JPasswordField {
 
             @Override
             public void focusGained(FocusEvent fe) {
-                changeBorderColor(name, focusGainedColor, focusGainedColor);
+                changeBorderColor(label, focusGainedColor, focusGainedColor);
             }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                changeBorderColor(name, focusLostColor, focusLostTextColor);
+                changeBorderColor(label, focusLostColor, focusLostTextColor);
             }
         });
     }
 
-    private void changeBorderColor(String name, Color borderColor, Color textColor) {
-        setBorder(BorderFactory.createTitledBorder(new RoundedBorder(borderRadius, inset, borderColor),
-                name, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, Fonts.ROBOTO_REGULAR.deriveFont(12f), textColor));
+    private void changeBorderColor(String name, Color borderColor,
+            Color textColor) {
+        setBorder(BorderFactory.createTitledBorder(new RoundedBorder(
+                borderRadius, inset, borderColor),
+                name, TitledBorder.DEFAULT_JUSTIFICATION,
+                TitledBorder.DEFAULT_POSITION, Fonts.ROBOTO_REGULAR.deriveFont(
+                        12f), textColor));
     }
 }

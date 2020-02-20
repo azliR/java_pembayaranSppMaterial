@@ -5,6 +5,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,6 +15,23 @@ import java.util.logging.Logger;
  */
 public class Intl {
     private static final Logger LOG = Logger.getLogger(Intl.class.getName());
+    private static final TreeMap<Integer, String> MAP = new TreeMap<>();
+
+    static {
+        MAP.put(1000, "M");
+        MAP.put(900, "CM");
+        MAP.put(500, "D");
+        MAP.put(400, "CD");
+        MAP.put(100, "C");
+        MAP.put(90, "XC");
+        MAP.put(50, "L");
+        MAP.put(40, "XL");
+        MAP.put(10, "X");
+        MAP.put(9, "IX");
+        MAP.put(5, "V");
+        MAP.put(4, "IV");
+        MAP.put(1, "I");
+    }
 
     public static String convertCurrency(int currency) {
         final var decimalFormat = (DecimalFormat) DecimalFormat.getInstance();
@@ -98,6 +116,14 @@ public class Intl {
 
     public static int extractNumber(String s) {
         return Integer.parseInt(s.replaceAll("\\D+", ""));
+    }
+
+    public static String toRoman(int number) {
+        int l = MAP.floorKey(number);
+        if (number == l) {
+            return MAP.get(number);
+        }
+        return MAP.get(l) + toRoman(number - l);
     }
 
     private Intl() {

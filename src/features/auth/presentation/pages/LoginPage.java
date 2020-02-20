@@ -90,11 +90,11 @@ public class LoginPage extends javax.swing.JPanel {
 
         tv_loading.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-        et_namaPengguna.setBackground(Colors.BACKGROUND_COLOR);
+        et_namaPengguna.setBackground(Colors.CARD_COLOR);
         et_namaPengguna.setFont(Fonts.ROBOTO_REGULAR.deriveFont(16f)
         );
 
-        et_kataSandi.setBackground(Colors.BACKGROUND_COLOR);
+        et_kataSandi.setBackground(Colors.CARD_COLOR);
         et_kataSandi.setFont(Fonts.ROBOTO_REGULAR.deriveFont(16f)
         );
         et_kataSandi.addActionListener(new java.awt.event.ActionListener() {

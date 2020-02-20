@@ -53,6 +53,9 @@ public class MainFrame extends javax.swing.JFrame {
         content = new javax.swing.JPanel();
         sideBar = new javax.swing.JPanel();
         nav_beranda = new a_SideNavigation(sideBarGroup);
+        nav_kelas = new a_SideNavigation(sideBarGroup);
+        nav_siswa = new a_SideNavigation(sideBarGroup);
+        nav_spp = new a_SideNavigation(sideBarGroup);
         nav_laporan = new a_SideNavigation(sideBarGroup);
         topBar = new javax.swing.JPanel();
         jPanel3 = new RoundedPanel(Constants.BORDER_RADIUS);
@@ -156,12 +159,56 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        nav_kelas.setBackground(Colors.BACKGROUND_COLOR);
+        sideBarGroup.add(nav_kelas);
+        nav_kelas.setForeground(Colors.GREY_TEXT_COLOR);
+        nav_kelas.setText("Kelas");
+        nav_kelas.setBorder(null);
+        nav_kelas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_google-classroom_grey.png"))); // NOI18N
+        nav_kelas.setIconTextGap(20);
+        nav_kelas.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_google-classroom.png"))); // NOI18N
+        nav_kelas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nav_kelasActionPerformed(evt);
+            }
+        });
+
+        nav_siswa.setBackground(Colors.BACKGROUND_COLOR);
+        sideBarGroup.add(nav_siswa);
+        nav_siswa.setForeground(Colors.GREY_TEXT_COLOR);
+        nav_siswa.setText("Siswa");
+        nav_siswa.setBorder(null);
+        nav_siswa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_account-group-outline_grey.png"))); // NOI18N
+        nav_siswa.setIconTextGap(20);
+        nav_siswa.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_account-group.png"))); // NOI18N
+        nav_siswa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nav_siswaActionPerformed(evt);
+            }
+        });
+
+        nav_spp.setBackground(Colors.BACKGROUND_COLOR);
+        sideBarGroup.add(nav_spp);
+        nav_spp.setForeground(Colors.GREY_TEXT_COLOR);
+        nav_spp.setText("Spp");
+        nav_spp.setBorder(null);
+        nav_spp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_card-account-details-outline_grey.png"))); // NOI18N
+        nav_spp.setIconTextGap(20);
+        nav_spp.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_card-account-details_grey.png"))); // NOI18N
+        nav_spp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nav_sppActionPerformed(evt);
+            }
+        });
+
         nav_laporan.setBackground(Colors.BACKGROUND_COLOR);
         sideBarGroup.add(nav_laporan);
         nav_laporan.setForeground(Colors.GREY_TEXT_COLOR);
-        nav_laporan.setText("Siswa");
+        nav_laporan.setText("Laporan");
         nav_laporan.setBorder(null);
+        nav_laporan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_poll-box-outline_grey.png"))); // NOI18N
         nav_laporan.setIconTextGap(20);
+        nav_laporan.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_poll-box.png"))); // NOI18N
         nav_laporan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nav_laporanActionPerformed(evt);
@@ -174,8 +221,11 @@ public class MainFrame extends javax.swing.JFrame {
             sideBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sideBarLayout.createSequentialGroup()
                 .addGroup(sideBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(nav_kelas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(nav_beranda, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                    .addComponent(nav_siswa, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(nav_laporan, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(nav_beranda, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
+                    .addComponent(nav_spp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         sideBarLayout.setVerticalGroup(
@@ -184,8 +234,14 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(84, 84, 84)
                 .addComponent(nav_beranda, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
+                .addComponent(nav_kelas, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(nav_siswa, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(nav_spp, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
                 .addComponent(nav_laporan, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(302, Short.MAX_VALUE))
+                .addContainerGap(158, Short.MAX_VALUE))
         );
 
         topBar.setBackground(Colors.BACKGROUND_COLOR);
@@ -194,7 +250,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Product Sans Light", 0, 16)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(111, 112, 112));
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_magnify.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_magnify_grey.png"))); // NOI18N
 
         et_search.setFont(Fonts.GOOGLE_SANS.deriveFont(16f));
         et_search.setForeground(Colors.GREY_TEXT_COLOR);
@@ -319,9 +375,9 @@ public class MainFrame extends javax.swing.JFrame {
         Navigator.push(new HomePage());
     }//GEN-LAST:event_nav_berandaActionPerformed
 
-    private void nav_laporanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nav_laporanActionPerformed
-        Navigator.push(new WrapperStudent(siswaRepository));
-    }//GEN-LAST:event_nav_laporanActionPerformed
+    private void nav_kelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nav_kelasActionPerformed
+
+    }//GEN-LAST:event_nav_kelasActionPerformed
 
     private void et_searchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_et_searchFocusGained
         if (!isSearchFilled) {
@@ -345,6 +401,18 @@ public class MainFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_et_searchKeyTyped
 
+    private void nav_siswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nav_siswaActionPerformed
+        Navigator.push(new WrapperStudent(siswaRepository));
+    }//GEN-LAST:event_nav_siswaActionPerformed
+
+    private void nav_laporanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nav_laporanActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nav_laporanActionPerformed
+
+    private void nav_sppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nav_sppActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nav_sppActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JPanel content;
     private javax.swing.JTextField et_search;
@@ -358,7 +426,10 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JRadioButton nav_beranda;
+    private javax.swing.JRadioButton nav_kelas;
     private javax.swing.JRadioButton nav_laporan;
+    private javax.swing.JRadioButton nav_siswa;
+    private javax.swing.JRadioButton nav_spp;
     public static javax.swing.JPanel sideBar;
     private javax.swing.ButtonGroup sideBarGroup;
     public static javax.swing.JPanel topBar;

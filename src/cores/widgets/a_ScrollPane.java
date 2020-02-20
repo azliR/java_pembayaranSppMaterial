@@ -35,6 +35,21 @@ public class a_ScrollPane extends JScrollPane {
     private static final int SB_SIZE = 10;
     private static final Color THUMB_COLOR = Color.BLACK;
 
+    public static void main(String[] args) {
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setPreferredSize(new Dimension(400, 400));
+
+        JPanel content = new JPanel();
+        content.setBackground(Color.WHITE);
+        content.setPreferredSize(new Dimension(500, 500));
+        content.add(new JLabel("test"));
+        frame.add(new a_ScrollPane(content));
+
+        frame.pack();
+        frame.setVisible(true);
+    }
+
     public a_ScrollPane(Component view) {
         this(view, VERTICAL_SCROLLBAR_AS_NEEDED, HORIZONTAL_SCROLLBAR_AS_NEEDED);
     }
@@ -119,14 +134,11 @@ public class a_ScrollPane extends JScrollPane {
         return viewSize.getWidth() > viewRect.getWidth();
     }
 
-    /**
-     * Class extending the BasicScrollBarUI and overrides all necessary methods
-     */
     private static class ModernScrollBarUI extends BasicScrollBarUI {
 
-        private JScrollPane sp;
+        private final JScrollPane sp;
 
-        public ModernScrollBarUI(a_ScrollPane sp) {
+        ModernScrollBarUI(a_ScrollPane sp) {
             this.sp = sp;
         }
 
@@ -141,24 +153,30 @@ public class a_ScrollPane extends JScrollPane {
         }
 
         @Override
-        protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
+        protected void paintTrack(Graphics g, JComponent c,
+                Rectangle trackBounds) {
         }
 
         @Override
-        protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
-            int alpha = isThumbRollover() ? SCROLL_BAR_ALPHA_ROLLOVER : SCROLL_BAR_ALPHA;
+        protected void paintThumb(Graphics g, JComponent c,
+                Rectangle thumbBounds) {
+            int alpha = isThumbRollover() ? SCROLL_BAR_ALPHA_ROLLOVER
+                    : SCROLL_BAR_ALPHA;
             int orientation = scrollbar.getOrientation();
             int x = thumbBounds.x;
             int y = thumbBounds.y;
 
-            int width = orientation == JScrollBar.VERTICAL ? THUMB_SIZE : thumbBounds.width;
+            int width = orientation == JScrollBar.VERTICAL ? THUMB_SIZE
+                    : thumbBounds.width;
             width = Math.max(width, THUMB_SIZE);
 
-            int height = orientation == JScrollBar.VERTICAL ? thumbBounds.height : THUMB_SIZE;
+            int height = orientation == JScrollBar.VERTICAL ? thumbBounds.height
+                    : THUMB_SIZE;
             height = Math.max(height, THUMB_SIZE);
 
             Graphics2D graphics2D = (Graphics2D) g.create();
-            graphics2D.setColor(new Color(THUMB_COLOR.getRed(), THUMB_COLOR.getGreen(), THUMB_COLOR.getBlue(), alpha));
+            graphics2D.setColor(new Color(THUMB_COLOR.getRed(), THUMB_COLOR
+                    .getGreen(), THUMB_COLOR.getBlue(), alpha));
             graphics2D.fillRect(x, y, width, height);
             graphics2D.dispose();
         }
@@ -186,18 +204,4 @@ public class a_ScrollPane extends JScrollPane {
         }
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(400, 400));
-
-        JPanel content = new JPanel();
-        content.setBackground(Color.WHITE);
-        content.setPreferredSize(new Dimension(500, 500));
-        content.add(new JLabel("test"));
-        frame.add(new a_ScrollPane(content));
-
-        frame.pack();
-        frame.setVisible(true);
-    }
 }
