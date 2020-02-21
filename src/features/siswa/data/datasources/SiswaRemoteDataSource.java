@@ -3,6 +3,8 @@ package features.siswa.data.datasources;
 import cores.entities.Kelas;
 import cores.entities.Siswa;
 import cores.entities.Spp;
+import cores.exceptions.IllegalOrphanException;
+import cores.exceptions.NonexistentEntityException;
 import cores.exceptions.PreexistingEntityException;
 import cores.exceptions.ServerException;
 import java.util.List;
@@ -15,6 +17,10 @@ public interface SiswaRemoteDataSource {
     public abstract List<Siswa> getListSiswaWithoutThumbnail(int maxResults,
             int firstResult) throws ServerException;
 
+    public abstract List<Siswa> getListSiswaByJenisKelaminWithoutThumbnail(
+            char keyword, int maxResults,
+            int firstResult) throws ServerException;
+
     public abstract byte[] getSiswaThumbnail(String nisn) throws ServerException;
 
     public abstract Siswa getSiswa(String nisn) throws ServerException;
@@ -25,4 +31,10 @@ public interface SiswaRemoteDataSource {
 
     public abstract void insertSiswa(Siswa siswa) throws
             PreexistingEntityException, ServerException;
+
+    public abstract void updateSiswa(Siswa siswa) throws IllegalOrphanException,
+            NonexistentEntityException, ServerException;
+
+    public abstract void deleteSiswa(String nisn) throws IllegalOrphanException,
+            NonexistentEntityException;
 }

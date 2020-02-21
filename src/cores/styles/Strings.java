@@ -22,6 +22,8 @@ public class Strings {
             = "Terjadi kesalahan ketika mengambil gambar dari penyimpanan Anda.";
     public static final String ERROR_DIALOG_EMPTY_FIELD
             = "Isi semua kolom yang dibutuhkan!";
+    public static final String ERROR_DIALOG_NULL_DATA
+            = "Data yang diminta tidak ada, silahkan coba kembali atau hubungi Admin untuk tindak lanjut";
 
     public static final String SUCCESS_DIALOG_DEFAULT = "Berhasil";
     public static final String SUCCESS_DIALOG_INSERT = "Data berhasil disimpan!";
@@ -33,6 +35,7 @@ public class Strings {
 
     public static final String LAKI_LAKI = "Laki-laki";
     public static final String PEREMPUAN = "Perempuan";
+    public static final String SEMUA = "Semua";
 
     private Strings() {
     }

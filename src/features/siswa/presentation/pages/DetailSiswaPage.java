@@ -24,11 +24,12 @@ public class DetailSiswaPage extends javax.swing.JPanel {
     }
 
     private void init(Siswa siswa) {
-        final var roundedImage = ImageProcessor.roundImage(ImageProcessor
-                .byteArrayToBufferedImage(siswa.getFoto()),
-                Constants.BORDER_RADIUS);
-
-        tv_foto.setIcon(new ImageIcon(roundedImage));
+        if (siswa.getFoto() != null) {
+            final var roundedImage = ImageProcessor.roundImage(ImageProcessor
+                    .byteArrayToBufferedImage(siswa.getFoto()),
+                    Constants.BORDER_RADIUS);
+            tv_foto.setIcon(new ImageIcon(roundedImage));
+        }
         tv_namaSiswa.setText(siswa.getNama());
         tv_nisn.setText(siswa.getNisn());
         tv_nis.setText(siswa.getNis());

@@ -21,46 +21,10 @@ import javax.imageio.ImageIO;
  */
 public class ImageProcessor {
 
-//    public static Image scaleImage(Image image, int maxImageWidth,
-//            int maxImageHeight) {
-//        int width = image.getWidth(null);
-//        int height = image.getHeight(null);
-//
-//        double currentRatio = (double) width / height;
-//        double aspectRatio = (double) maxImageWidth / maxImageHeight;
-//
-//        if (currentRatio < aspectRatio) {
-//            height = (int) (height * ((double) maxImageWidth / width));
-//            width = maxImageWidth;
-//        } else {
-//            width = (int) (width / ((double) height / maxImageHeight));
-//            height = maxImageHeight;
-//        }
-//        return image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-//    }
-//    public static BufferedImage cropImage(final BufferedImage image,
-//            int maxImageWidth, int maxImageHeight) {
-//        final var width = image.getWidth();
-//        final var height = image.getHeight();
-//        var x = 0;
-//        var y = 0;
-//        var maxWidth = maxImageWidth;
-//        var maxHeigth = maxImageHeight;
-//
-//        if (width > maxImageWidth) {
-////            x = (width - maxImageWidth) / 2;
-//        } else {
-//            maxWidth = width;
-//        }
-//        if (height > maxImageHeight) {
-////            y = (height - maxImageHeight) / 2;
-//        } else {
-//            maxHeigth = height;
-//        }
-//
-//        return image.getSubimage(x, y, maxWidth, maxHeigth);
-//    }
     public static BufferedImage roundImage(Image image, int borderRadius) {
+        if (image == null) {
+            return null;
+        }
         int w = image.getWidth(null);
         int h = image.getHeight(null);
         BufferedImage output = new BufferedImage(w, h,
@@ -83,18 +47,24 @@ public class ImageProcessor {
         return output;
     }
 
-    public static BufferedImage toBufferedImage(Image img) {
+    public static BufferedImage toBufferedImage(Image image) {
+        if (image == null) {
+            return null;
+        }
         BufferedImage buffImage = new BufferedImage(
-                img.getWidth(null),
-                img.getHeight(null),
+                image.getWidth(null),
+                image.getHeight(null),
                 BufferedImage.TYPE_INT_RGB);
 
-        buffImage.getGraphics().drawImage(img, 0, 0, null);
+        buffImage.getGraphics().drawImage(image, 0, 0, null);
 
         return buffImage;
     }
 
     public static File toFile(Image image) {
+        if (image == null) {
+            return null;
+        }
         try {
             File resizedImageFile = new File(System.getProperty("user.dir")
                     + "/bin.png");
@@ -109,6 +79,9 @@ public class ImageProcessor {
     }
 
     public static byte[] toByteArray(BufferedImage image) {
+        if (image == null) {
+            return null;
+        }
         try {
             final var byteArrayOutputStream = new ByteArrayOutputStream();
             ImageIO.write(image, "jpg", byteArrayOutputStream);
@@ -121,6 +94,9 @@ public class ImageProcessor {
     }
 
     public static BufferedImage byteArrayToBufferedImage(byte[] byteArrayImage) {
+        if (byteArrayImage == null) {
+            return null;
+        }
         try {
             final var byteArrayInputStream
                     = new ByteArrayInputStream(byteArrayImage);

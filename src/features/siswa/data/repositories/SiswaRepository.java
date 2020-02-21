@@ -13,6 +13,10 @@ public interface SiswaRepository {
             ListSiswaPage context, int maxResults,
             int firstResult);
 
+    public abstract void initListSiswaByJenisKelaminWithoutThumbnail(
+            ListSiswaPage context, char keyword, int maxResults,
+            int firstResult);
+
     public abstract void initDetailSiswa(String nisn);
 
     public abstract void initDropdownKelas(AddSiswaPage context);
@@ -25,6 +29,8 @@ public interface SiswaRepository {
             int height);
 
     public abstract void insertSiswa(AddSiswaPage context);
+
+    public abstract void deleteSiswa(String nisn);
 
     public abstract void clear(AddSiswaPage context);
 }

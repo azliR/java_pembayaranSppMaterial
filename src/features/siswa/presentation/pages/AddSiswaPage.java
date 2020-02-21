@@ -24,6 +24,7 @@ public class AddSiswaPage extends javax.swing.JPanel {
     private final SiswaRepository repository;
 
     public Siswa siswa;
+    public byte[] foto;
 
     public AddSiswaPage(SiswaRepository repository, Siswa siswa) {
         this.repository = repository;
@@ -36,12 +37,15 @@ public class AddSiswaPage extends javax.swing.JPanel {
         repository.initDropdownKelas(this);
         repository.initDropdownSpp(this);
         if (siswa != null) {
-            final var roundedImage = ImageProcessor.roundImage(ImageProcessor
-                    .byteArrayToBufferedImage(siswa.getFoto()),
-                    Constants.BORDER_RADIUS);
-            b_addImage.setIcon(new ImageIcon(roundedImage));
-            b_addImage.setText(null);
-            b_addImage.setBorder(null);
+            if (siswa.getFoto() != null) {
+                final var roundedImage = ImageProcessor.roundImage(ImageProcessor
+                        .byteArrayToBufferedImage(siswa.getFoto()),
+                        Constants.BORDER_RADIUS);
+                foto = siswa.getFoto();
+                b_addImage.setIcon(new ImageIcon(roundedImage));
+                b_addImage.setText(null);
+                b_addImage.setBorder(null);
+            }
             et_namaSiswa.setText(siswa.getNama());
             et_nisn.setText(siswa.getNisn());
             et_nis.setText(siswa.getNis());
@@ -50,6 +54,7 @@ public class AddSiswaPage extends javax.swing.JPanel {
             cb_kelas.setSelectedItem(siswa.getIdKelas());
             cb_spp.setSelectedItem(siswa.getIdSpp());
             cb_jenisKelamin.setSelectedItem(siswa.getJenisKelamin());
+            b_save.setText("Perbarui");
         }
     }
 

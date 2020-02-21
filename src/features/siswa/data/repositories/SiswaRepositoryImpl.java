@@ -3,6 +3,8 @@ package features.siswa.data.repositories;
 import cores.entities.Kelas;
 import cores.entities.Siswa;
 import cores.entities.Spp;
+import cores.exceptions.IllegalOrphanException;
+import cores.exceptions.NonexistentEntityException;
 import cores.exceptions.PreexistingEntityException;
 import cores.exceptions.ServerException;
 import cores.exceptions.UnexpectedException;
@@ -56,6 +58,49 @@ public class SiswaRepositoryImpl implements SiswaRepository {
         try {
             final var result = remoteDataSource.getListSiswaWithoutThumbnail(
                     maxResults, firstResult);
+            if (result == null) {
+                return;
+            }
+
+            final var widthTile = (MainFrame.content.getSize().width / 3) - (4 * 3);
+            for (int i = 0; i < result.size(); i++) {
+                final var siswa = result.get(i);
+                final var siswaTile = new SiswaTile(this, siswa);
+                siswaTile.setPreferredSize(new Dimension(widthTile,
+                        siswaTile.getPreferredSize().height));
+
+                if (i + 1 == result.size()) {
+                    siswaTile.addComponentListener(new ComponentAdapter() {
+                        @Override
+                        public void componentResized(ComponentEvent e) {
+                            context.isLoading = false;
+                            super.componentResized(e);
+                        }
+                    });
+                }
+                context.gridLayout.add(siswaTile);
+                context.listSiswaTiles.add(siswaTile);
+            }
+            context.listSiswa.addAll(result);
+            context.currentIndex += result.size();
+            context.isLasIndex = result.size() < context.maxResult;
+        } catch (ServerException ex) {
+            AlertDialog.showErrorDialog(ex.getMessage());
+            LOG.log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void initListSiswaByJenisKelaminWithoutThumbnail(
+            ListSiswaPage context, char keyword, int maxResults, int firstResult) {
+        context.isLoading = true;
+        try {
+            final var result = remoteDataSource
+                    .getListSiswaByJenisKelaminWithoutThumbnail(
+                            keyword, maxResults, firstResult);
+            if (result == null) {
+                return;
+            }
             final var widthTile = (MainFrame.content.getSize().width / 3) - (4 * 3);
 
             for (int i = 0; i < result.size(); i++) {
@@ -90,6 +135,9 @@ public class SiswaRepositoryImpl implements SiswaRepository {
     public void initDropdownKelas(AddSiswaPage context) {
         try {
             final var result = remoteDataSource.getListKelas();
+            if (result == null) {
+                return;
+            }
             context.cb_kelas.setModel(new DefaultComboBoxModel<>(result
                     .toArray(new Kelas[result.size()])));
         } catch (ServerException ex) {
@@ -102,6 +150,9 @@ public class SiswaRepositoryImpl implements SiswaRepository {
     public void initDropdownSpp(AddSiswaPage context) {
         try {
             final var result = remoteDataSource.getListSpp();
+            if (result == null) {
+                return;
+            }
             context.cb_spp.setModel(new DefaultComboBoxModel<>(result
                     .toArray(new Spp[result.size()])));
         } catch (ServerException ex) {
@@ -114,6 +165,10 @@ public class SiswaRepositoryImpl implements SiswaRepository {
     public void initDetailSiswa(String nisn) {
         try {
             final var result = remoteDataSource.getSiswa(nisn);
+            if (result == null) {
+                AlertDialog.showErrorDialog(Strings.ERROR_DIALOG_NULL_DATA);
+                return;
+            }
             Navigator.push(WrapperStudent.content, new DetailSiswaPage(result));
         } catch (ServerException ex) {
             AlertDialog.showErrorDialog(ex.getMessage());
@@ -126,10 +181,14 @@ public class SiswaRepositoryImpl implements SiswaRepository {
         try {
             final var result = remoteDataSource.getSiswaThumbnail(
                     siswaTile.siswa.getNisn());
+            if (result == null) {
+                return;
+            }
             siswaTile.tv_image.setIcon(new ImageIcon(result));
             siswaTile.siswa.setFoto(result);
             siswaTile.setFoto(result);
         } catch (ServerException ex) {
+            AlertDialog.showErrorDialog(ex.getMessage());
             LOG.log(Level.SEVERE, null, ex);
         }
     }
@@ -150,7 +209,7 @@ public class SiswaRepositoryImpl implements SiswaRepository {
             context.b_addImage.setIcon(new ImageIcon(roundedImage));
             context.b_addImage.setText(null);
             context.b_addImage.setBorder(null);
-            context.siswa.setFoto(ImageProcessor.toByteArray(croppedImage));
+            context.foto = ImageProcessor.toByteArray(croppedImage);
 
 //            for (var file : result.getParentFile().listFiles()) {
 //                final var a = Scalr.resize(ImageIO.read(file),
@@ -186,7 +245,7 @@ public class SiswaRepositoryImpl implements SiswaRepository {
 
     @Override
     public void insertSiswa(AddSiswaPage context) {
-        final var foto = context.siswa.getFoto();
+        final var foto = context.foto;
         final var nisn = context.et_nisn.getText();
         final var nis = context.et_nis.getText();
         final var nama = context.et_namaSiswa.getText();
@@ -200,8 +259,9 @@ public class SiswaRepositoryImpl implements SiswaRepository {
                 ? Strings.DATABASE_JENIS_KELAMIN_L
                 : Strings.DATABASE_JENIS_KELAMIN_P;
 
-        if (nisn.isBlank() || nis.isBlank() || nama.isBlank() || noTelepon
-                .isBlank() || alamat.isBlank() || kelas == null || spp == null) {
+        if (nisn.isBlank() || nis.isBlank() || nama.isBlank()
+                || noTelepon.isBlank() || alamat.isBlank() || kelas == null
+                || spp == null || nisn.length() < 10 || nis.length() < 8) {
             AlertDialog.showErrorDialog(Strings.ERROR_DIALOG_EMPTY_FIELD);
             return;
         }
@@ -217,14 +277,31 @@ public class SiswaRepositoryImpl implements SiswaRepository {
             siswa.setJenisKelamin(jenisKelamin);
             siswa.setIdKelas(kelas);
             siswa.setIdSpp(spp);
-            siswa.setSppBulanIni("Belum dibayar");
+            siswa.setSppBulanIni(context.siswa == null ? "Belum dibayar"
+                    : context.siswa.getSppBulanIni());
 
-            remoteDataSource.insertSiswa(siswa);
+            if (context.siswa == null) {
+                remoteDataSource.insertSiswa(siswa);
+            } else {
+                remoteDataSource.updateSiswa(siswa);
+            }
 
             clear(context);
             AlertDialog.showDialog(Strings.SUCCESS_DIALOG_DEFAULT,
                     Strings.SUCCESS_DIALOG_INSERT);
-        } catch (PreexistingEntityException | ServerException ex) {
+        } catch (PreexistingEntityException | ServerException
+                | IllegalOrphanException | NonexistentEntityException ex) {
+            AlertDialog.showErrorDialog(ex.getMessage());
+            LOG.log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void deleteSiswa(String nisn) {
+        try {
+            remoteDataSource.deleteSiswa(nisn);
+            Navigator.push(WrapperStudent.content, new ListSiswaPage(this));
+        } catch (IllegalOrphanException | NonexistentEntityException ex) {
             AlertDialog.showErrorDialog(ex.getMessage());
             LOG.log(Level.SEVERE, null, ex);
         }

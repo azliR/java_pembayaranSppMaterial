@@ -34,9 +34,9 @@ public class ListSiswaPage extends javax.swing.JPanel {
     }
 
     private void init() {
-        final var screenHeigth = Toolkit.getDefaultToolkit().getScreenSize().height;
-        final var appBarHeight = screenHeigth - MainFrame.content.getHeight();
-
+        final var screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+        final var contentHeight = MainFrame.content.getHeight();
+        final var appBarHeight = screenHeight - contentHeight;
         scrollPane.getVerticalScrollBar().addAdjustmentListener((e) -> {
             final var max = scrollPane.getVerticalScrollBar().getModel()
                     .getMaximum();
@@ -50,12 +50,13 @@ public class ListSiswaPage extends javax.swing.JPanel {
             }
 
             listSiswaTiles.forEach((siswaTile) -> {
-                final var location = siswaTile.getLocationOnScreen().y
-                        - appBarHeight - 49;
-
-                if (siswaTile.siswa.getFoto() == null && location >= 0
-                        && location <= screenHeigth) {
-                    repository.initSiswaThumbnail(siswaTile);
+                if (siswaTile.isShowing() && siswaTile.isValid()) {
+                    final var location = siswaTile.getLocationOnScreen().y;
+                    if (siswaTile.siswa.getFoto() == null
+                            && location >= appBarHeight
+                            && location <= contentHeight) {
+                        repository.initSiswaThumbnail(siswaTile);
+                    }
                 }
             });
         });

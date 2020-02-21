@@ -3,11 +3,13 @@ package features.siswa.presentation.pages;
 import cores.styles.Colors;
 import cores.styles.Constants;
 import cores.styles.Fonts;
+import cores.styles.Strings;
 import cores.utils.Navigator;
 import cores.widgets.RoundedButton;
 import cores.widgets.a_Chip;
 import features.siswa.data.repositories.SiswaRepository;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -32,16 +34,31 @@ public class WrapperStudent extends javax.swing.JPanel {
 
         final var listJenisKelamin = new ArrayList<String>();
         listJenisKelamin.add("Semua");
-        listJenisKelamin.add("Laki-Laki");
-        listJenisKelamin.add("Perempuan");
+        listJenisKelamin.add(Strings.LAKI_LAKI);
+        listJenisKelamin.add(Strings.PEREMPUAN);
         listJenisKelamin.forEach((jenisKelamin) -> {
             final var chip = new a_Chip(jenisKelamin, jenisKelaminGroup);
             jenisKelaminGroup.add(chip);
-            jenisKelaminGroup.setSelected(chip.getModel(), jenisKelamin.equals(
-                    "Semua"));
+            jenisKelaminGroup.setSelected(
+                    chip.getModel(), jenisKelamin.equals(Strings.SEMUA));
 
+            chip.setSelected(chip);
             chip.addActionListener((ae) -> {
-                System.out.println(ae.paramString());
+                listSiswaPage.currentIndex = 0;
+                listSiswaPage.gridLayout.removeAll();
+                if (jenisKelamin.equals(Strings.SEMUA)) {
+                    repository.initListSiswaWithoutThumbnail(listSiswaPage,
+                            listSiswaPage.maxResult, listSiswaPage.currentIndex);
+                } else {
+                    final var keyword = jenisKelamin.equals(Strings.LAKI_LAKI)
+                            ? Strings.DATABASE_JENIS_KELAMIN_L
+                            : Strings.DATABASE_JENIS_KELAMIN_P;
+                    repository.initListSiswaByJenisKelaminWithoutThumbnail(
+                            listSiswaPage, keyword, listSiswaPage.maxResult,
+                            listSiswaPage.currentIndex);
+                }
+                listSiswaPage.gridLayout.repaint();
+                listSiswaPage.gridLayout.revalidate();
             });
             chipsPanel.add(chip);
         });
@@ -53,7 +70,7 @@ public class WrapperStudent extends javax.swing.JPanel {
 
         jenisKelaminGroup = new javax.swing.ButtonGroup();
         sppGroup = new javax.swing.ButtonGroup();
-        jPanel1 = new javax.swing.JPanel();
+        appbar = new javax.swing.JPanel();
         b_add = new RoundedButton(Constants.XLARGE_BORDER_RADIUS);
         jSeparator1 = new javax.swing.JSeparator();
         b_back = new RoundedButton(Constants.XLARGE_BORDER_RADIUS);
@@ -62,7 +79,7 @@ public class WrapperStudent extends javax.swing.JPanel {
         chipsPanel = new javax.swing.JPanel();
         content = new javax.swing.JPanel();
 
-        jPanel1.setBackground(Colors.BACKGROUND_COLOR);
+        appbar.setBackground(Colors.BACKGROUND_COLOR);
 
         b_add.setBackground(Colors.PRIMARY_COLOR);
         b_add.setFont(Fonts.PRODUCT_SANS_MEDIUM.deriveFont(14f)
@@ -120,30 +137,31 @@ public class WrapperStudent extends javax.swing.JPanel {
         chipsPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 4, 0));
         jPanel3.add(chipsPanel);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout appbarLayout = new javax.swing.GroupLayout(appbar);
+        appbar.setLayout(appbarLayout);
+        appbarLayout.setHorizontalGroup(
+            appbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(appbarLayout.createSequentialGroup()
                 .addComponent(b_back, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(tv_title)
                 .addGap(16, 16, 16)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
                 .addGap(16, 16, 16)
                 .addComponent(b_add)
                 .addContainerGap())
             .addComponent(jSeparator1)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        appbarLayout.setVerticalGroup(
+            appbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(appbarLayout.createSequentialGroup()
                 .addGap(6, 6, 6)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(b_add, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(b_back, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tv_title, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(appbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(appbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(b_add, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(b_back, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(tv_title, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(6, 6, 6)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
@@ -162,13 +180,13 @@ public class WrapperStudent extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(appbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(appbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -189,6 +207,8 @@ public class WrapperStudent extends javax.swing.JPanel {
             b_back.setVisible(false);
             b_add.setVisible(true);
             b_add.setText("Tambah");
+            b_add.setIcon(new ImageIcon(getClass().getResource(
+                    "/assets/images/ic_plus_white.png")));
 
         } else if (evt.getChild() instanceof AddSiswaPage) {
             final var child = (AddSiswaPage) evt.getChild();
@@ -206,6 +226,8 @@ public class WrapperStudent extends javax.swing.JPanel {
             b_back.setVisible(true);
             b_add.setVisible(true);
             b_add.setText("Edit");
+            b_add.setIcon(new ImageIcon(getClass().getResource(
+                    "/assets/images/ic_pencil-outline_white.png")));
         }
     }//GEN-LAST:event_contentComponentAdded
 
@@ -236,11 +258,11 @@ public class WrapperStudent extends javax.swing.JPanel {
     }//GEN-LAST:event_b_backActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel appbar;
     public javax.swing.JButton b_add;
     public javax.swing.JButton b_back;
     public javax.swing.JPanel chipsPanel;
     public static javax.swing.JPanel content;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.ButtonGroup jenisKelaminGroup;

@@ -24,16 +24,23 @@ public class Fonts {
 
     public static void registerFont(Class c) {
         try {
-            GOOGLE_SANS = Font.createFont(Font.TRUETYPE_FONT, c.getResourceAsStream("/assets/fonts/GoogleSans-Regular.ttf"));
+            GOOGLE_SANS = Font.createFont(Font.TRUETYPE_FONT, c
+                    .getResourceAsStream("/assets/fonts/GoogleSans-Regular.ttf"));
 
-            PRODUCT_SANS_REGULAR = Font.createFont(Font.TRUETYPE_FONT, c.getResourceAsStream("/assets/fonts/ProductSans-Regular.ttf"));
-            PRODUCT_SANS_MEDIUM = Font.createFont(Font.TRUETYPE_FONT, c.getResourceAsStream("/assets/fonts/ProductSans-Medium.ttf"));
+            PRODUCT_SANS_REGULAR = Font.createFont(Font.TRUETYPE_FONT, c
+                    .getResourceAsStream("/assets/fonts/ProductSans-Regular.ttf"));
+            PRODUCT_SANS_MEDIUM = Font.createFont(Font.TRUETYPE_FONT, c
+                    .getResourceAsStream("/assets/fonts/ProductSans-Medium.ttf"));
 
-            ROBOTO_REGULAR = Font.createFont(Font.TRUETYPE_FONT, c.getResourceAsStream("/assets/fonts/Roboto-Regular.ttf"));
-            ROBOTO_LIGHT = Font.createFont(Font.TRUETYPE_FONT, c.getResourceAsStream("/assets/fonts/Roboto-Light.ttf"));
-            ROBOTO_MEDIUM = Font.createFont(Font.TRUETYPE_FONT, c.getResourceAsStream("/assets/fonts/Roboto-Medium.ttf"));
+            ROBOTO_REGULAR = Font.createFont(Font.TRUETYPE_FONT, c
+                    .getResourceAsStream("/assets/fonts/Roboto-Regular.ttf"));
+            ROBOTO_LIGHT = Font.createFont(Font.TRUETYPE_FONT, c
+                    .getResourceAsStream("/assets/fonts/Roboto-Light.ttf"));
+            ROBOTO_MEDIUM = Font.createFont(Font.TRUETYPE_FONT, c
+                    .getResourceAsStream("/assets/fonts/Roboto-Medium.ttf"));
 
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            GraphicsEnvironment ge = GraphicsEnvironment
+                    .getLocalGraphicsEnvironment();
             ge.registerFont(GOOGLE_SANS);
             ge.registerFont(PRODUCT_SANS_REGULAR);
             ge.registerFont(ROBOTO_MEDIUM);
@@ -41,5 +48,8 @@ public class Fonts {
         } catch (FontFormatException | IOException ex) {
             Logger.getLogger(Fonts.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private Fonts() {
     }
 }

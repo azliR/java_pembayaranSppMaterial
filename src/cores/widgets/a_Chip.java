@@ -52,7 +52,7 @@ public class a_Chip extends RoundedButton {
 
     }
 
-    private void setSelected(a_Chip chip) {
+    public void setSelected(a_Chip chip) {
         chip.setBackground(chip.isSelected() ? activeBackgroundColor
                 : inactiveBackgroundColor);
         chip.setForeground(chip.isSelected() ? activeTextColor
