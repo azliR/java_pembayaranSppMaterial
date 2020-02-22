@@ -13,13 +13,13 @@ import cores.styles.Strings;
 import cores.utils.AlertDialog;
 import cores.utils.ImageProcessor;
 import cores.utils.Navigator;
+import cores.utils.Scalr;
 import cores.widgets.RoundedBorder;
 import features.siswa.data.datasources.SiswaLocalDataSource;
 import features.siswa.data.datasources.SiswaRemoteDataSource;
 import features.siswa.presentation.pages.AddSiswaPage;
 import features.siswa.presentation.pages.DetailSiswaPage;
 import features.siswa.presentation.pages.ListSiswaPage;
-import features.siswa.presentation.pages.WrapperStudent;
 import features.siswa.presentation.widgets.SiswaTile;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
@@ -31,7 +31,6 @@ import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import main.MainFrame;
-import org.imgscalr.Scalr;
 
 /**
  *
@@ -59,6 +58,7 @@ public class SiswaRepositoryImpl implements SiswaRepository {
             final var result = remoteDataSource.getListSiswaWithoutThumbnail(
                     maxResults, firstResult);
             if (result == null) {
+                context.isLasIndex = true;
                 return;
             }
 
@@ -99,6 +99,7 @@ public class SiswaRepositoryImpl implements SiswaRepository {
                     .getListSiswaByJenisKelaminWithoutThumbnail(
                             keyword, maxResults, firstResult);
             if (result == null) {
+                context.isLasIndex = true;
                 return;
             }
             final var widthTile = (MainFrame.content.getSize().width / 3) - (4 * 3);
@@ -169,7 +170,7 @@ public class SiswaRepositoryImpl implements SiswaRepository {
                 AlertDialog.showErrorDialog(Strings.ERROR_DIALOG_NULL_DATA);
                 return;
             }
-            Navigator.push(WrapperStudent.content, new DetailSiswaPage(result));
+            Navigator.push(new DetailSiswaPage(this, result));
         } catch (ServerException ex) {
             AlertDialog.showErrorDialog(ex.getMessage());
             LOG.log(Level.SEVERE, null, ex);
@@ -282,13 +283,14 @@ public class SiswaRepositoryImpl implements SiswaRepository {
 
             if (context.siswa == null) {
                 remoteDataSource.insertSiswa(siswa);
+
+                clear(context);
+                AlertDialog.showDialog(Strings.SUCCESS_DIALOG_DEFAULT,
+                        Strings.SUCCESS_DIALOG_INSERT);
             } else {
                 remoteDataSource.updateSiswa(siswa);
+                Navigator.push(new DetailSiswaPage(this, siswa));
             }
-
-            clear(context);
-            AlertDialog.showDialog(Strings.SUCCESS_DIALOG_DEFAULT,
-                    Strings.SUCCESS_DIALOG_INSERT);
         } catch (PreexistingEntityException | ServerException
                 | IllegalOrphanException | NonexistentEntityException ex) {
             AlertDialog.showErrorDialog(ex.getMessage());
@@ -300,7 +302,7 @@ public class SiswaRepositoryImpl implements SiswaRepository {
     public void deleteSiswa(String nisn) {
         try {
             remoteDataSource.deleteSiswa(nisn);
-            Navigator.push(WrapperStudent.content, new ListSiswaPage(this));
+            Navigator.push(new ListSiswaPage(this));
         } catch (IllegalOrphanException | NonexistentEntityException ex) {
             AlertDialog.showErrorDialog(ex.getMessage());
             LOG.log(Level.SEVERE, null, ex);

@@ -5,12 +5,12 @@ import cores.styles.Colors;
 import cores.styles.Constants;
 import cores.styles.Fonts;
 import cores.utils.ImageProcessor;
+import cores.utils.Scalr;
 import cores.widgets.RoundedBorder;
 import cores.widgets.RoundedPanel;
 import features.siswa.data.repositories.SiswaRepository;
 import java.awt.image.BufferedImageOp;
 import javax.swing.ImageIcon;
-import org.imgscalr.Scalr;
 
 /**
  *

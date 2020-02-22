@@ -10,7 +10,7 @@ import features.auth.data.repositories.AuthRepository;
 import features.auth.presentation.pages.LoginPage;
 import features.home.pages.HomePage;
 import features.siswa.data.repositories.SiswaRepository;
-import features.siswa.presentation.pages.WrapperStudent;
+import features.siswa.presentation.pages.ListSiswaPage;
 import java.awt.Frame;
 import javax.swing.JFrame;
 
@@ -226,7 +226,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(nav_siswa, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(nav_laporan, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(nav_spp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGap(10, 10, 10))
         );
         sideBarLayout.setVerticalGroup(
             sideBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -278,8 +278,8 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(et_search, javax.swing.GroupLayout.DEFAULT_SIZE, 645, Short.MAX_VALUE)
+                .addGap(8, 8, 8)
+                .addComponent(et_search, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -307,8 +307,8 @@ public class MainFrame extends javax.swing.JFrame {
             .addComponent(jSeparator1)
             .addGroup(topBarLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(128, 128, 128))
         );
@@ -402,7 +402,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_et_searchKeyTyped
 
     private void nav_siswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nav_siswaActionPerformed
-        Navigator.push(new WrapperStudent(siswaRepository));
+        Navigator.push(new ListSiswaPage(siswaRepository));
     }//GEN-LAST:event_nav_siswaActionPerformed
 
     private void nav_laporanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nav_laporanActionPerformed
