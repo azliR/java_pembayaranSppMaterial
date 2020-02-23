@@ -174,7 +174,7 @@ public class SiswaTile extends RoundedPanel {
     }//GEN-LAST:event_formMouseExited
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-        repository.initDetailSiswa(siswa.getNisn());
+        repository.initDetailSiswa(siswa.getId());
     }//GEN-LAST:event_formMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

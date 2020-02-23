@@ -2,7 +2,6 @@ package cores.controllerTest;
 
 import cores.controllerTest.exceptions.IllegalOrphanException;
 import cores.controllerTest.exceptions.NonexistentEntityException;
-import cores.controllerTest.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -31,7 +30,7 @@ public class SiswaJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Siswa siswa) throws PreexistingEntityException, Exception {
+    public void create(Siswa siswa) {
         if (siswa.getPembayaranList() == null) {
             siswa.setPembayaranList(new ArrayList<Pembayaran>());
         }
@@ -68,24 +67,18 @@ public class SiswaJpaController implements Serializable {
                 idSpp = em.merge(idSpp);
             }
             for (Pembayaran pembayaranListPembayaran : siswa.getPembayaranList()) {
-                Siswa oldNisnOfPembayaranListPembayaran
-                        = pembayaranListPembayaran.getNisn();
-                pembayaranListPembayaran.setNisn(siswa);
+                Siswa oldIdSiswaOfPembayaranListPembayaran
+                        = pembayaranListPembayaran.getIdSiswa();
+                pembayaranListPembayaran.setIdSiswa(siswa);
                 pembayaranListPembayaran = em.merge(pembayaranListPembayaran);
-                if (oldNisnOfPembayaranListPembayaran != null) {
-                    oldNisnOfPembayaranListPembayaran.getPembayaranList()
+                if (oldIdSiswaOfPembayaranListPembayaran != null) {
+                    oldIdSiswaOfPembayaranListPembayaran.getPembayaranList()
                             .remove(pembayaranListPembayaran);
-                    oldNisnOfPembayaranListPembayaran
-                            = em.merge(oldNisnOfPembayaranListPembayaran);
+                    oldIdSiswaOfPembayaranListPembayaran
+                            = em.merge(oldIdSiswaOfPembayaranListPembayaran);
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findSiswa(siswa.getNisn()) != null) {
-                throw new PreexistingEntityException("Siswa " + siswa +
-                        " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -99,7 +92,7 @@ public class SiswaJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Siswa persistentSiswa = em.find(Siswa.class, siswa.getNisn());
+            Siswa persistentSiswa = em.find(Siswa.class, siswa.getId());
             Kelas idKelasOld = persistentSiswa.getIdKelas();
             Kelas idKelasNew = siswa.getIdKelas();
             Spp idSppOld = persistentSiswa.getIdSpp();
@@ -115,7 +108,7 @@ public class SiswaJpaController implements Serializable {
                     }
                     illegalOrphanMessages.add("You must retain Pembayaran " +
                             pembayaranListOldPembayaran +
-                            " since its nisn field is not nullable.");
+                            " since its idSiswa field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -161,17 +154,17 @@ public class SiswaJpaController implements Serializable {
             }
             for (Pembayaran pembayaranListNewPembayaran : pembayaranListNew) {
                 if (!pembayaranListOld.contains(pembayaranListNewPembayaran)) {
-                    Siswa oldNisnOfPembayaranListNewPembayaran
-                            = pembayaranListNewPembayaran.getNisn();
-                    pembayaranListNewPembayaran.setNisn(siswa);
+                    Siswa oldIdSiswaOfPembayaranListNewPembayaran
+                            = pembayaranListNewPembayaran.getIdSiswa();
+                    pembayaranListNewPembayaran.setIdSiswa(siswa);
                     pembayaranListNewPembayaran
                             = em.merge(pembayaranListNewPembayaran);
-                    if (oldNisnOfPembayaranListNewPembayaran != null &&
-                            !oldNisnOfPembayaranListNewPembayaran.equals(siswa)) {
-                        oldNisnOfPembayaranListNewPembayaran.getPembayaranList()
+                    if (oldIdSiswaOfPembayaranListNewPembayaran != null &&
+                            !oldIdSiswaOfPembayaranListNewPembayaran.equals(siswa)) {
+                        oldIdSiswaOfPembayaranListNewPembayaran.getPembayaranList()
                                 .remove(pembayaranListNewPembayaran);
-                        oldNisnOfPembayaranListNewPembayaran
-                                = em.merge(oldNisnOfPembayaranListNewPembayaran);
+                        oldIdSiswaOfPembayaranListNewPembayaran
+                                = em.merge(oldIdSiswaOfPembayaranListNewPembayaran);
                     }
                 }
             }
@@ -179,7 +172,7 @@ public class SiswaJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                String id = siswa.getNisn();
+                Integer id = siswa.getId();
                 if (findSiswa(id) == null) {
                     throw new NonexistentEntityException("The siswa with id " +
                             id + " no longer exists.");
@@ -193,7 +186,7 @@ public class SiswaJpaController implements Serializable {
         }
     }
 
-    public void destroy(String id) throws IllegalOrphanException,
+    public void destroy(Integer id) throws IllegalOrphanException,
             NonexistentEntityException {
         EntityManager em = null;
         try {
@@ -202,7 +195,7 @@ public class SiswaJpaController implements Serializable {
             Siswa siswa;
             try {
                 siswa = em.getReference(Siswa.class, id);
-                siswa.getNisn();
+                siswa.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The siswa with id " + id +
                         " no longer exists.", enfe);
@@ -217,7 +210,7 @@ public class SiswaJpaController implements Serializable {
                 illegalOrphanMessages.add("This Siswa (" + siswa +
                         ") cannot be destroyed since the Pembayaran " +
                         pembayaranListOrphanCheckPembayaran +
-                        " in its pembayaranList field has a non-nullable nisn field.");
+                        " in its pembayaranList field has a non-nullable idSiswa field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
@@ -266,7 +259,7 @@ public class SiswaJpaController implements Serializable {
         }
     }
 
-    public Siswa findSiswa(String id) {
+    public Siswa findSiswa(Integer id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Siswa.class, id);

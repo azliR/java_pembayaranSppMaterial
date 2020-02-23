@@ -163,9 +163,9 @@ public class SiswaRepositoryImpl implements SiswaRepository {
     }
 
     @Override
-    public void initDetailSiswa(String nisn) {
+    public void initDetailSiswa(int id) {
         try {
-            final var result = remoteDataSource.getSiswa(nisn);
+            final var result = remoteDataSource.getSiswa(id);
             if (result == null) {
                 AlertDialog.showErrorDialog(Strings.ERROR_DIALOG_NULL_DATA);
                 return;
@@ -181,7 +181,7 @@ public class SiswaRepositoryImpl implements SiswaRepository {
     public void initSiswaThumbnail(SiswaTile siswaTile) {
         try {
             final var result = remoteDataSource.getSiswaThumbnail(
-                    siswaTile.siswa.getNisn());
+                    siswaTile.siswa.getId());
             if (result == null) {
                 return;
             }
@@ -246,6 +246,7 @@ public class SiswaRepositoryImpl implements SiswaRepository {
 
     @Override
     public void insertSiswa(AddSiswaPage context) {
+        final var id = context.siswa == null ? null : context.siswa.getId();
         final var foto = context.foto;
         final var nisn = context.et_nisn.getText();
         final var nis = context.et_nis.getText();
@@ -269,6 +270,7 @@ public class SiswaRepositoryImpl implements SiswaRepository {
 
         try {
             final var siswa = new Siswa();
+            siswa.setId(id);
             siswa.setNisn(nisn);
             siswa.setNis(nis);
             siswa.setNama(nama);
@@ -299,9 +301,9 @@ public class SiswaRepositoryImpl implements SiswaRepository {
     }
 
     @Override
-    public void deleteSiswa(String nisn) {
+    public void deleteSiswa(int id) {
         try {
-            remoteDataSource.deleteSiswa(nisn);
+            remoteDataSource.deleteSiswa(id);
             Navigator.push(new ListSiswaPage(this));
         } catch (IllegalOrphanException | NonexistentEntityException ex) {
             AlertDialog.showErrorDialog(ex.getMessage());

@@ -454,7 +454,7 @@ public class DetailSiswaPage extends javax.swing.JPanel {
                 + " dari database secara permanen? Tindakan ini tidak dapat diurungkan.",
                 "Hapus data?", JOptionPane.YES_NO_OPTION);
         if (result == 0) {
-            repository.deleteSiswa(siswa.getNisn());
+            repository.deleteSiswa(siswa.getId());
         }
     }//GEN-LAST:event_b_deleteActionPerformed
 

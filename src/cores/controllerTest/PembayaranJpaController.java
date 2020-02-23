@@ -8,8 +8,8 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import cores.entities.Petugas;
-import cores.entities.Spp;
 import cores.entities.Siswa;
+import cores.entities.Spp;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -40,28 +40,28 @@ public class PembayaranJpaController implements Serializable {
                         idPetugas.getId());
                 pembayaran.setIdPetugas(idPetugas);
             }
+            Siswa idSiswa = pembayaran.getIdSiswa();
+            if (idSiswa != null) {
+                idSiswa = em.getReference(idSiswa.getClass(), idSiswa.getId());
+                pembayaran.setIdSiswa(idSiswa);
+            }
             Spp idSpp = pembayaran.getIdSpp();
             if (idSpp != null) {
                 idSpp = em.getReference(idSpp.getClass(), idSpp.getId());
                 pembayaran.setIdSpp(idSpp);
-            }
-            Siswa nisn = pembayaran.getNisn();
-            if (nisn != null) {
-                nisn = em.getReference(nisn.getClass(), nisn.getNisn());
-                pembayaran.setNisn(nisn);
             }
             em.persist(pembayaran);
             if (idPetugas != null) {
                 idPetugas.getPembayaranList().add(pembayaran);
                 idPetugas = em.merge(idPetugas);
             }
+            if (idSiswa != null) {
+                idSiswa.getPembayaranList().add(pembayaran);
+                idSiswa = em.merge(idSiswa);
+            }
             if (idSpp != null) {
                 idSpp.getPembayaranList().add(pembayaran);
                 idSpp = em.merge(idSpp);
-            }
-            if (nisn != null) {
-                nisn.getPembayaranList().add(pembayaran);
-                nisn = em.merge(nisn);
             }
             em.getTransaction().commit();
         } finally {
@@ -81,24 +81,26 @@ public class PembayaranJpaController implements Serializable {
                     = em.find(Pembayaran.class, pembayaran.getId());
             Petugas idPetugasOld = persistentPembayaran.getIdPetugas();
             Petugas idPetugasNew = pembayaran.getIdPetugas();
+            Siswa idSiswaOld = persistentPembayaran.getIdSiswa();
+            Siswa idSiswaNew = pembayaran.getIdSiswa();
             Spp idSppOld = persistentPembayaran.getIdSpp();
             Spp idSppNew = pembayaran.getIdSpp();
-            Siswa nisnOld = persistentPembayaran.getNisn();
-            Siswa nisnNew = pembayaran.getNisn();
             if (idPetugasNew != null) {
                 idPetugasNew
                         = em.getReference(idPetugasNew.getClass(),
                         idPetugasNew.getId());
                 pembayaran.setIdPetugas(idPetugasNew);
             }
+            if (idSiswaNew != null) {
+                idSiswaNew
+                        = em.getReference(idSiswaNew.getClass(),
+                        idSiswaNew.getId());
+                pembayaran.setIdSiswa(idSiswaNew);
+            }
             if (idSppNew != null) {
                 idSppNew
                         = em.getReference(idSppNew.getClass(), idSppNew.getId());
                 pembayaran.setIdSpp(idSppNew);
-            }
-            if (nisnNew != null) {
-                nisnNew = em.getReference(nisnNew.getClass(), nisnNew.getNisn());
-                pembayaran.setNisn(nisnNew);
             }
             pembayaran = em.merge(pembayaran);
             if (idPetugasOld != null && !idPetugasOld.equals(idPetugasNew)) {
@@ -109,6 +111,14 @@ public class PembayaranJpaController implements Serializable {
                 idPetugasNew.getPembayaranList().add(pembayaran);
                 idPetugasNew = em.merge(idPetugasNew);
             }
+            if (idSiswaOld != null && !idSiswaOld.equals(idSiswaNew)) {
+                idSiswaOld.getPembayaranList().remove(pembayaran);
+                idSiswaOld = em.merge(idSiswaOld);
+            }
+            if (idSiswaNew != null && !idSiswaNew.equals(idSiswaOld)) {
+                idSiswaNew.getPembayaranList().add(pembayaran);
+                idSiswaNew = em.merge(idSiswaNew);
+            }
             if (idSppOld != null && !idSppOld.equals(idSppNew)) {
                 idSppOld.getPembayaranList().remove(pembayaran);
                 idSppOld = em.merge(idSppOld);
@@ -116,14 +126,6 @@ public class PembayaranJpaController implements Serializable {
             if (idSppNew != null && !idSppNew.equals(idSppOld)) {
                 idSppNew.getPembayaranList().add(pembayaran);
                 idSppNew = em.merge(idSppNew);
-            }
-            if (nisnOld != null && !nisnOld.equals(nisnNew)) {
-                nisnOld.getPembayaranList().remove(pembayaran);
-                nisnOld = em.merge(nisnOld);
-            }
-            if (nisnNew != null && !nisnNew.equals(nisnOld)) {
-                nisnNew.getPembayaranList().add(pembayaran);
-                nisnNew = em.merge(nisnNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -161,15 +163,15 @@ public class PembayaranJpaController implements Serializable {
                 idPetugas.getPembayaranList().remove(pembayaran);
                 idPetugas = em.merge(idPetugas);
             }
+            Siswa idSiswa = pembayaran.getIdSiswa();
+            if (idSiswa != null) {
+                idSiswa.getPembayaranList().remove(pembayaran);
+                idSiswa = em.merge(idSiswa);
+            }
             Spp idSpp = pembayaran.getIdSpp();
             if (idSpp != null) {
                 idSpp.getPembayaranList().remove(pembayaran);
                 idSpp = em.merge(idSpp);
-            }
-            Siswa nisn = pembayaran.getNisn();
-            if (nisn != null) {
-                nisn.getPembayaranList().remove(pembayaran);
-                nisn = em.merge(nisn);
             }
             em.remove(pembayaran);
             em.getTransaction().commit();

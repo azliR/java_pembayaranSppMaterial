@@ -17,7 +17,7 @@ public interface SiswaRepository {
             ListSiswaPage context, char keyword, int maxResults,
             int firstResult);
 
-    public abstract void initDetailSiswa(String nisn);
+    public abstract void initDetailSiswa(int id);
 
     public abstract void initDropdownKelas(AddSiswaPage context);
 
@@ -30,7 +30,7 @@ public interface SiswaRepository {
 
     public abstract void insertSiswa(AddSiswaPage context);
 
-    public abstract void deleteSiswa(String nisn);
+    public abstract void deleteSiswa(int id);
 
     public abstract void clear(AddSiswaPage context);
 }

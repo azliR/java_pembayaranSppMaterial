@@ -9,6 +9,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -30,10 +32,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "siswa", catalog = "pembayaran_spp", schema = "",
         uniqueConstraints
-        = {@UniqueConstraint(columnNames = {"nis"})})
+        = {@UniqueConstraint(columnNames = {"nis"}),
+            @UniqueConstraint(columnNames = {"nisn"})})
 @XmlRootElement
 @NamedQueries({@NamedQuery(name = "Siswa.findAll", query
             = "SELECT s FROM Siswa s"),
+    @NamedQuery(name = "Siswa.findById", query
+            = "SELECT s FROM Siswa s WHERE s.id = :id"),
     @NamedQuery(name = "Siswa.findByNisn", query
             = "SELECT s FROM Siswa s WHERE s.nisn = :nisn"),
     @NamedQuery(name = "Siswa.findByNis", query
@@ -49,6 +54,10 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Siswa implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id", nullable = false)
+    private Integer id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 10)
@@ -87,7 +96,7 @@ public class Siswa implements Serializable {
     @Size(min = 1, max = 13)
     @Column(name = "spp_bulan_ini", nullable = false, length = 13)
     private String sppBulanIni;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nisn", fetch
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSiswa", fetch
             = FetchType.LAZY)
     private List<Pembayaran> pembayaranList;
     @JoinColumn(name = "id_kelas", referencedColumnName = "id", nullable = false)
@@ -100,12 +109,14 @@ public class Siswa implements Serializable {
     public Siswa() {
     }
 
-    public Siswa(String nisn) {
-        this.nisn = nisn;
+    public Siswa(Integer id) {
+        this.id = id;
     }
 
-    public Siswa(String nisn, String nis, String nama, Character jenisKelamin,
-            String noTelepon, String alamat, String sppBulanIni) {
+    public Siswa(Integer id, String nisn, String nis, String nama,
+            Character jenisKelamin, String noTelepon, String alamat,
+            String sppBulanIni) {
+        this.id = id;
         this.nisn = nisn;
         this.nis = nis;
         this.nama = nama;
@@ -113,6 +124,14 @@ public class Siswa implements Serializable {
         this.noTelepon = noTelepon;
         this.alamat = alamat;
         this.sppBulanIni = sppBulanIni;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNisn() {
@@ -208,7 +227,7 @@ public class Siswa implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (nisn != null ? nisn.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -219,16 +238,13 @@ public class Siswa implements Serializable {
             return false;
         }
         Siswa other = (Siswa) object;
-        if ((this.nisn == null && other.nisn != null) || (this.nisn != null
-                && !this.nisn.equals(other.nisn))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null
+                && !this.id.equals(other.id)));
     }
 
     @Override
     public String toString() {
-        return "cores.entities.Siswa[ nisn=" + nisn + " ]";
+        return "cores.entities.Siswa[ id=" + id + " ]";
     }
 
 }

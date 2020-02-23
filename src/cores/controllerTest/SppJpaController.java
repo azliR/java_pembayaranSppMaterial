@@ -53,7 +53,7 @@ public class SppJpaController implements Serializable {
             for (Siswa siswaListSiswaToAttach : spp.getSiswaList()) {
                 siswaListSiswaToAttach
                         = em.getReference(siswaListSiswaToAttach.getClass(),
-                        siswaListSiswaToAttach.getNisn());
+                        siswaListSiswaToAttach.getId());
                 attachedSiswaList.add(siswaListSiswaToAttach);
             }
             spp.setSiswaList(attachedSiswaList);
@@ -139,7 +139,7 @@ public class SppJpaController implements Serializable {
             for (Siswa siswaListNewSiswaToAttach : siswaListNew) {
                 siswaListNewSiswaToAttach
                         = em.getReference(siswaListNewSiswaToAttach.getClass(),
-                        siswaListNewSiswaToAttach.getNisn());
+                        siswaListNewSiswaToAttach.getId());
                 attachedSiswaListNew.add(siswaListNewSiswaToAttach);
             }
             siswaListNew = attachedSiswaListNew;

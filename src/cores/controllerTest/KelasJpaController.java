@@ -48,7 +48,7 @@ public class KelasJpaController implements Serializable {
             for (Siswa siswaListSiswaToAttach : kelas.getSiswaList()) {
                 siswaListSiswaToAttach
                         = em.getReference(siswaListSiswaToAttach.getClass(),
-                        siswaListSiswaToAttach.getNisn());
+                        siswaListSiswaToAttach.getId());
                 attachedSiswaList.add(siswaListSiswaToAttach);
             }
             kelas.setSiswaList(attachedSiswaList);
@@ -111,7 +111,7 @@ public class KelasJpaController implements Serializable {
             for (Siswa siswaListNewSiswaToAttach : siswaListNew) {
                 siswaListNewSiswaToAttach
                         = em.getReference(siswaListNewSiswaToAttach.getClass(),
-                        siswaListNewSiswaToAttach.getNisn());
+                        siswaListNewSiswaToAttach.getId());
                 attachedSiswaListNew.add(siswaListNewSiswaToAttach);
             }
             siswaListNew = attachedSiswaListNew;

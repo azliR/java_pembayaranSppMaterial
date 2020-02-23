@@ -54,12 +54,12 @@ public class Pembayaran implements Serializable {
             = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Petugas idPetugas;
+    @JoinColumn(name = "id_siswa", referencedColumnName = "id", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Siswa idSiswa;
     @JoinColumn(name = "id_spp", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Spp idSpp;
-    @JoinColumn(name = "nisn", referencedColumnName = "nisn", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Siswa nisn;
 
     public Pembayaran() {
     }
@@ -106,20 +106,20 @@ public class Pembayaran implements Serializable {
         this.idPetugas = idPetugas;
     }
 
+    public Siswa getIdSiswa() {
+        return idSiswa;
+    }
+
+    public void setIdSiswa(Siswa idSiswa) {
+        this.idSiswa = idSiswa;
+    }
+
     public Spp getIdSpp() {
         return idSpp;
     }
 
     public void setIdSpp(Spp idSpp) {
         this.idSpp = idSpp;
-    }
-
-    public Siswa getNisn() {
-        return nisn;
-    }
-
-    public void setNisn(Siswa nisn) {
-        this.nisn = nisn;
     }
 
     @Override
@@ -136,11 +136,8 @@ public class Pembayaran implements Serializable {
             return false;
         }
         Pembayaran other = (Pembayaran) object;
-        if ((this.id == null && other.id != null) ||
-                (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null
+                && !this.id.equals(other.id)));
     }
 
     @Override

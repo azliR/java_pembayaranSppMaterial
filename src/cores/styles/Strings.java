@@ -33,7 +33,7 @@ public class Strings {
     public static final String DATABASE_BELUM_DIBAYAR = "Belum dibayar";
     public static final String DATABASE_TELAH_DIBAYAR = "Telah dibayar";
 
-    public static final String LAKI_LAKI = "Laki-laki";
+    public static final String LAKI_LAKI = "Laki-Laki";
     public static final String PEREMPUAN = "Perempuan";
     public static final String SEMUA = "Semua";
 
