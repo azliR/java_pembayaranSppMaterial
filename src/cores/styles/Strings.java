@@ -37,6 +37,8 @@ public class Strings {
     public static final String PEREMPUAN = "Perempuan";
     public static final String SEMUA = "Semua";
 
+    public static final String SEARCH_HINT = "Cari siswa & mulai pembayaran";
+
     private Strings() {
     }
 }

@@ -14,6 +14,7 @@ import cores.widgets.RoundedButton;
 import cores.widgets.a_ScrollPane;
 import cores.widgets.a_TextField;
 import features.siswa.data.repositories.SiswaRepository;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 
 /**
@@ -36,8 +37,10 @@ public class AddSiswaPage extends javax.swing.JPanel {
     }
 
     private void init() {
-        repository.initDropdownKelas(this);
-        repository.initDropdownSpp(this);
+        initDropdownJenisKelamin();
+        initDropdownKelas();
+        initDropdownSpp();
+
         if (siswa != null) {
             if (siswa.getFoto() != null) {
                 final var roundedImage = ImageProcessor.roundImage(ImageProcessor
@@ -57,6 +60,29 @@ public class AddSiswaPage extends javax.swing.JPanel {
             cb_spp.setSelectedItem(siswa.getIdSpp());
             cb_jenisKelamin.setSelectedItem(siswa.getJenisKelamin());
             b_save.setText("Perbarui");
+        }
+    }
+
+    private void initDropdownJenisKelamin() {
+        final var result = new String[]{Strings.LAKI_LAKI, Strings.PEREMPUAN};
+        if (result != null) {
+            cb_jenisKelamin.setModel(new DefaultComboBoxModel<>(result));
+        }
+    }
+
+    private void initDropdownKelas() {
+        final var result = repository.getListKelas();
+        if (result != null) {
+            cb_kelas.setModel(new DefaultComboBoxModel<>(result
+                    .toArray(new Kelas[result.size()])));
+        }
+    }
+
+    private void initDropdownSpp() {
+        final var result = repository.getListSpp();
+        if (result != null) {
+            cb_spp.setModel(new DefaultComboBoxModel<>(result
+                    .toArray(new Spp[result.size()])));
         }
     }
 
@@ -230,7 +256,6 @@ public class AddSiswaPage extends javax.swing.JPanel {
         cb_jenisKelamin.setFont(Fonts.ROBOTO_MEDIUM.deriveFont(14f)
         );
         cb_jenisKelamin.setForeground(Colors.TEXT_COLOR);
-        cb_jenisKelamin.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { Strings.LAKI_LAKI, Strings.PEREMPUAN }));
         cb_jenisKelamin.setBorder(null);
 
         jLabel2.setFont(Fonts.ROBOTO_MEDIUM.deriveFont(14f)
@@ -372,7 +397,14 @@ public class AddSiswaPage extends javax.swing.JPanel {
     }//GEN-LAST:event_b_saveActionPerformed
 
     private void b_addImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_addImageActionPerformed
-        repository.getImageFromDisk(this, 144, 192);
+        final var result = repository.getImageFromDisk(144, 192);
+        if (result != null) {
+            b_addImage.setIcon(new ImageIcon(ImageProcessor.roundImage(result,
+                    Constants.BORDER_RADIUS)));
+            b_addImage.setText(null);
+            b_addImage.setBorder(null);
+            foto = ImageProcessor.toByteArray(result);
+        }
     }//GEN-LAST:event_b_addImageActionPerformed
 
     private void et_namaSiswaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_et_namaSiswaKeyTyped

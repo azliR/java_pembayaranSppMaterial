@@ -8,10 +8,8 @@ import cores.exceptions.NonexistentEntityException;
 import cores.exceptions.PreexistingEntityException;
 import cores.exceptions.ServerException;
 import cores.exceptions.UnexpectedException;
-import cores.styles.Constants;
 import cores.styles.Strings;
 import cores.utils.AlertDialog;
-import cores.utils.ImageProcessor;
 import cores.utils.Navigator;
 import cores.utils.Scalr;
 import cores.widgets.RoundedBorder;
@@ -19,18 +17,12 @@ import features.siswa.data.datasources.SiswaLocalDataSource;
 import features.siswa.data.datasources.SiswaRemoteDataSource;
 import features.siswa.presentation.pages.AddSiswaPage;
 import features.siswa.presentation.pages.DetailSiswaPage;
-import features.siswa.presentation.pages.ListSiswaPage;
-import features.siswa.presentation.widgets.SiswaTile;
-import java.awt.Dimension;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
-import main.MainFrame;
 
 /**
  *
@@ -51,166 +43,98 @@ public class SiswaRepositoryImpl implements SiswaRepository {
     }
 
     @Override
-    public void initListSiswaWithoutThumbnail(ListSiswaPage context,
-            int maxResults, int firstResult) {
-        context.isLoading = true;
+    public List<Siswa> getListSiswaWithoutThumbnail(int maxResults,
+            int firstResult) {
         try {
-            final var result = remoteDataSource.getListSiswaWithoutThumbnail(
+            return remoteDataSource.getListSiswaWithoutThumbnail(
                     maxResults, firstResult);
-            if (result == null) {
-                context.isLasIndex = true;
-                return;
-            }
-
-            final var widthTile = (MainFrame.content.getSize().width / 3) - (4 * 3);
-            for (int i = 0; i < result.size(); i++) {
-                final var siswa = result.get(i);
-                final var siswaTile = new SiswaTile(this, siswa);
-                siswaTile.setPreferredSize(new Dimension(widthTile,
-                        siswaTile.getPreferredSize().height));
-
-                if (i + 1 == result.size()) {
-                    siswaTile.addComponentListener(new ComponentAdapter() {
-                        @Override
-                        public void componentResized(ComponentEvent e) {
-                            context.isLoading = false;
-                            super.componentResized(e);
-                        }
-                    });
-                }
-                context.gridLayout.add(siswaTile);
-                context.listSiswaTiles.add(siswaTile);
-            }
-            context.listSiswa.addAll(result);
-            context.currentIndex += result.size();
-            context.isLasIndex = result.size() < context.maxResult;
         } catch (ServerException ex) {
             AlertDialog.showErrorDialog(ex.getMessage());
             LOG.log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     @Override
-    public void initListSiswaByJenisKelaminWithoutThumbnail(
-            ListSiswaPage context, char keyword, int maxResults, int firstResult) {
-        context.isLoading = true;
+    public List<Siswa> getListSiswaByJenisKelaminWithoutThumbnail(char keyword,
+            int maxResults, int firstResult) {
         try {
-            final var result = remoteDataSource
-                    .getListSiswaByJenisKelaminWithoutThumbnail(
-                            keyword, maxResults, firstResult);
-            if (result == null) {
-                context.isLasIndex = true;
-                return;
-            }
-            final var widthTile = (MainFrame.content.getSize().width / 3) - (4 * 3);
-
-            for (int i = 0; i < result.size(); i++) {
-                final var siswa = result.get(i);
-                final var siswaTile = new SiswaTile(this, siswa);
-                siswaTile.setPreferredSize(new Dimension(widthTile,
-                        siswaTile.getPreferredSize().height));
-
-                if (i + 1 == result.size()) {
-                    siswaTile.addComponentListener(new ComponentAdapter() {
-                        @Override
-                        public void componentResized(ComponentEvent e) {
-                            context.isLoading = false;
-                            super.componentResized(e);
-                        }
-                    });
-                }
-                context.gridLayout.add(siswaTile);
-                context.listSiswaTiles.add(siswaTile);
-            }
-
-            context.listSiswa.addAll(result);
-            context.currentIndex += result.size();
-            context.isLasIndex = result.size() < context.maxResult;
+            return remoteDataSource.getListSiswaByJenisKelaminWithoutThumbnail(
+                    keyword, maxResults, firstResult);
         } catch (ServerException ex) {
             AlertDialog.showErrorDialog(ex.getMessage());
             LOG.log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     @Override
-    public void initDropdownKelas(AddSiswaPage context) {
+    public List<Siswa> getListSiswaByNameWithoutThumbnail(String keyword,
+            int maxResults, int firstResult) {
         try {
-            final var result = remoteDataSource.getListKelas();
-            if (result == null) {
-                return;
-            }
-            context.cb_kelas.setModel(new DefaultComboBoxModel<>(result
-                    .toArray(new Kelas[result.size()])));
+            return remoteDataSource.getListSiswaByNameWithoutThumbnail(keyword,
+                    maxResults, firstResult);
         } catch (ServerException ex) {
-            AlertDialog.showErrorDialog(ex.getMessage());
             LOG.log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     @Override
-    public void initDropdownSpp(AddSiswaPage context) {
+    public List<Kelas> getListKelas() {
         try {
-            final var result = remoteDataSource.getListSpp();
-            if (result == null) {
-                return;
-            }
-            context.cb_spp.setModel(new DefaultComboBoxModel<>(result
-                    .toArray(new Spp[result.size()])));
+            return remoteDataSource.getListKelas();
         } catch (ServerException ex) {
             AlertDialog.showErrorDialog(ex.getMessage());
             LOG.log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     @Override
-    public void initDetailSiswa(int id) {
+    public List<Spp> getListSpp() {
         try {
-            final var result = remoteDataSource.getSiswa(id);
-            if (result == null) {
-                AlertDialog.showErrorDialog(Strings.ERROR_DIALOG_NULL_DATA);
-                return;
-            }
-            Navigator.push(new DetailSiswaPage(this, result));
+            return remoteDataSource.getListSpp();
         } catch (ServerException ex) {
             AlertDialog.showErrorDialog(ex.getMessage());
             LOG.log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     @Override
-    public void initSiswaThumbnail(SiswaTile siswaTile) {
+    public Siswa getSiswa(int id) {
         try {
-            final var result = remoteDataSource.getSiswaThumbnail(
-                    siswaTile.siswa.getId());
-            if (result == null) {
-                return;
-            }
-            siswaTile.tv_image.setIcon(new ImageIcon(result));
-            siswaTile.siswa.setFoto(result);
-            siswaTile.setFoto(result);
+            return remoteDataSource.getSiswa(id);
         } catch (ServerException ex) {
             AlertDialog.showErrorDialog(ex.getMessage());
             LOG.log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     @Override
-    public void getImageFromDisk(AddSiswaPage context, int width, int height) {
+    public byte[] getSiswaThumbnail(int id) {
+        try {
+            return remoteDataSource.getSiswaThumbnail(id);
+        } catch (ServerException ex) {
+            AlertDialog.showErrorDialog(ex.getMessage());
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    public BufferedImage getImageFromDisk(int width, int height) {
         try {
             final var result = localDataSource.getImageFromDisk();
             if (result == null) {
-                return;
+                return null;
             }
             final var resizedImage = Scalr.resize(ImageIO.read(result), height,
                     height);
             final var croppedImage = Scalr.crop(resizedImage, width, height);
-            final var roundedImage = ImageProcessor.roundImage(croppedImage,
-                    Constants.BORDER_RADIUS);
-
-            context.b_addImage.setIcon(new ImageIcon(roundedImage));
-            context.b_addImage.setText(null);
-            context.b_addImage.setBorder(null);
-            context.foto = ImageProcessor.toByteArray(croppedImage);
+            return croppedImage;
 
 //            for (var file : result.getParentFile().listFiles()) {
 //                final var a = Scalr.resize(ImageIO.read(file),
@@ -242,6 +166,7 @@ public class SiswaRepositoryImpl implements SiswaRepository {
             AlertDialog.showErrorDialog(ex.getMessage());
             LOG.log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     @Override
@@ -304,8 +229,8 @@ public class SiswaRepositoryImpl implements SiswaRepository {
     public void deleteSiswa(int id) {
         try {
             remoteDataSource.deleteSiswa(id);
-            Navigator.push(new ListSiswaPage(this));
-        } catch (IllegalOrphanException | NonexistentEntityException ex) {
+        } catch (IllegalOrphanException | NonexistentEntityException
+                | ServerException ex) {
             AlertDialog.showErrorDialog(ex.getMessage());
             LOG.log(Level.SEVERE, null, ex);
         }

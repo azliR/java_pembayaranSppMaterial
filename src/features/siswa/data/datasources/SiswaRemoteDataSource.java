@@ -21,6 +21,9 @@ public interface SiswaRemoteDataSource {
             char keyword, int maxResults,
             int firstResult) throws ServerException;
 
+    public abstract List<Siswa> getListSiswaByNameWithoutThumbnail(String keyword, int maxResults,
+            int firstResult) throws ServerException;
+
     public abstract byte[] getSiswaThumbnail(int id) throws ServerException;
 
     public abstract Siswa getSiswa(int id) throws ServerException;
@@ -36,5 +39,5 @@ public interface SiswaRemoteDataSource {
             NonexistentEntityException, ServerException;
 
     public abstract void deleteSiswa(int id) throws IllegalOrphanException,
-            NonexistentEntityException;
+            NonexistentEntityException, ServerException;
 }

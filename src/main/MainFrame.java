@@ -3,6 +3,7 @@ package main;
 import cores.styles.Colors;
 import cores.styles.Constants;
 import cores.styles.Fonts;
+import cores.styles.Strings;
 import cores.utils.Navigator;
 import cores.widgets.RoundedPanel;
 import cores.widgets.a_SideNavigation;
@@ -61,6 +62,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel3 = new RoundedPanel(Constants.BORDER_RADIUS);
         jLabel1 = new javax.swing.JLabel();
         et_search = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
 
@@ -241,7 +243,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(nav_spp, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(nav_laporan, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(158, Short.MAX_VALUE))
+                .addContainerGap(154, Short.MAX_VALUE))
         );
 
         topBar.setBackground(Colors.BACKGROUND_COLOR);
@@ -254,7 +256,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         et_search.setFont(Fonts.GOOGLE_SANS.deriveFont(16f));
         et_search.setForeground(Colors.GREY_TEXT_COLOR);
-        et_search.setText("Cari Siswa dan mulai pembayaran");
+        et_search.setText(Strings.SEARCH_HINT);
         et_search.setBorder(null);
         et_search.setOpaque(false);
         et_search.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -266,8 +268,20 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         et_search.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                et_searchKeyTyped(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                et_searchKeyReleased(evt);
+            }
+        });
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_close_grey.png"))); // NOI18N
+        jButton1.setBorder(null);
+        jButton1.setContentAreaFilled(false);
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.setFocusPainted(false);
+        jButton1.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_close_black.png"))); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -278,9 +292,11 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jLabel1)
-                .addGap(8, 8, 8)
-                .addComponent(et_search, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(10, 10, 10)
+                .addComponent(et_search, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -288,7 +304,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(et_search, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(et_search)
+            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jSeparator1.setForeground(Colors.BORDER_COLOR);
@@ -310,16 +327,16 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(128, 128, 128))
+                .addGap(64, 64, 64))
         );
         topBarLayout.setVerticalGroup(
             topBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(topBarLayout.createSequentialGroup()
-                .addGap(8, 8, 8)
+                .addGap(0, 0, 0)
                 .addGroup(topBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(8, 8, 8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -331,8 +348,10 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(sideBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(topBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(topBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -388,18 +407,20 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void et_searchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_et_searchFocusLost
         if (et_search.getText().isBlank()) {
-            et_search.setText("Telusuri Pesanan");
+            et_search.setText(Strings.SEARCH_HINT);
             et_search.setForeground(Colors.GREY_TEXT_COLOR);
+
+            ListSiswaPage listSiswaPage;
+            if (content.getComponent(0) instanceof ListSiswaPage) {
+                listSiswaPage = (ListSiswaPage) content.getComponent(0);
+                listSiswaPage.isSearching = true;
+            }
 
             isSearchFilled = false;
         } else {
             isSearchFilled = true;
         }
     }//GEN-LAST:event_et_searchFocusLost
-
-    private void et_searchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_et_searchKeyTyped
-
-    }//GEN-LAST:event_et_searchKeyTyped
 
     private void nav_siswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nav_siswaActionPerformed
         Navigator.push(new ListSiswaPage(siswaRepository));
@@ -413,9 +434,31 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_nav_sppActionPerformed
 
+    private void et_searchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_et_searchKeyReleased
+        ListSiswaPage listSiswaPage;
+        if (content.getComponent(0) instanceof ListSiswaPage) {
+            listSiswaPage = (ListSiswaPage) content.getComponent(0);
+        } else {
+            listSiswaPage = new ListSiswaPage(siswaRepository);
+            Navigator.push(listSiswaPage);
+        }
+        listSiswaPage.currentIndex = 0;
+        listSiswaPage.currentKeyword = et_search.getText();
+        listSiswaPage.isSearching = true;
+        listSiswaPage.scrollPane.getVerticalScrollBar().setValue(0);
+        listSiswaPage.gridLayout.removeAll();
+        listSiswaPage.initListSiswaByKeyword();
+        listSiswaPage.gridLayout.revalidate();
+    }//GEN-LAST:event_et_searchKeyReleased
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JPanel content;
     private javax.swing.JTextField et_search;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;

@@ -9,5 +9,6 @@ import java.util.List;
  * @author rizal
  */
 public interface KelasRemoteDataSource {
-    public abstract List<Kelas> getListKelas() throws ServerException;
+    public abstract List<Kelas> getListKelas(int maxResults, int firstResult)
+            throws ServerException;
 }

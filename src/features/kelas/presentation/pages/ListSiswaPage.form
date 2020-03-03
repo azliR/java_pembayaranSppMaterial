@@ -158,6 +158,9 @@
                   </Border>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+              </AuxValues>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
                 <Property name="alignment" type="int" value="0"/>
@@ -181,7 +184,6 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="scrollPane.getVerticalScrollBar().setUnitIncrement(12);"/>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new a_ScrollPane(jPanel1)"/>
-        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
       </AuxValues>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>

@@ -23,7 +23,7 @@ public class DetailSiswaPage extends javax.swing.JPanel {
 
     private final SiswaRepository repository;
 
-    public final Siswa siswa;
+    private final Siswa siswa;
 
     public DetailSiswaPage(SiswaRepository repository, Siswa siswa) {
         this.repository = repository;
@@ -455,6 +455,7 @@ public class DetailSiswaPage extends javax.swing.JPanel {
                 "Hapus data?", JOptionPane.YES_NO_OPTION);
         if (result == 0) {
             repository.deleteSiswa(siswa.getId());
+            Navigator.push(new ListSiswaPage(repository));
         }
     }//GEN-LAST:event_b_deleteActionPerformed
 

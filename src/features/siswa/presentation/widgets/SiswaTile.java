@@ -5,11 +5,12 @@ import cores.styles.Colors;
 import cores.styles.Constants;
 import cores.styles.Fonts;
 import cores.utils.ImageProcessor;
+import cores.utils.Navigator;
 import cores.utils.Scalr;
 import cores.widgets.RoundedBorder;
 import cores.widgets.RoundedPanel;
 import features.siswa.data.repositories.SiswaRepository;
-import java.awt.image.BufferedImageOp;
+import features.siswa.presentation.pages.DetailSiswaPage;
 import javax.swing.ImageIcon;
 
 /**
@@ -41,32 +42,23 @@ public class SiswaTile extends RoundedPanel {
     }
 
     public void setFoto(byte[] foto) {
+        if (foto == null) {
+            return;
+        }
         final var maxWidth = 120;
         final var maxHeight = 120;
 
         var image = ImageProcessor.byteArrayToBufferedImage(foto);
-        if (image.getWidth(null) > maxWidth
-                || image.getHeight(null) > maxHeight) {
+        if (image.getWidth(null) > maxWidth || image.getHeight(null) > maxHeight) {
             image = Scalr.resize(image, Scalr.Mode.FIT_TO_WIDTH, maxWidth,
-                    maxHeight, (BufferedImageOp) null);
+                    maxHeight);
         }
-        final var croppedImage = Scalr.crop(image, maxWidth, maxHeight,
-                (BufferedImageOp) null);
+        final var croppedImage = Scalr.crop(image, maxWidth, maxHeight);
         final var roundedImage = ImageProcessor.roundImage(
                 croppedImage, Constants.MEDIUM_BORDER_RADIUS);
 
         tv_image.setIcon(new ImageIcon(roundedImage));
-    }
-
-    public void setSelected(boolean isSelected) {
-        setBackground(isSelected ? Colors.BLUE_BACKGROUND_COLOR
-                : Colors.CARD_COLOR);
-        setBorder(new RoundedBorder(
-                Constants.MEDIUM_BORDER_RADIUS,
-                Constants.ALL_4_BORDER_INSETS,
-                isSelected ? Colors.ACTIVE_BORDER_COLOR : Colors.BORDER_COLOR));
-        tv_namaSiswa.setForeground(isSelected ? Colors.ACTIVE_TEXT_COLOR
-                : Colors.TEXT_COLOR);
+        siswa.setFoto(foto);
     }
 
     @SuppressWarnings("unchecked")
@@ -174,13 +166,14 @@ public class SiswaTile extends RoundedPanel {
     }//GEN-LAST:event_formMouseExited
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-        repository.initDetailSiswa(siswa.getId());
+        final var result = repository.getSiswa(siswa.getId());
+        Navigator.push(new DetailSiswaPage(repository, result));
     }//GEN-LAST:event_formMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jTextView;
     private javax.swing.JLabel tv_bulanIni;
-    public javax.swing.JLabel tv_image;
+    private javax.swing.JLabel tv_image;
     private javax.swing.JLabel tv_namaSiswa;
     private javax.swing.JLabel tv_nisn;
     // End of variables declaration//GEN-END:variables

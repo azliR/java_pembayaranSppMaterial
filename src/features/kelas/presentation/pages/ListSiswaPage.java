@@ -1,5 +1,6 @@
-package features.siswa.presentation.pages;
+package features.kelas.presentation.pages;
 
+import features.siswa.presentation.pages.*;
 import cores.entities.Siswa;
 import cores.styles.Colors;
 import cores.styles.Constants;
@@ -12,9 +13,7 @@ import cores.widgets.a_ScrollPane;
 import features.siswa.data.repositories.SiswaRepository;
 import features.siswa.presentation.widgets.SiswaTile;
 import java.awt.Dimension;
-import java.awt.HeadlessException;
 import java.awt.Toolkit;
-import java.awt.event.AdjustmentEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
@@ -30,15 +29,14 @@ public class ListSiswaPage extends javax.swing.JPanel {
 
     private final SiswaRepository repository;
 
-    private final List<SiswaTile> listSiswaTiles = new ArrayList<>();
-    private final List<Siswa> listSiswa = new ArrayList<>();
+    public final List<SiswaTile> listSiswaTiles = new ArrayList<>();
+    public final List<Siswa> listSiswa = new ArrayList<>();
 
-    private final int maxResult = 15;
-    public boolean isSearching = false;
-    private boolean isLoading = false;
-    private boolean isLasIndex = false;
+    public final int maxResult = 15;
+    public boolean isLoading = false;
+    public boolean isLasIndex = false;
     public int currentIndex = 0;
-    public String currentKeyword = Strings.SEMUA;
+    public String currentJenisKelaminValue = Strings.SEMUA;
 
     public ListSiswaPage(SiswaRepository repository) {
         this.repository = repository;
@@ -48,96 +46,35 @@ public class ListSiswaPage extends javax.swing.JPanel {
 
     private void init() {
         initJenisKelaminChips();
-        initScrollListener();
-    }
-
-    private void initScrollListener() throws HeadlessException {
         final var screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
         final var contentHeight = MainFrame.content.getHeight();
         final var appBarHeight = screenHeight - contentHeight;
         scrollPane.getVerticalScrollBar().addAdjustmentListener((e) -> {
-            initListSiswaWhenScroll(e);
-            initSiswaThumbnail(appBarHeight, contentHeight);
-        });
-    }
+            final var max = scrollPane.getVerticalScrollBar().getModel()
+                    .getMaximum();
+            final var extent = scrollPane.getVerticalScrollBar().getModel()
+                    .getExtent();
+            final var loadingArea = max - extent - 20;
 
-    private void initListSiswaWhenScroll(AdjustmentEvent e) {
-        final var max = scrollPane.getVerticalScrollBar().getModel()
-                .getMaximum();
-        final var extent = scrollPane.getVerticalScrollBar().getModel()
-                .getExtent();
-        final var loadingArea = max - extent - 20;
-
-        if (e.getValue() > loadingArea && !isLasIndex && !isLoading) {
-            initListSiswaByKeyword();
-        }
-    }
-
-    public void initListSiswaByKeyword() {
-        if (isSearching) {
-            initListSiswa(repository.getListSiswaByNameWithoutThumbnail(
-                    currentKeyword, maxResult, currentIndex));
-        } else {
-            if (currentKeyword.equals(Strings.SEMUA)) {
-                initListSiswa(repository.getListSiswaWithoutThumbnail(maxResult,
-                        currentIndex));
-            } else {
-                final var keyword = currentKeyword.equals(
-                        Strings.LAKI_LAKI)
-                                ? Strings.DATABASE_JENIS_KELAMIN_L
-                                : Strings.DATABASE_JENIS_KELAMIN_P;
-                initListSiswa(repository
-                        .getListSiswaByJenisKelaminWithoutThumbnail(keyword,
-                                maxResult, currentIndex));
+            if (e.getValue() > loadingArea && !isLoading) {
+                initListSiswa();
             }
-        }
-    }
 
-    private void initListSiswa(final List<Siswa> listSiswaNew) {
-        if (listSiswaNew == null) {
-            isLasIndex = true;
-            return;
-        }
-        final var widthTile = (MainFrame.content.getSize().width / 3) - (4 * 3);
-        for (int i = 0; i < listSiswaNew.size(); i++) {
-            final var siswa = listSiswaNew.get(i);
-            final var siswaTile = new SiswaTile(repository, siswa);
-            siswaTile.setPreferredSize(new Dimension(widthTile,
-                    siswaTile.getPreferredSize().height));
+            listSiswaTiles.forEach((siswaTile) -> {
+                if (siswaTile.isShowing() && siswaTile.isValid()) {
+                    final var location = siswaTile.getLocationOnScreen().y;
+                    if (siswaTile.siswa.getFoto() == null
+                            && location >= appBarHeight
+                            && location <= contentHeight) {
 
-            if (i + 1 == listSiswaNew.size()) {
-                siswaTile.addComponentListener(new ComponentAdapter() {
-                    @Override
-                    public void componentResized(ComponentEvent e) {
-                        isLoading = false;
-                        super.componentResized(e);
-                    }
-                });
-            }
-            gridLayout.add(siswaTile);
-            listSiswaTiles.add(siswaTile);
-        }
-        listSiswa.addAll(listSiswaNew);
-        currentIndex += listSiswaNew.size();
-        isLasIndex = listSiswaNew.size() < maxResult;
-    }
-
-    private void initSiswaThumbnail(final int appBarHeight,
-            final int contentHeight) {
-        listSiswaTiles.forEach((siswaTile) -> {
-            if (siswaTile.isShowing() && siswaTile.isValid()) {
-                final var location = siswaTile.getLocationOnScreen().y;
-                if (siswaTile.siswa.getFoto() == null
-                        && location >= appBarHeight
-                        && location <= contentHeight) {
-
-                    final var result = repository.getSiswaThumbnail(
-                            siswaTile.siswa.getId());
-                    if (result != null) {
-                        siswaTile.setFoto(result);
+                        final var result = repository.getSiswaThumbnail(
+                                siswaTile.siswa.getId());
+                        if (result != null) {
+                            siswaTile.setFoto(result);
+                        }
                     }
                 }
-            }
+            });
         });
     }
 
@@ -155,14 +92,56 @@ public class ListSiswaPage extends javax.swing.JPanel {
 
             chip.addActionListener((ae) -> {
                 currentIndex = 0;
-                currentKeyword = jenisKelamin;
+                currentJenisKelaminValue = jenisKelamin;
                 scrollPane.getVerticalScrollBar().setValue(0);
                 gridLayout.removeAll();
-                initListSiswaByKeyword();
+                initListSiswa();
                 gridLayout.revalidate();
             });
             chipsPanel.add(chip);
         });
+    }
+
+    private void initListSiswa() {
+        if (currentJenisKelaminValue.equals(Strings.SEMUA)) {
+            final var result = repository.getListSiswaWithoutThumbnail(maxResult,
+                    currentIndex);
+            if (result != null) {
+                listSiswa.addAll(result);
+            }
+        } else {
+            final var keyword = currentJenisKelaminValue.equals(
+                    Strings.LAKI_LAKI)
+                            ? Strings.DATABASE_JENIS_KELAMIN_L
+                            : Strings.DATABASE_JENIS_KELAMIN_P;
+            final var result = repository
+                    .getListSiswaByJenisKelaminWithoutThumbnail(keyword,
+                            maxResult, currentIndex);
+            if (result != null) {
+                listSiswa.addAll(result);
+            }
+        }
+        final var widthTile = (MainFrame.content.getSize().width / 3) - (4 * 3);
+        for (int i = 0; i < listSiswa.size(); i++) {
+            final var siswa = listSiswa.get(i);
+            final var siswaTile = new SiswaTile(repository, siswa);
+            siswaTile.setPreferredSize(new Dimension(widthTile,
+                    siswaTile.getPreferredSize().height));
+
+            if (i + 1 == listSiswa.size()) {
+                siswaTile.addComponentListener(new ComponentAdapter() {
+                    @Override
+                    public void componentResized(ComponentEvent e) {
+                        isLoading = false;
+                        super.componentResized(e);
+                    }
+                });
+            }
+            gridLayout.add(siswaTile);
+            listSiswaTiles.add(siswaTile);
+        }
+        currentIndex += listSiswa.size();
+        isLasIndex = listSiswa.size() < maxResult;
     }
 
     @SuppressWarnings("unchecked")
@@ -281,12 +260,12 @@ public class ListSiswaPage extends javax.swing.JPanel {
     private javax.swing.JPanel appbar3;
     private javax.swing.JButton b_add;
     private javax.swing.JPanel chipsPanel;
-    private javax.swing.JPanel chipsPanel3;
+    public javax.swing.JPanel chipsPanel3;
     public javax.swing.JPanel gridLayout;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.ButtonGroup jenisKelaminGroup;
-    public javax.swing.JScrollPane scrollPane;
+    private javax.swing.JScrollPane scrollPane;
     private javax.swing.JLabel tv_title;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,32 +1,35 @@
 package features.siswa.data.repositories;
 
+import cores.entities.Kelas;
+import cores.entities.Siswa;
+import cores.entities.Spp;
 import features.siswa.presentation.pages.AddSiswaPage;
-import features.siswa.presentation.pages.ListSiswaPage;
-import features.siswa.presentation.widgets.SiswaTile;
+import java.awt.image.BufferedImage;
+import java.util.List;
 
 /**
  *
  * @author rizal
  */
 public interface SiswaRepository {
-    public abstract void initListSiswaWithoutThumbnail(
-            ListSiswaPage context, int maxResults,
+    public abstract List<Siswa> getListSiswaWithoutThumbnail(int maxResults,
             int firstResult);
 
-    public abstract void initListSiswaByJenisKelaminWithoutThumbnail(
-            ListSiswaPage context, char keyword, int maxResults,
-            int firstResult);
+    public abstract List<Siswa> getListSiswaByJenisKelaminWithoutThumbnail(
+            char keyword, int maxResults, int firstResult);
 
-    public abstract void initDetailSiswa(int id);
+    public abstract List<Siswa> getListSiswaByNameWithoutThumbnail(
+            String keyword, int maxResults, int firstResult);
 
-    public abstract void initDropdownKelas(AddSiswaPage context);
+    public abstract List<Kelas> getListKelas();
 
-    public abstract void initDropdownSpp(AddSiswaPage context);
+    public abstract List<Spp> getListSpp();
 
-    public abstract void initSiswaThumbnail(SiswaTile siswaTile);
+    public abstract Siswa getSiswa(int id);
 
-    public abstract void getImageFromDisk(AddSiswaPage context, int width,
-            int height);
+    public abstract byte[] getSiswaThumbnail(int id);
+
+    public abstract BufferedImage getImageFromDisk(int width, int height);
 
     public abstract void insertSiswa(AddSiswaPage context);
 
