@@ -1,11 +1,10 @@
 package features.auth.data.datasources;
 
 import cores.entities.Petugas;
-import cores.entities.Petugas_;
 import cores.exceptions.ServerException;
 import cores.styles.Strings;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.TypedQuery;
+import javax.persistence.ParameterMode;
 
 /**
  *
@@ -23,25 +22,27 @@ public class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
             ServerException {
         final var entityManager = entityManagerFactory.createEntityManager();
         try {
-            final var criteriaBuilder = entityManager.getCriteriaBuilder();
-            final var criteriaQuery = criteriaBuilder.createQuery(Petugas.class);
-            final var root = criteriaQuery.from(Petugas.class);
-            criteriaQuery.select(root);
-            criteriaQuery.where(criteriaBuilder.equal(root.get(
-                    Petugas_.namaPengguna),
-                    namaPengguna));
-            criteriaQuery.where(criteriaBuilder.equal(root.get(
-                    Petugas_.kataSandi),
-                    kataSandi));
-            TypedQuery<Petugas> q = entityManager.createQuery(criteriaQuery);
+            final var storedProcedureQuery = entityManager
+                    .createStoredProcedureQuery("login", Petugas.class);
+            storedProcedureQuery.registerStoredProcedureParameter(1,
+                    String.class, ParameterMode.IN);
+            storedProcedureQuery.registerStoredProcedureParameter(2,
+                    String.class, ParameterMode.IN);
+            storedProcedureQuery.registerStoredProcedureParameter(3,
+                    Integer.class,
+                    ParameterMode.OUT);
+            storedProcedureQuery.setParameter(1, namaPengguna);
+            storedProcedureQuery.setParameter(2, kataSandi);
+            storedProcedureQuery.execute();
 
-            if (q.getResultList().size() <= 0) {
+            final var id = Integer.parseUnsignedInt(storedProcedureQuery
+                    .getOutputParameterValue(3).toString());
+            if (id <= 0) {
                 return null;
             }
-            return q.getSingleResult();
-        } catch (Exception ex) {
-            throw new ServerException(Strings.ERROR_DIALOG_CONNECTION,
-                    ex);
+            return entityManager.find(Petugas.class, id);
+        } catch (NumberFormatException ex) {
+            throw new ServerException(Strings.ERROR_DIALOG_CONNECTION, ex);
         } finally {
             entityManager.close();
         }

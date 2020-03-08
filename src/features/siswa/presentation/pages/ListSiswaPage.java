@@ -38,7 +38,8 @@ public class ListSiswaPage extends javax.swing.JPanel {
     private boolean isLoading = false;
     private boolean isLasIndex = false;
     public int currentIndex = 0;
-    public String currentKeyword = Strings.SEMUA;
+    public String currentSearchKeyword = null;
+    public String currentJenisKelamin = null;
 
     public ListSiswaPage(SiswaRepository repository) {
         this.repository = repository;
@@ -75,20 +76,16 @@ public class ListSiswaPage extends javax.swing.JPanel {
 
     public void initListSiswaByKeyword() {
         if (isSearching) {
-            initListSiswa(repository.getListSiswaByNameWithoutThumbnail(
-                    currentKeyword, maxResult, currentIndex));
+            initListSiswa(repository.getListSiswaByKeywordWithoutThumbnail(
+                    currentSearchKeyword, currentJenisKelamin, maxResult,
+                    currentIndex));
         } else {
-            if (currentKeyword.equals(Strings.SEMUA)) {
+            if (currentJenisKelamin == null) {
                 initListSiswa(repository.getListSiswaWithoutThumbnail(maxResult,
                         currentIndex));
             } else {
-                final var keyword = currentKeyword.equals(
-                        Strings.LAKI_LAKI)
-                                ? Strings.DATABASE_JENIS_KELAMIN_L
-                                : Strings.DATABASE_JENIS_KELAMIN_P;
-                initListSiswa(repository
-                        .getListSiswaByJenisKelaminWithoutThumbnail(keyword,
-                                maxResult, currentIndex));
+                initListSiswa(repository.getListSiswaByKeywordWithoutThumbnail(
+                        null, currentJenisKelamin, maxResult, currentIndex));
             }
         }
     }
@@ -154,8 +151,18 @@ public class ListSiswaPage extends javax.swing.JPanel {
             chip.setSelected(chip);
 
             chip.addActionListener((ae) -> {
+                switch (jenisKelamin) {
+                    case Strings.LAKI_LAKI:
+                        currentJenisKelamin = String.valueOf(
+                                Strings.DATABASE_JENIS_KELAMIN_L);
+                        break;
+                    case Strings.PEREMPUAN:
+                        currentJenisKelamin = String
+                                .valueOf(Strings.DATABASE_JENIS_KELAMIN_P);
+                        break;
+                    default: currentJenisKelamin = null;
+                }
                 currentIndex = 0;
-                currentKeyword = jenisKelamin;
                 scrollPane.getVerticalScrollBar().setValue(0);
                 gridLayout.removeAll();
                 initListSiswaByKeyword();
@@ -223,8 +230,8 @@ public class ListSiswaPage extends javax.swing.JPanel {
             .addComponent(jSeparator4)
             .addGroup(appbar3Layout.createSequentialGroup()
                 .addComponent(tv_title)
-                .addGap(16, 16, 16)
-                .addComponent(chipsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE)
+                .addGap(8, 8, 8)
+                .addComponent(chipsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
                 .addGap(16, 16, 16)
                 .addComponent(b_add)
                 .addContainerGap())

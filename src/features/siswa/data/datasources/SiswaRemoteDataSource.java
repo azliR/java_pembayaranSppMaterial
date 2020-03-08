@@ -17,12 +17,9 @@ public interface SiswaRemoteDataSource {
     public abstract List<Siswa> getListSiswaWithoutThumbnail(int maxResults,
             int firstResult) throws ServerException;
 
-    public abstract List<Siswa> getListSiswaByJenisKelaminWithoutThumbnail(
-            char keyword, int maxResults,
-            int firstResult) throws ServerException;
-
-    public abstract List<Siswa> getListSiswaByNameWithoutThumbnail(String keyword, int maxResults,
-            int firstResult) throws ServerException;
+    public abstract List<Siswa> getListSiswaByKeywordWithoutThumbnail(
+            String keyword, String jenisKelamin, int maxResults, int firstResult)
+            throws ServerException;
 
     public abstract byte[] getSiswaThumbnail(int id) throws ServerException;
 

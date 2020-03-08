@@ -77,6 +77,7 @@ public class MainFrame extends javax.swing.JFrame {
         jButton7.setBorderPainted(false);
         jButton7.setContentAreaFilled(false);
         jButton7.setFocusPainted(false);
+        jButton7.setFocusable(false);
         jButton7.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/titlebutton-close-hover.png"))); // NOI18N
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -90,6 +91,7 @@ public class MainFrame extends javax.swing.JFrame {
         jButton8.setBorderPainted(false);
         jButton8.setContentAreaFilled(false);
         jButton8.setFocusPainted(false);
+        jButton8.setFocusable(false);
         jButton8.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/titlebutton-minimize-hover.png"))); // NOI18N
         jButton8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -349,9 +351,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(sideBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(topBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+            .addComponent(topBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -410,10 +410,9 @@ public class MainFrame extends javax.swing.JFrame {
             et_search.setText(Strings.SEARCH_HINT);
             et_search.setForeground(Colors.GREY_TEXT_COLOR);
 
-            ListSiswaPage listSiswaPage;
             if (content.getComponent(0) instanceof ListSiswaPage) {
-                listSiswaPage = (ListSiswaPage) content.getComponent(0);
-                listSiswaPage.isSearching = true;
+                final var listSiswaPage = (ListSiswaPage) content.getComponent(0);
+                listSiswaPage.isSearching = false;
             }
 
             isSearchFilled = false;
@@ -443,11 +442,12 @@ public class MainFrame extends javax.swing.JFrame {
             Navigator.push(listSiswaPage);
         }
         listSiswaPage.currentIndex = 0;
-        listSiswaPage.currentKeyword = et_search.getText();
+        listSiswaPage.currentSearchKeyword = et_search.getText();
         listSiswaPage.isSearching = true;
         listSiswaPage.scrollPane.getVerticalScrollBar().setValue(0);
         listSiswaPage.gridLayout.removeAll();
         listSiswaPage.initListSiswaByKeyword();
+        listSiswaPage.gridLayout.repaint();
         listSiswaPage.gridLayout.revalidate();
     }//GEN-LAST:event_et_searchKeyReleased
 

@@ -56,25 +56,13 @@ public class SiswaRepositoryImpl implements SiswaRepository {
     }
 
     @Override
-    public List<Siswa> getListSiswaByJenisKelaminWithoutThumbnail(char keyword,
-            int maxResults, int firstResult) {
+    public List<Siswa> getListSiswaByKeywordWithoutThumbnail(String keyword,
+            String jenisKelamin, int maxResults, int firstResult) {
         try {
-            return remoteDataSource.getListSiswaByJenisKelaminWithoutThumbnail(
-                    keyword, maxResults, firstResult);
+            return remoteDataSource.getListSiswaByKeywordWithoutThumbnail(
+                    keyword, jenisKelamin, maxResults, firstResult);
         } catch (ServerException ex) {
             AlertDialog.showErrorDialog(ex.getMessage());
-            LOG.log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
-    @Override
-    public List<Siswa> getListSiswaByNameWithoutThumbnail(String keyword,
-            int maxResults, int firstResult) {
-        try {
-            return remoteDataSource.getListSiswaByNameWithoutThumbnail(keyword,
-                    maxResults, firstResult);
-        } catch (ServerException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
         return null;

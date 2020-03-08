@@ -17,7 +17,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.metamodel.SingularAttribute;
 
 /**
  *
@@ -30,9 +29,9 @@ public class SiswaRemoteDataSourceImpl implements SiswaRemoteDataSource {
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    private List<Siswa> getListSiswa(SingularAttribute<Siswa, ?> attribute,
-            String keyword, int maxResults, int firstResult)
-            throws ServerException {
+    private List<Siswa> getListSiswa(String namaKeyword,
+            String jenisKelaminKeyword, int maxResults, int firstResult) throws
+            ServerException {
         EntityManager entityManager = null;
         try {
             entityManager = entityManagerFactory.createEntityManager();
@@ -55,9 +54,21 @@ public class SiswaRemoteDataSourceImpl implements SiswaRemoteDataSource {
                         root.get(sppBulanIni).alias(sppBulanIni.getName()));
             }
             criteriaQuery.orderBy(criteriaBuilder.asc(root.get(nama)));
-            if (keyword != null && attribute != null) {
-                criteriaQuery.where(criteriaBuilder.like(root.get(attribute).as(
-                        String.class), "%" + keyword + "%"));
+
+            if (namaKeyword != null && jenisKelaminKeyword != null) {
+                criteriaQuery.where(
+                        criteriaBuilder.like(
+                                root.get(nama).as(String.class), "%"
+                                + namaKeyword + "%"),
+                        criteriaBuilder.equal(root.get(jenisKelamin),
+                                jenisKelaminKeyword));
+            } else if (namaKeyword != null) {
+                criteriaQuery.where(
+                        criteriaBuilder.like(root.get(nama).as(String.class),
+                                "%" + namaKeyword + "%"));
+            } else if (jenisKelaminKeyword != null) {
+                criteriaQuery.where(criteriaBuilder
+                        .equal(root.get(jenisKelamin), jenisKelaminKeyword));
             }
 
             final var query = entityManager.createQuery(criteriaQuery);
@@ -93,17 +104,10 @@ public class SiswaRemoteDataSourceImpl implements SiswaRemoteDataSource {
     }
 
     @Override
-    public List<Siswa> getListSiswaByJenisKelaminWithoutThumbnail(char keyword,
-            int maxResults, int firstResult) throws ServerException {
-        return getListSiswa(jenisKelamin, String.valueOf(keyword), maxResults,
-                firstResult);
-    }
-
-    @Override
-    public List<Siswa> getListSiswaByNameWithoutThumbnail(String keyword,
-            int maxResults,
-            int firstResult) throws ServerException {
-        return getListSiswa(nama, keyword, maxResults, firstResult);
+    public List<Siswa> getListSiswaByKeywordWithoutThumbnail(String keyword,
+            String jenisKelamin, int maxResults, int firstResult) throws
+            ServerException {
+        return getListSiswa(keyword, jenisKelamin, maxResults, firstResult);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package features.kelas.presentation.pages;
 
-import features.siswa.presentation.pages.*;
 import cores.entities.Siswa;
 import cores.styles.Colors;
 import cores.styles.Constants;
@@ -8,17 +7,12 @@ import cores.styles.Fonts;
 import cores.styles.Strings;
 import cores.utils.Navigator;
 import cores.widgets.RoundedButton;
-import cores.widgets.a_Chip;
 import cores.widgets.a_ScrollPane;
 import features.siswa.data.repositories.SiswaRepository;
+import features.siswa.presentation.pages.*;
 import features.siswa.presentation.widgets.SiswaTile;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
-import main.MainFrame;
 
 /**
  *
@@ -41,107 +35,6 @@ public class ListSiswaPage extends javax.swing.JPanel {
     public ListSiswaPage(SiswaRepository repository) {
         this.repository = repository;
         initComponents();
-        init();
-    }
-
-    private void init() {
-        initJenisKelaminChips();
-        final var screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
-        final var contentHeight = MainFrame.content.getHeight();
-        final var appBarHeight = screenHeight - contentHeight;
-        scrollPane.getVerticalScrollBar().addAdjustmentListener((e) -> {
-            final var max = scrollPane.getVerticalScrollBar().getModel()
-                    .getMaximum();
-            final var extent = scrollPane.getVerticalScrollBar().getModel()
-                    .getExtent();
-            final var loadingArea = max - extent - 20;
-
-            if (e.getValue() > loadingArea && !isLoading) {
-                initListSiswa();
-            }
-
-            listSiswaTiles.forEach((siswaTile) -> {
-                if (siswaTile.isShowing() && siswaTile.isValid()) {
-                    final var location = siswaTile.getLocationOnScreen().y;
-                    if (siswaTile.siswa.getFoto() == null
-                            && location >= appBarHeight
-                            && location <= contentHeight) {
-
-                        final var result = repository.getSiswaThumbnail(
-                                siswaTile.siswa.getId());
-                        if (result != null) {
-                            siswaTile.setFoto(result);
-                        }
-                    }
-                }
-            });
-        });
-    }
-
-    private void initJenisKelaminChips() {
-        final var listJenisKelamin = new ArrayList<String>();
-        listJenisKelamin.add("Semua");
-        listJenisKelamin.add(Strings.LAKI_LAKI);
-        listJenisKelamin.add(Strings.PEREMPUAN);
-        listJenisKelamin.forEach((jenisKelamin) -> {
-            final var chip = new a_Chip(jenisKelamin, jenisKelaminGroup);
-            jenisKelaminGroup.add(chip);
-            jenisKelaminGroup.setSelected(
-                    chip.getModel(), jenisKelamin.equals(Strings.SEMUA));
-            chip.setSelected(chip);
-
-            chip.addActionListener((ae) -> {
-                currentIndex = 0;
-                currentJenisKelaminValue = jenisKelamin;
-                scrollPane.getVerticalScrollBar().setValue(0);
-                gridLayout.removeAll();
-                initListSiswa();
-                gridLayout.revalidate();
-            });
-            chipsPanel.add(chip);
-        });
-    }
-
-    private void initListSiswa() {
-        if (currentJenisKelaminValue.equals(Strings.SEMUA)) {
-            final var result = repository.getListSiswaWithoutThumbnail(maxResult,
-                    currentIndex);
-            if (result != null) {
-                listSiswa.addAll(result);
-            }
-        } else {
-            final var keyword = currentJenisKelaminValue.equals(
-                    Strings.LAKI_LAKI)
-                            ? Strings.DATABASE_JENIS_KELAMIN_L
-                            : Strings.DATABASE_JENIS_KELAMIN_P;
-            final var result = repository
-                    .getListSiswaByJenisKelaminWithoutThumbnail(keyword,
-                            maxResult, currentIndex);
-            if (result != null) {
-                listSiswa.addAll(result);
-            }
-        }
-        final var widthTile = (MainFrame.content.getSize().width / 3) - (4 * 3);
-        for (int i = 0; i < listSiswa.size(); i++) {
-            final var siswa = listSiswa.get(i);
-            final var siswaTile = new SiswaTile(repository, siswa);
-            siswaTile.setPreferredSize(new Dimension(widthTile,
-                    siswaTile.getPreferredSize().height));
-
-            if (i + 1 == listSiswa.size()) {
-                siswaTile.addComponentListener(new ComponentAdapter() {
-                    @Override
-                    public void componentResized(ComponentEvent e) {
-                        isLoading = false;
-                        super.componentResized(e);
-                    }
-                });
-            }
-            gridLayout.add(siswaTile);
-            listSiswaTiles.add(siswaTile);
-        }
-        currentIndex += listSiswa.size();
-        isLasIndex = listSiswa.size() < maxResult;
     }
 
     @SuppressWarnings("unchecked")
