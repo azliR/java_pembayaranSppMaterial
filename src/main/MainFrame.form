@@ -228,6 +228,7 @@
                           <Component id="nav_siswa" alignment="0" max="32767" attributes="0"/>
                           <Component id="nav_laporan" alignment="0" max="32767" attributes="0"/>
                           <Component id="nav_spp" alignment="0" max="32767" attributes="0"/>
+                          <Component id="nav_petugas" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   </Group>
@@ -245,8 +246,10 @@
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="nav_spp" min="-2" pref="48" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                      <Component id="nav_petugas" min="-2" pref="48" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="nav_laporan" min="-2" pref="48" max="-2" attributes="0"/>
-                      <EmptySpace pref="154" max="32767" attributes="0"/>
+                      <EmptySpace pref="106" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -365,6 +368,36 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="nav_sppActionPerformed"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new a_SideNavigation(sideBarGroup)"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JRadioButton" name="nav_petugas">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="Colors.BACKGROUND_COLOR" type="code"/>
+                </Property>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="sideBarGroup"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="Colors.GREY_TEXT_COLOR" type="code"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Petugas"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="null"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/assets/images/ic_card-account-details-outline_grey.png"/>
+                </Property>
+                <Property name="iconTextGap" type="int" value="20"/>
+                <Property name="selectedIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/assets/images/ic_card-account-details_grey.png"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="nav_petugasActionPerformed"/>
               </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new a_SideNavigation(sideBarGroup)"/>

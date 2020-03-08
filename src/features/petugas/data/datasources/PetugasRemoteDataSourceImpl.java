@@ -1,11 +1,11 @@
-package features.petugas.data;
+package features.petugas.data.datasources;
 
 import cores.entities.Pembayaran;
 import cores.entities.Petugas;
 import cores.exceptions.IllegalOrphanException;
 import cores.exceptions.NonexistentEntityException;
-import cores.exceptions.PreexistingEntityException;
 import cores.exceptions.ServerException;
+import cores.styles.Strings;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -24,8 +24,8 @@ public class PetugasRemoteDataSourceImpl implements PetugasRemoteDataSource {
     }
 
     @Override
-    public List<Petugas> getListPetugas(int maxResults, int firstResult) throws
-            ServerException {
+    public List<Petugas> getListPetugas(int maxResults, int firstResult)
+            throws ServerException {
         EntityManager entityManager = null;
         try {
             entityManager = entityManagerFactory.createEntityManager();
@@ -38,6 +38,8 @@ public class PetugasRemoteDataSourceImpl implements PetugasRemoteDataSource {
             query.setFirstResult(firstResult);
 
             return query.getResultList();
+        } catch (Exception ex) {
+            throw new ServerException(Strings.ERROR_DIALOG_CONNECTION, ex);
         } finally {
             if (entityManager != null) {
                 entityManager.close();
@@ -51,6 +53,8 @@ public class PetugasRemoteDataSourceImpl implements PetugasRemoteDataSource {
         try {
             entityManager = entityManagerFactory.createEntityManager();
             return entityManager.find(Petugas.class, id);
+        } catch (Exception ex) {
+            throw new ServerException(Strings.ERROR_DIALOG_CONNECTION, ex);
         } finally {
             if (entityManager != null) {
                 entityManager.close();
@@ -59,8 +63,7 @@ public class PetugasRemoteDataSourceImpl implements PetugasRemoteDataSource {
     }
 
     @Override
-    public void insertPetugas(Petugas petugas) throws PreexistingEntityException,
-            ServerException {
+    public void insertPetugas(Petugas petugas) throws ServerException {
         if (petugas.getPembayaranList() == null) {
             petugas.setPembayaranList(new ArrayList<>());
         }
@@ -102,11 +105,7 @@ public class PetugasRemoteDataSourceImpl implements PetugasRemoteDataSource {
             }
             entityManager.getTransaction().commit();
         } catch (Exception ex) {
-            if (getPetugas(petugas.getId()) != null) {
-                throw new PreexistingEntityException("Petugas " + petugas
-                        + " already exists.", ex);
-            }
-            throw ex;
+            throw new ServerException(Strings.ERROR_DIALOG_CONNECTION, ex);
         } finally {
             if (entityManager != null) {
                 entityManager.close();
@@ -116,8 +115,7 @@ public class PetugasRemoteDataSourceImpl implements PetugasRemoteDataSource {
 
     @Override
     public void updatePetugas(Petugas petugasValue) throws
-            IllegalOrphanException,
-            NonexistentEntityException, ServerException {
+            IllegalOrphanException, NonexistentEntityException, ServerException {
         EntityManager entityManager = null;
         var petugas = petugasValue;
         try {
@@ -181,11 +179,14 @@ public class PetugasRemoteDataSourceImpl implements PetugasRemoteDataSource {
             if (msg == null || msg.length() == 0) {
                 Integer id = petugas.getId();
                 if (getPetugas(id) == null) {
-                    throw new NonexistentEntityException("The petugas with id "
-                            + id + " no longer exists.");
+                    throw new NonexistentEntityException("Petugas dengan id "
+                            + id + " tidak tersedia.");
                 }
             }
-            throw ex;
+            if (ex instanceof IllegalOrphanException) {
+                throw ex;
+            }
+            throw new ServerException(Strings.ERROR_DIALOG_CONNECTION, ex);
         } finally {
             if (entityManager != null) {
                 entityManager.close();
@@ -205,8 +206,8 @@ public class PetugasRemoteDataSourceImpl implements PetugasRemoteDataSource {
                 petugas = entityManager.getReference(Petugas.class, id);
                 petugas.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The petugas with id " + id
-                        + " no longer exists.", enfe);
+                throw new NonexistentEntityException("Petugas dengan ID " + id
+                        + " tidak tersedia.", enfe);
             }
             final var illegalOrphanMessages = new ArrayList<String>();
             final var pembayaranListOrphanCheck = petugas.getPembayaranList();
@@ -223,6 +224,12 @@ public class PetugasRemoteDataSourceImpl implements PetugasRemoteDataSource {
             }
             entityManager.remove(petugas);
             entityManager.getTransaction().commit();
+        } catch (NonexistentEntityException | IllegalOrphanException ex) {
+            if (ex instanceof NonexistentEntityException
+                    || ex instanceof IllegalOrphanException) {
+                throw ex;
+            }
+            throw new ServerException(Strings.ERROR_DIALOG_CONNECTION, ex);
         } finally {
             if (entityManager != null) {
                 entityManager.close();

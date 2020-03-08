@@ -2,7 +2,6 @@ package cores.controllerTest;
 
 import cores.controllerTest.exceptions.IllegalOrphanException;
 import cores.controllerTest.exceptions.NonexistentEntityException;
-import cores.controllerTest.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -29,8 +28,7 @@ public class PetugasJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Petugas petugas) throws PreexistingEntityException,
-            Exception {
+    public void create(Petugas petugas) {
         if (petugas.getPembayaranList() == null) {
             petugas.setPembayaranList(new ArrayList<Pembayaran>());
         }
@@ -61,12 +59,6 @@ public class PetugasJpaController implements Serializable {
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findPetugas(petugas.getId()) != null) {
-                throw new PreexistingEntityException("Petugas " + petugas +
-                        " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();

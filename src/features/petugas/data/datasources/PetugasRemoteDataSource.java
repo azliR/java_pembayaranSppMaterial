@@ -1,9 +1,8 @@
-package features.petugas.data;
+package features.petugas.data.datasources;
 
 import cores.entities.Petugas;
 import cores.exceptions.IllegalOrphanException;
 import cores.exceptions.NonexistentEntityException;
-import cores.exceptions.PreexistingEntityException;
 import cores.exceptions.ServerException;
 import java.util.List;
 
@@ -17,8 +16,7 @@ public interface PetugasRemoteDataSource {
 
     public abstract Petugas getPetugas(int id) throws ServerException;
 
-    public abstract void insertPetugas(Petugas petugas) throws
-            PreexistingEntityException, ServerException;
+    public abstract void insertPetugas(Petugas petugas) throws ServerException;
 
     public abstract void updatePetugas(Petugas petugas) throws
             IllegalOrphanException,

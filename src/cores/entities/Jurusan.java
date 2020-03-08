@@ -10,8 +10,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -26,14 +24,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "jurusan", catalog = "pembayaran_spp", schema = "")
 @XmlRootElement
-@NamedQueries({@NamedQuery(name = "Jurusan.findAll", query
-            = "SELECT j FROM Jurusan j"),
-    @NamedQuery(name = "Jurusan.findById", query
-            = "SELECT j FROM Jurusan j WHERE j.id = :id"),
-    @NamedQuery(name = "Jurusan.findByNamaJurusan", query
-            = "SELECT j FROM Jurusan j WHERE j.namaJurusan = :namaJurusan"),
-    @NamedQuery(name = "Jurusan.findByAlias", query
-            = "SELECT j FROM Jurusan j WHERE j.alias = :alias")})
 public class Jurusan implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -48,9 +38,9 @@ public class Jurusan implements Serializable {
     private String namaJurusan;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 8)
-    @Column(name = "alias", nullable = false, length = 8)
-    private String alias;
+    @Size(min = 1, max = 6)
+    @Column(name = "akronim", nullable = false, length = 6)
+    private String akronim;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idJurusan", fetch
             = FetchType.LAZY)
     private List<Kelas> kelasList;
@@ -62,10 +52,10 @@ public class Jurusan implements Serializable {
         this.id = id;
     }
 
-    public Jurusan(Integer id, String namaJurusan, String alias) {
+    public Jurusan(Integer id, String namaJurusan, String akronim) {
         this.id = id;
         this.namaJurusan = namaJurusan;
-        this.alias = alias;
+        this.akronim = akronim;
     }
 
     public Integer getId() {
@@ -84,12 +74,12 @@ public class Jurusan implements Serializable {
         this.namaJurusan = namaJurusan;
     }
 
-    public String getAlias() {
-        return alias;
+    public String getAkronim() {
+        return akronim;
     }
 
-    public void setAlias(String alias) {
-        this.alias = alias;
+    public void setAkronim(String akronim) {
+        this.akronim = akronim;
     }
 
     @XmlTransient
@@ -115,16 +105,12 @@ public class Jurusan implements Serializable {
             return false;
         }
         Jurusan other = (Jurusan) object;
-        if ((this.id == null && other.id != null) ||
-                (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null
+                && !this.id.equals(other.id)));
     }
 
     @Override
     public String toString() {
         return "cores.entities.Jurusan[ id=" + id + " ]";
     }
-
 }

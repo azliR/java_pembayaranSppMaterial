@@ -11,8 +11,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -28,13 +26,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "spp", catalog = "pembayaran_spp", schema = "", uniqueConstraints
         = {@UniqueConstraint(columnNames = {"tahun"})})
 @XmlRootElement
-@NamedQueries({@NamedQuery(name = "Spp.findAll", query = "SELECT s FROM Spp s"),
-    @NamedQuery(name = "Spp.findById", query
-            = "SELECT s FROM Spp s WHERE s.id = :id"),
-    @NamedQuery(name = "Spp.findByTahun", query
-            = "SELECT s FROM Spp s WHERE s.tahun = :tahun"),
-    @NamedQuery(name = "Spp.findByNominal", query
-            = "SELECT s FROM Spp s WHERE s.nominal = :nominal")})
 public class Spp implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -134,5 +125,4 @@ public class Spp implements Serializable {
     public String toString() {
         return Intl.convertCurrency(nominal) + " (" + tahun + ")";
     }
-
 }

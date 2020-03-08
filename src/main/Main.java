@@ -6,6 +6,10 @@ import features.auth.data.datasources.AuthRemoteDataSource;
 import features.auth.data.datasources.AuthRemoteDataSourceImpl;
 import features.auth.data.repositories.AuthRepository;
 import features.auth.data.repositories.AuthRepositoryImpl;
+import features.petugas.data.datasources.PetugasRemoteDataSource;
+import features.petugas.data.datasources.PetugasRemoteDataSourceImpl;
+import features.petugas.data.repositories.PetugasRepository;
+import features.petugas.data.repositories.PetugasRepositoryImpl;
 import features.siswa.data.datasources.SiswaLocalDataSource;
 import features.siswa.data.datasources.SiswaLocalDataSourceImpl;
 import features.siswa.data.datasources.SiswaRemoteDataSource;
@@ -25,27 +29,32 @@ public class Main {
     public static AuthRemoteDataSource authRemoteDataSource;
     public static SiswaLocalDataSource siswaLocalDataSource;
     public static SiswaRemoteDataSource siswaRemoteDataSource;
+    public static PetugasRemoteDataSource petugasRemoteDataSource;
 
     public static AuthRepository authRepository;
     public static SiswaRepository siswaRepository;
+    public static PetugasRepository petugasRepository;
 
     public static void main(String[] args) {
         Fonts.registerFont(Main.class);
-
         entityManagerFactory = PersistenceManager.instance
                 .getEntityManagerFactory();
 
-        authRemoteDataSource
-                = new AuthRemoteDataSourceImpl(entityManagerFactory);
+        authRemoteDataSource = new AuthRemoteDataSourceImpl(
+                entityManagerFactory);
         siswaLocalDataSource = new SiswaLocalDataSourceImpl();
         siswaRemoteDataSource = new SiswaRemoteDataSourceImpl(
+                entityManagerFactory);
+        petugasRemoteDataSource = new PetugasRemoteDataSourceImpl(
                 entityManagerFactory);
 
         authRepository = new AuthRepositoryImpl(authRemoteDataSource);
         siswaRepository = new SiswaRepositoryImpl(siswaRemoteDataSource,
                 siswaLocalDataSource);
+        petugasRepository = new PetugasRepositoryImpl(petugasRemoteDataSource);
 
-        new MainFrame(authRepository, siswaRepository).setVisible(true);
+        new MainFrame(authRepository, siswaRepository, petugasRepository)
+                .setVisible(true);
 
         try {
             for (UIManager.LookAndFeelInfo info : UIManager

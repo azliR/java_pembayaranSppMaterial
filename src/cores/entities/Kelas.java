@@ -13,8 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -28,16 +26,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "kelas", catalog = "pembayaran_spp", schema = "")
 @XmlRootElement
-@NamedQueries({@NamedQuery(name = "Kelas.findAll", query
-            = "SELECT k FROM Kelas k"),
-    @NamedQuery(name = "Kelas.findById", query
-            = "SELECT k FROM Kelas k WHERE k.id = :id"),
-    @NamedQuery(name = "Kelas.findByKelas", query
-            = "SELECT k FROM Kelas k WHERE k.kelas = :kelas"),
-    @NamedQuery(name = "Kelas.findByNoKelas", query
-            = "SELECT k FROM Kelas k WHERE k.noKelas = :noKelas"),
-    @NamedQuery(name = "Kelas.findByJumlahSiswa", query
-            = "SELECT k FROM Kelas k WHERE k.jumlahSiswa = :jumlahSiswa")})
 public class Kelas implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -148,7 +136,7 @@ public class Kelas implements Serializable {
 
     @Override
     public String toString() {
-        return Intl.toRoman(kelas) + " " + idJurusan.getAlias() + " " + noKelas;
+        return Intl.toRoman(kelas) + " " + idJurusan.getAkronim() + " "
+                + noKelas;
     }
-
 }

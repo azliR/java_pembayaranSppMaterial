@@ -1,18 +1,21 @@
 package cores.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,21 +31,11 @@ import javax.xml.bind.annotation.XmlTransient;
         uniqueConstraints
         = {@UniqueConstraint(columnNames = {"nama_pengguna"})})
 @XmlRootElement
-@NamedQueries({@NamedQuery(name = "Petugas.findAll", query
-            = "SELECT p FROM Petugas p"),
-    @NamedQuery(name = "Petugas.findById", query
-            = "SELECT p FROM Petugas p WHERE p.id = :id"),
-    @NamedQuery(name = "Petugas.findByNamaPetugas", query
-            = "SELECT p FROM Petugas p WHERE p.namaPetugas = :namaPetugas"),
-    @NamedQuery(name = "Petugas.findByNamaPengguna", query
-            = "SELECT p FROM Petugas p WHERE p.namaPengguna = :namaPengguna"),
-    @NamedQuery(name = "Petugas.findByHakAkses", query
-            = "SELECT p FROM Petugas p WHERE p.hakAkses = :hakAkses")})
 public class Petugas implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id", nullable = false)
     private Integer id;
     @Basic(optional = false)
@@ -66,6 +59,16 @@ public class Petugas implements Serializable {
     @Size(min = 1, max = 7)
     @Column(name = "hak_akses", nullable = false, length = 7)
     private String hakAkses;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "dibuat_pada", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dibuatPada;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "terakhir_digunakan", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date terakhirDigunakan;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPetugas", fetch
             = FetchType.LAZY)
     private List<Pembayaran> pembayaranList;
@@ -78,12 +81,15 @@ public class Petugas implements Serializable {
     }
 
     public Petugas(Integer id, String namaPetugas, String namaPengguna,
-            String kataSandi, String hakAkses) {
+            String kataSandi, String hakAkses, Date dibuatPada,
+            Date terakhirDigunakan) {
         this.id = id;
         this.namaPetugas = namaPetugas;
         this.namaPengguna = namaPengguna;
         this.kataSandi = kataSandi;
         this.hakAkses = hakAkses;
+        this.dibuatPada = dibuatPada;
+        this.terakhirDigunakan = terakhirDigunakan;
     }
 
     public Integer getId() {
@@ -126,6 +132,22 @@ public class Petugas implements Serializable {
         this.hakAkses = hakAkses;
     }
 
+    public Date getDibuatPada() {
+        return dibuatPada;
+    }
+
+    public void setDibuatPada(Date dibuatPada) {
+        this.dibuatPada = dibuatPada;
+    }
+
+    public Date getTerakhirDigunakan() {
+        return terakhirDigunakan;
+    }
+
+    public void setTerakhirDigunakan(Date terakhirDigunakan) {
+        this.terakhirDigunakan = terakhirDigunakan;
+    }
+
     @XmlTransient
     public List<Pembayaran> getPembayaranList() {
         return pembayaranList;
@@ -157,5 +179,4 @@ public class Petugas implements Serializable {
     public String toString() {
         return "cores.entities.Petugas[ id=" + id + " ]";
     }
-
 }

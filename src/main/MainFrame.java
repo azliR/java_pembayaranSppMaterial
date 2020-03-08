@@ -10,6 +10,8 @@ import cores.widgets.a_SideNavigation;
 import features.auth.data.repositories.AuthRepository;
 import features.auth.presentation.pages.LoginPage;
 import features.home.pages.HomePage;
+import features.petugas.data.repositories.PetugasRepository;
+import features.petugas.presentation.pages.ListPetugasPage;
 import features.siswa.data.repositories.SiswaRepository;
 import features.siswa.presentation.pages.ListSiswaPage;
 import java.awt.Frame;
@@ -22,15 +24,18 @@ import javax.swing.JFrame;
 public class MainFrame extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
 
-    final AuthRepository authRepository;
-    final SiswaRepository siswaRepository;
+    private final AuthRepository authRepository;
+    private final SiswaRepository siswaRepository;
+    private final PetugasRepository petugasRepository;
 
     boolean isSearchFilled = false;
 
     public MainFrame(AuthRepository authRepository,
-            SiswaRepository siswaRepository) {
+            SiswaRepository siswaRepository,
+            PetugasRepository petugasRepository) {
         this.authRepository = authRepository;
         this.siswaRepository = siswaRepository;
+        this.petugasRepository = petugasRepository;
         initComponents();
         init();
     }
@@ -38,6 +43,11 @@ public class MainFrame extends javax.swing.JFrame {
     private void init() {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         content.add(new LoginPage(authRepository));
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
     }
 
     @SuppressWarnings("unchecked")
@@ -57,6 +67,7 @@ public class MainFrame extends javax.swing.JFrame {
         nav_kelas = new a_SideNavigation(sideBarGroup);
         nav_siswa = new a_SideNavigation(sideBarGroup);
         nav_spp = new a_SideNavigation(sideBarGroup);
+        nav_petugas = new a_SideNavigation(sideBarGroup);
         nav_laporan = new a_SideNavigation(sideBarGroup);
         topBar = new javax.swing.JPanel();
         jPanel3 = new RoundedPanel(Constants.BORDER_RADIUS);
@@ -205,6 +216,20 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        nav_petugas.setBackground(Colors.BACKGROUND_COLOR);
+        sideBarGroup.add(nav_petugas);
+        nav_petugas.setForeground(Colors.GREY_TEXT_COLOR);
+        nav_petugas.setText("Petugas");
+        nav_petugas.setBorder(null);
+        nav_petugas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_card-account-details-outline_grey.png"))); // NOI18N
+        nav_petugas.setIconTextGap(20);
+        nav_petugas.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_card-account-details_grey.png"))); // NOI18N
+        nav_petugas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nav_petugasActionPerformed(evt);
+            }
+        });
+
         nav_laporan.setBackground(Colors.BACKGROUND_COLOR);
         sideBarGroup.add(nav_laporan);
         nav_laporan.setForeground(Colors.GREY_TEXT_COLOR);
@@ -229,7 +254,8 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(nav_beranda, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
                     .addComponent(nav_siswa, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(nav_laporan, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(nav_spp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(nav_spp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(nav_petugas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(10, 10, 10))
         );
         sideBarLayout.setVerticalGroup(
@@ -244,8 +270,10 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addComponent(nav_spp, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
+                .addComponent(nav_petugas, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
                 .addComponent(nav_laporan, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(154, Short.MAX_VALUE))
+                .addContainerGap(106, Short.MAX_VALUE))
         );
 
         topBar.setBackground(Colors.BACKGROUND_COLOR);
@@ -455,6 +483,10 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void nav_petugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nav_petugasActionPerformed
+        Navigator.push(new ListPetugasPage(petugasRepository));
+    }//GEN-LAST:event_nav_petugasActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JPanel content;
     private javax.swing.JTextField et_search;
@@ -471,6 +503,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton nav_beranda;
     private javax.swing.JRadioButton nav_kelas;
     private javax.swing.JRadioButton nav_laporan;
+    private javax.swing.JRadioButton nav_petugas;
     private javax.swing.JRadioButton nav_siswa;
     private javax.swing.JRadioButton nav_spp;
     public static javax.swing.JPanel sideBar;

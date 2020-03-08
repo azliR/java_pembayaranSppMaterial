@@ -29,8 +29,8 @@ import javax.imageio.ImageIO;
  * @author rizal
  */
 public class SiswaRepositoryImpl implements SiswaRepository {
-    private static final Logger LOG = Logger.getLogger(SiswaRepositoryImpl.class
-            .getName());
+    private static final Logger LOG = Logger.getLogger(
+            SiswaRepositoryImpl.class.getName());
 
     final SiswaRemoteDataSource remoteDataSource;
     final SiswaLocalDataSource localDataSource;
