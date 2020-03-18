@@ -48,7 +48,7 @@ public class Intl {
         if (date == null) {
             return null;
         }
-        return new SimpleDateFormat("HH:mm  |  dd MMMM yyyy").format(date);
+        return new SimpleDateFormat("dd MMMM yyyy").format(date);
     }
 
     public static String convertSimpleTimestamp(Date dateValue) {

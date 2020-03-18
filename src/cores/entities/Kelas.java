@@ -41,10 +41,6 @@ public class Kelas implements Serializable {
     @NotNull
     @Column(name = "no_kelas", nullable = false)
     private int noKelas;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "jumlah_siswa", nullable = false)
-    private int jumlahSiswa;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idKelas", fetch
             = FetchType.LAZY)
     private List<Siswa> siswaList;
@@ -60,11 +56,10 @@ public class Kelas implements Serializable {
         this.id = id;
     }
 
-    public Kelas(Integer id, int kelas, int noKelas, int jumlahSiswa) {
+    public Kelas(Integer id, int kelas, int noKelas) {
         this.id = id;
         this.kelas = kelas;
         this.noKelas = noKelas;
-        this.jumlahSiswa = jumlahSiswa;
     }
 
     public Integer getId() {
@@ -89,14 +84,6 @@ public class Kelas implements Serializable {
 
     public void setNoKelas(int noKelas) {
         this.noKelas = noKelas;
-    }
-
-    public int getJumlahSiswa() {
-        return jumlahSiswa;
-    }
-
-    public void setJumlahSiswa(int jumlahSiswa) {
-        this.jumlahSiswa = jumlahSiswa;
     }
 
     @XmlTransient

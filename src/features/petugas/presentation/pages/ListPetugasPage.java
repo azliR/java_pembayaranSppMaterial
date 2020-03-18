@@ -9,7 +9,7 @@ import cores.utils.Intl;
 import cores.widgets.RoundedButton;
 import cores.widgets.a_ScrollPane;
 import features.petugas.data.repositories.PetugasRepository;
-import features.petugas.presentation.widgets.ListPembayaranByDateTile;
+import features.petugas.presentation.widgets.DateTile;
 import features.petugas.presentation.widgets.PetugasTile;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
@@ -109,33 +109,23 @@ public class ListPetugasPage extends javax.swing.JPanel {
 
     private void initListPembayaran(List<Pembayaran> listPembayarans) {
         Date currentDate = null;
-        final var listPembayaransByDate = new ArrayList<Pembayaran>();
-
-        for (int i = 0; i < listPembayarans.size(); i++) {
+        for (int i = listPembayarans.size() - 1; i >= 0; i--) {
             final var pembayaran = listPembayarans.get(i);
 
             if (currentDate == null) {
                 currentDate = pembayaran.getTanggalBayar();
+                p_listPembayaran.add(new DateTile(currentDate, true));
             }
-            final var tanggalBayar = Intl.convertSimpleTimestamp(pembayaran
-                    .getTanggalBayar());
+            final var tanggalBayar = Intl.convertSimpleTimestamp(
+                    pembayaran.getTanggalBayar());
+            final var nextTanggalBayar = Intl.convertSimpleTimestamp(
+                    listPembayarans.get(i).getTanggalBayar());
             final var lastDate = Intl.convertSimpleTimestamp(currentDate);
 
-            if (i == listPembayarans.size() - 1) {
-                listPembayaransByDate.add(pembayaran);
-            }
-            if (!tanggalBayar.equals(lastDate)
-                    || i == listPembayarans.size() - 1) {
-                if (!listPembayaransByDate.isEmpty()) {
-                    final var listPembayaranByDateTile
-                            = new ListPembayaranByDateTile(
-                                    listPembayaransByDate, currentDate);
-                    p_listPembayaran.add(listPembayaranByDateTile);
-                    listPembayaransByDate.clear();
-                }
+            if (!tanggalBayar.equals(lastDate)) {
                 currentDate = pembayaran.getTanggalBayar();
+                p_listPembayaran.add(new DateTile(currentDate));
             }
-            listPembayaransByDate.add(pembayaran);
         }
     }
 
@@ -329,8 +319,9 @@ public class ListPetugasPage extends javax.swing.JPanel {
         jScrollPane1.setBorder(null);
 
         jPanel4.setBackground(Colors.BACKGROUND_COLOR);
-        jPanel4.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 8));
+        jPanel4.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
+        p_listPembayaran.setBackground(Colors.BACKGROUND_COLOR);
         p_listPembayaran.setLayout(new java.awt.GridLayout(0, 1));
         jPanel4.add(p_listPembayaran);
 
@@ -359,7 +350,7 @@ public class ListPetugasPage extends javax.swing.JPanel {
                 .addGap(12, 12, 12)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE))
         );
 
         jSeparator3.setForeground(Colors.BORDER_COLOR);

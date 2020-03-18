@@ -2,17 +2,17 @@ package cores.controllerTest;
 
 import cores.controllerTest.exceptions.IllegalOrphanException;
 import cores.controllerTest.exceptions.NonexistentEntityException;
-import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import cores.entities.Pembayaran;
 import cores.entities.Petugas;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -38,15 +38,18 @@ public class PetugasJpaController implements Serializable {
             em.getTransaction().begin();
             List<Pembayaran> attachedPembayaranList
                     = new ArrayList<Pembayaran>();
-            for (Pembayaran pembayaranListPembayaranToAttach : petugas.getPembayaranList()) {
+            for (Pembayaran pembayaranListPembayaranToAttach : petugas
+                    .getPembayaranList()) {
                 pembayaranListPembayaranToAttach
-                        = em.getReference(pembayaranListPembayaranToAttach.getClass(),
-                        pembayaranListPembayaranToAttach.getId());
+                        = em.getReference(pembayaranListPembayaranToAttach
+                                .getClass(),
+                                pembayaranListPembayaranToAttach.getId());
                 attachedPembayaranList.add(pembayaranListPembayaranToAttach);
             }
             petugas.setPembayaranList(attachedPembayaranList);
             em.persist(petugas);
-            for (Pembayaran pembayaranListPembayaran : petugas.getPembayaranList()) {
+            for (Pembayaran pembayaranListPembayaran : petugas
+                    .getPembayaranList()) {
                 Petugas oldIdPetugasOfPembayaranListPembayaran
                         = pembayaranListPembayaran.getIdPetugas();
                 pembayaranListPembayaran.setIdPetugas(petugas);
@@ -82,9 +85,9 @@ public class PetugasJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Pembayaran " +
-                            pembayaranListOldPembayaran +
-                            " since its idPetugas field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Pembayaran "
+                            + pembayaranListOldPembayaran
+                            + " since its idPetugas field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -92,11 +95,14 @@ public class PetugasJpaController implements Serializable {
             }
             List<Pembayaran> attachedPembayaranListNew
                     = new ArrayList<Pembayaran>();
-            for (Pembayaran pembayaranListNewPembayaranToAttach : pembayaranListNew) {
+            for (Pembayaran pembayaranListNewPembayaranToAttach
+                    : pembayaranListNew) {
                 pembayaranListNewPembayaranToAttach
-                        = em.getReference(pembayaranListNewPembayaranToAttach.getClass(),
-                        pembayaranListNewPembayaranToAttach.getId());
-                attachedPembayaranListNew.add(pembayaranListNewPembayaranToAttach);
+                        = em.getReference(pembayaranListNewPembayaranToAttach
+                                .getClass(),
+                                pembayaranListNewPembayaranToAttach.getId());
+                attachedPembayaranListNew.add(
+                        pembayaranListNewPembayaranToAttach);
             }
             pembayaranListNew = attachedPembayaranListNew;
             petugas.setPembayaranList(pembayaranListNew);
@@ -108,12 +114,15 @@ public class PetugasJpaController implements Serializable {
                     pembayaranListNewPembayaran.setIdPetugas(petugas);
                     pembayaranListNewPembayaran
                             = em.merge(pembayaranListNewPembayaran);
-                    if (oldIdPetugasOfPembayaranListNewPembayaran != null &&
-                            !oldIdPetugasOfPembayaranListNewPembayaran.equals(petugas)) {
-                        oldIdPetugasOfPembayaranListNewPembayaran.getPembayaranList()
+                    if (oldIdPetugasOfPembayaranListNewPembayaran != null
+                            && !oldIdPetugasOfPembayaranListNewPembayaran
+                                    .equals(petugas)) {
+                        oldIdPetugasOfPembayaranListNewPembayaran
+                                .getPembayaranList()
                                 .remove(pembayaranListNewPembayaran);
                         oldIdPetugasOfPembayaranListNewPembayaran
-                                = em.merge(oldIdPetugasOfPembayaranListNewPembayaran);
+                                = em.merge(
+                                        oldIdPetugasOfPembayaranListNewPembayaran);
                     }
                 }
             }
@@ -123,8 +132,8 @@ public class PetugasJpaController implements Serializable {
             if (msg == null || msg.length() == 0) {
                 Integer id = petugas.getId();
                 if (findPetugas(id) == null) {
-                    throw new NonexistentEntityException("The petugas with id " +
-                            id + " no longer exists.");
+                    throw new NonexistentEntityException("The petugas with id "
+                            + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -146,20 +155,21 @@ public class PetugasJpaController implements Serializable {
                 petugas = em.getReference(Petugas.class, id);
                 petugas.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The petugas with id " + id +
-                        " no longer exists.", enfe);
+                throw new NonexistentEntityException("The petugas with id " + id
+                        + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
             List<Pembayaran> pembayaranListOrphanCheck
                     = petugas.getPembayaranList();
-            for (Pembayaran pembayaranListOrphanCheckPembayaran : pembayaranListOrphanCheck) {
+            for (Pembayaran pembayaranListOrphanCheckPembayaran
+                    : pembayaranListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Petugas (" + petugas +
-                        ") cannot be destroyed since the Pembayaran " +
-                        pembayaranListOrphanCheckPembayaran +
-                        " in its pembayaranList field has a non-nullable idPetugas field.");
+                illegalOrphanMessages.add("This Petugas (" + petugas
+                        + ") cannot be destroyed since the Pembayaran "
+                        + pembayaranListOrphanCheckPembayaran
+                        + " in its pembayaranList field has a non-nullable idPetugas field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

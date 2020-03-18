@@ -1,5 +1,6 @@
 package features.auth.data.repositories;
 
+import cores.exceptions.NonexistentEntityException;
 import cores.exceptions.ServerException;
 import cores.styles.Strings;
 import cores.utils.AlertDialog;
@@ -14,26 +15,44 @@ import java.util.logging.Logger;
  * @author rizal
  */
 public class AuthRepositoryImpl implements AuthRepository {
-    private static final Logger LOG
-            = Logger.getLogger(AuthRepositoryImpl.class.getName());
+    private static final Logger LOG = Logger.getLogger(AuthRepositoryImpl.class
+            .getName());
 
-    final AuthRemoteDataSource authRemoteDataSource;
+    final AuthRemoteDataSource remoteDataSource;
+    int loggedInId = 0;
 
     public AuthRepositoryImpl(AuthRemoteDataSource authRemoteDataSource) {
-        this.authRemoteDataSource = authRemoteDataSource;
+        this.remoteDataSource = authRemoteDataSource;
     }
 
     @Override
     public void login(String namaPengguna, String kataSandi) {
         try {
-            final var result = authRemoteDataSource.login(namaPengguna, kataSandi);
+            final var result = remoteDataSource.login(namaPengguna, kataSandi);
 
             if (result != null) {
+                loggedInId = result.getId();
+                updateStatus(Strings.DATABASE_SEDANG_AKTIF);
                 Navigator.push(new HomePage(), true);
             } else {
                 AlertDialog.showErrorDialog(Strings.ERROR_DIALOG_WRONG_PASSWORD);
             }
-        } catch (ServerException ex) {
+        } catch (NonexistentEntityException | ServerException ex) {
+            AlertDialog.showErrorDialog(ex.getMessage());
+            LOG.log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void updateStatus(String status) {
+        try {
+            if (loggedInId != 0) {
+                remoteDataSource.updateStatus(loggedInId, status);
+            } else {
+                AlertDialog
+                        .showErrorDialog(Strings.ERROR_DIALOG_DEFAULT_MESSAGE);
+            }
+        } catch (NonexistentEntityException | ServerException ex) {
             AlertDialog.showErrorDialog(ex.getMessage());
             LOG.log(Level.SEVERE, null, ex);
         }

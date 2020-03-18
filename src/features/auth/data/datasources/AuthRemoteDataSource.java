@@ -1,6 +1,7 @@
 package features.auth.data.datasources;
 
 import cores.entities.Petugas;
+import cores.exceptions.NonexistentEntityException;
 import cores.exceptions.ServerException;
 
 /**
@@ -9,5 +10,8 @@ import cores.exceptions.ServerException;
  */
 public interface AuthRemoteDataSource {
     public abstract Petugas login(String namaPengguna, String kataSandi) throws
-            ServerException;
+            NonexistentEntityException, ServerException;
+
+    public abstract void updateStatus(int id, String status) throws
+            NonexistentEntityException, ServerException;
 }

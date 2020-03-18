@@ -47,6 +47,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     @Override
     public void dispose() {
+        authRepository.updateStatus(Strings.DATABASE_TIDAK_AKTIF);
         super.dispose();
     }
 
@@ -70,14 +71,14 @@ public class MainFrame extends javax.swing.JFrame {
         nav_petugas = new a_SideNavigation(sideBarGroup);
         nav_laporan = new a_SideNavigation(sideBarGroup);
         topBar = new javax.swing.JPanel();
-        jPanel3 = new RoundedPanel(Constants.BORDER_RADIUS);
+        jPanel3 = new RoundedPanel(Constants.LARGE_BORDER_RADIUS);
         jLabel1 = new javax.swing.JLabel();
         et_search = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
 
         jPanel6.setBackground(Colors.BACKGROUND_COLOR);
@@ -110,9 +111,9 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        tv_title.setFont(Fonts.PRODUCT_SANS_REGULAR.deriveFont(14f)
+        tv_title.setFont(Fonts.PRODUCT_SANS_MEDIUM.deriveFont(14f)
         );
-        tv_title.setForeground(new java.awt.Color(0, 24, 44));
+        tv_title.setForeground(Colors.TEXT_COLOR);
         tv_title.setText("Pembayaran SPP");
         tv_title.setBorder(javax.swing.BorderFactory.createEmptyBorder(6, 0, 0, 0));
 
@@ -207,9 +208,9 @@ public class MainFrame extends javax.swing.JFrame {
         nav_spp.setForeground(Colors.GREY_TEXT_COLOR);
         nav_spp.setText("Spp");
         nav_spp.setBorder(null);
-        nav_spp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_card-account-details-outline_grey.png"))); // NOI18N
+        nav_spp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_text-box-check-outline_grey.png"))); // NOI18N
         nav_spp.setIconTextGap(20);
-        nav_spp.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_card-account-details_grey.png"))); // NOI18N
+        nav_spp.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_text-box-check.png"))); // NOI18N
         nav_spp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nav_sppActionPerformed(evt);
@@ -323,8 +324,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addComponent(jLabel1)
                 .addGap(10, 10, 10)
-                .addComponent(et_search, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(et_search)
+                .addGap(16, 16, 16)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
@@ -411,7 +412,7 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        System.exit(0);
+        dispose();
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed

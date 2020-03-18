@@ -56,8 +56,8 @@ public class Petugas implements Serializable {
     private String kataSandi;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 7)
-    @Column(name = "hak_akses", nullable = false, length = 7)
+    @Size(min = 1, max = 13)
+    @Column(name = "hak_akses", nullable = false, length = 13)
     private String hakAkses;
     @Basic(optional = false)
     @NotNull
@@ -66,9 +66,14 @@ public class Petugas implements Serializable {
     private Date dibuatPada;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "terakhir_digunakan", nullable = false)
+    @Column(name = "terakhir_masuk", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date terakhirDigunakan;
+    private Date terakhirMasuk;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 12)
+    @Column(name = "status", nullable = false, length = 12)
+    private String status;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPetugas", fetch
             = FetchType.LAZY)
     private List<Pembayaran> pembayaranList;
@@ -82,14 +87,15 @@ public class Petugas implements Serializable {
 
     public Petugas(Integer id, String namaPetugas, String namaPengguna,
             String kataSandi, String hakAkses, Date dibuatPada,
-            Date terakhirDigunakan) {
+            Date terakhirMasuk, String status) {
         this.id = id;
         this.namaPetugas = namaPetugas;
         this.namaPengguna = namaPengguna;
         this.kataSandi = kataSandi;
         this.hakAkses = hakAkses;
         this.dibuatPada = dibuatPada;
-        this.terakhirDigunakan = terakhirDigunakan;
+        this.terakhirMasuk = terakhirMasuk;
+        this.status = status;
     }
 
     public Integer getId() {
@@ -140,12 +146,20 @@ public class Petugas implements Serializable {
         this.dibuatPada = dibuatPada;
     }
 
-    public Date getTerakhirDigunakan() {
-        return terakhirDigunakan;
+    public Date getTerakhirMasuk() {
+        return terakhirMasuk;
     }
 
-    public void setTerakhirDigunakan(Date terakhirDigunakan) {
-        this.terakhirDigunakan = terakhirDigunakan;
+    public void setTerakhirMasuk(Date terakhirMasuk) {
+        this.terakhirMasuk = terakhirMasuk;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @XmlTransient
