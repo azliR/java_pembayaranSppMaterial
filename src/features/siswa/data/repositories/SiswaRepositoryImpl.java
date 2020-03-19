@@ -158,7 +158,7 @@ public class SiswaRepositoryImpl implements SiswaRepository {
     }
 
     @Override
-    public void insertSiswa(AddSiswaPage context) {
+    public void insertOrUpdateSiswa(AddSiswaPage context) {
         final var id = context.siswa == null ? null : context.siswa.getId();
         final var foto = context.foto;
         final var nisn = context.et_nisn.getText();
@@ -176,9 +176,13 @@ public class SiswaRepositoryImpl implements SiswaRepository {
 
         if (nisn.isBlank() || nis.isBlank() || nama.isBlank()
                 || noTelepon.isBlank() || alamat.isBlank() || kelas == null
-                || spp == null || nisn.length() < 10 || nis.length() < 8) {
+                || spp == null) {
             AlertDialog.showErrorDialog(Strings.ERROR_DIALOG_EMPTY_FIELD);
             return;
+        }
+
+        if (nisn.length() < 10 || nis.length() < 8) {
+
         }
 
         try {

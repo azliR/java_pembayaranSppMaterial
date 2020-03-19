@@ -6,10 +6,12 @@ import cores.styles.Colors;
 import cores.styles.Constants;
 import cores.styles.Fonts;
 import cores.utils.Intl;
+import cores.utils.Navigator;
 import cores.widgets.RoundedButton;
 import cores.widgets.a_ScrollPane;
 import features.petugas.data.repositories.PetugasRepository;
 import features.petugas.presentation.widgets.DateTile;
+import features.petugas.presentation.widgets.PembayaranTile;
 import features.petugas.presentation.widgets.PetugasTile;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
@@ -17,7 +19,6 @@ import java.awt.event.AdjustmentEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import main.MainFrame;
 
@@ -94,39 +95,83 @@ public class ListPetugasPage extends javax.swing.JPanel {
         isLasIndex = listPetugasesNew.size() < maxResult;
     }
 
-    public void showSidebar(Petugas petugas) {
-        final var newWidthTile = MainFrame.content.getWidth() - p_sideBar
-                .getPreferredSize().width;
+    public void showSidebar(PetugasTile context, Petugas petugas) {
+        final var newWidthTile = MainFrame.content.getWidth()
+                - p_sideBar.getPreferredSize().width;
+
         listPetugasTiles.forEach((petugasTile) -> {
-            final var newSize = new Dimension(newWidthTile, petugasTile.getHeight());
-            petugasTile.setPreferredSize(newSize);
-            petugasTile.validate();
+            if (!p_sideBar.isVisible()) {
+                final var newSize = new Dimension(newWidthTile, petugasTile
+                        .getHeight());
+
+                petugasTile.tv_status.setVisible(false);
+                petugasTile.setPreferredSize(newSize);
+            }
+            petugasTile.setSelected(context.equals(petugasTile));
         });
         p_listPetugas.revalidate();
         p_sideBar.setVisible(true);
+        tv_status.setVisible(false);
         initListPembayaran(petugas.getPembayaranList());
     }
 
-    private void initListPembayaran(List<Pembayaran> listPembayarans) {
-        Date currentDate = null;
-        for (int i = listPembayarans.size() - 1; i >= 0; i--) {
-            final var pembayaran = listPembayarans.get(i);
+    private void hideSidebar() {
+        if (p_sideBar.isVisible()) {
+            p_sideBar.setVisible(false);
+            tv_status.setVisible(true);
+            listPetugasTiles.forEach((petugasTile) -> {
+                final var newSize = new Dimension(MainFrame.content.getWidth(),
+                        petugasTile.getHeight());
+                petugasTile.tv_status.setVisible(true);
+                petugasTile.setPreferredSize(newSize);
+                petugasTile.setSelected(false);
+                petugasTile.setBackground(Colors.BACKGROUND_COLOR);
+            });
+            p_listPetugas.revalidate();
+        }
+    }
 
-            if (currentDate == null) {
-                currentDate = pembayaran.getTanggalBayar();
-                p_listPembayaran.add(new DateTile(currentDate, true));
-            }
-            final var tanggalBayar = Intl.convertSimpleTimestamp(
-                    pembayaran.getTanggalBayar());
+    private void initListPembayaran(List<Pembayaran> listPembayarans) {
+        p_listPembayaran.removeAll();
+
+        PembayaranTile lastTile = null;
+        int lastTanggal = 0;
+        for (var i = listPembayarans.size() - 1; i >= 0; i--) {
+            final var pembayaran = listPembayarans.get(i);
+            final var tanggalBayar = pembayaran.getTanggalBayar().getDate();
             final var nextTanggalBayar = Intl.convertSimpleTimestamp(
                     listPembayarans.get(i).getTanggalBayar());
-            final var lastDate = Intl.convertSimpleTimestamp(currentDate);
 
-            if (!tanggalBayar.equals(lastDate)) {
-                currentDate = pembayaran.getTanggalBayar();
-                p_listPembayaran.add(new DateTile(currentDate));
+            if (lastTanggal == 0 || tanggalBayar != lastTanggal) {
+                lastTanggal = tanggalBayar;
+
+                if (lastTile != null) {
+                    lastTile.setLastTile(true);
+                    p_listPembayaran.add(lastTile);
+                }
+
+                final var dateTile = new DateTile(pembayaran.getTanggalBayar());
+                final var tileSize = new Dimension(
+                        p_sideBar.getPreferredSize().width,
+                        dateTile.getPreferredSize().height);
+                dateTile.setPreferredSize(tileSize);
+                p_listPembayaran.add(dateTile);
+            } else {
+                p_listPembayaran.add(lastTile);
+            }
+            final var pembayaranTile = new PembayaranTile(pembayaran);
+            final var tileSize = new Dimension(p_sideBar.getPreferredSize().width,
+                    pembayaranTile.getPreferredSize().height);
+            pembayaranTile.setPreferredSize(tileSize);
+
+            if (i != 0) {
+                lastTile = pembayaranTile;
+            } else {
+                lastTile.setLastTile(true);
+                p_listPembayaran.add(lastTile);
             }
         }
+        p_listPembayaran.revalidate();
     }
 
     @SuppressWarnings("unchecked")
@@ -147,6 +192,7 @@ public class ListPetugasPage extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel3 = new javax.swing.JLabel();
+        tv_status = new javax.swing.JLabel();
         p_sideBar = new javax.swing.JPanel();
         jLabel41 = new javax.swing.JLabel();
         b_closeSidebar = new RoundedButton(Constants.XLARGE_BORDER_RADIUS);
@@ -249,20 +295,27 @@ public class ListPetugasPage extends javax.swing.JPanel {
         jLabel3.setForeground(Colors.GREY_TEXT_COLOR);
         jLabel3.setText("Hak Akses");
 
+        tv_status.setFont(Fonts.ROBOTO_MEDIUM.deriveFont(12f)
+        );
+        tv_status.setForeground(Colors.GREY_TEXT_COLOR);
+        tv_status.setText("Status");
+
         javax.swing.GroupLayout p_mainLayout = new javax.swing.GroupLayout(p_main);
         p_main.setLayout(p_mainLayout);
         p_mainLayout.setHorizontalGroup(
             p_mainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(scrollPane)
+            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(p_mainLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                 .addGap(16, 16, 16)
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                 .addGap(16, 16, 16)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                .addGap(16, 16, 16)
+                .addComponent(tv_status, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                 .addContainerGap())
-            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         p_mainLayout.setVerticalGroup(
             p_mainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -271,7 +324,8 @@ public class ListPetugasPage extends javax.swing.JPanel {
                 .addGroup(p_mainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabel3)
+                    .addComponent(tv_status))
                 .addGap(12, 12, 12)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
@@ -350,7 +404,7 @@ public class ListPetugasPage extends javax.swing.JPanel {
                 .addGap(12, 12, 12)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE))
         );
 
         jSeparator3.setForeground(Colors.BORDER_COLOR);
@@ -373,16 +427,16 @@ public class ListPetugasPage extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(p_appBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(p_main, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(p_sideBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSeparator3)))
+                    .addComponent(jSeparator3)
+                    .addComponent(p_main, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         p_sideBar.setVisible(false);
     }// </editor-fold>//GEN-END:initComponents
 
     private void b_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_addActionPerformed
-
+        Navigator.push(new AddPetugasPage(repository));
     }//GEN-LAST:event_b_addActionPerformed
 
     private void b_closeSidebarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_b_closeSidebarMouseEntered
@@ -394,7 +448,7 @@ public class ListPetugasPage extends javax.swing.JPanel {
     }//GEN-LAST:event_b_closeSidebarMouseExited
 
     private void b_closeSidebarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_closeSidebarActionPerformed
-        p_sideBar.setVisible(false);
+        hideSidebar();
     }//GEN-LAST:event_b_closeSidebarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -419,6 +473,7 @@ public class ListPetugasPage extends javax.swing.JPanel {
     private javax.swing.JPanel p_main;
     private javax.swing.JPanel p_sideBar;
     private javax.swing.JScrollPane scrollPane;
+    private javax.swing.JLabel tv_status;
     private javax.swing.JLabel tv_title;
     // End of variables declaration//GEN-END:variables
 }

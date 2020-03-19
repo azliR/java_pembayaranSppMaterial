@@ -4,7 +4,6 @@ import cores.styles.Colors;
 import cores.styles.Constants;
 import cores.styles.Fonts;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import javax.swing.BorderFactory;
@@ -34,7 +33,7 @@ public class a_PasswordField extends JPasswordField {
 
     private void init() {
         changeBorderColor(label, focusLostColor, focusLostTextColor);
-        setFont(new Font("Times New Roman", 0, 16));
+        setFont(Fonts.ROBOTO_REGULAR);
         setForeground(new Color(0, 0, 0));
         setCaretColor(new Color(0, 0, 0));
         addFocusListener(new FocusAdapter() {

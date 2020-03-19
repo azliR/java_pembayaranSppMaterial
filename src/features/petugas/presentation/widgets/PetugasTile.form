@@ -29,13 +29,15 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="tv_namaPetugas" pref="217" max="32767" attributes="0"/>
+          <Group type="102" attributes="0">
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="tv_namaPetugas" pref="0" max="32767" attributes="0"/>
               <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
-              <Component id="tv_namaPengguna" pref="128" max="32767" attributes="0"/>
+              <Component id="tv_namaPengguna" pref="0" max="32767" attributes="0"/>
               <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
-              <Component id="tv_hakAkses" min="-2" pref="80" max="-2" attributes="0"/>
+              <Component id="tv_hakAkses" pref="0" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+              <Component id="tv_status" pref="0" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
           <Component id="jSeparator1" alignment="0" max="32767" attributes="0"/>
@@ -49,6 +51,7 @@
                   <Component id="tv_namaPetugas" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="tv_namaPengguna" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="tv_hakAkses" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="tv_status" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
               <Component id="jSeparator1" min="-2" pref="1" max="-2" attributes="0"/>
@@ -97,6 +100,21 @@
           <Connection code="Colors.BORDER_COLOR" type="code"/>
         </Property>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="tv_status">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="Fonts.ROBOTO_REGULAR.deriveFont(13f)&#xa;    " type="code"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="Colors.GREY_TEXT_COLOR" type="code"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Sedang Aktif"/>
+        <Property name="iconTextGap" type="int" value="8"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

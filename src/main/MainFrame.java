@@ -345,7 +345,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         jLabel2.setForeground(Colors.TEXT_COLOR);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/a_ logo.png"))); // NOI18N
-        jLabel2.setText("Fragile");
+        jLabel2.setText("azliR");
         jLabel2.setIconTextGap(12);
 
         javax.swing.GroupLayout topBarLayout = new javax.swing.GroupLayout(topBar);

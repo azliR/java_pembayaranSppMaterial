@@ -281,7 +281,7 @@ public class ListSiswaPage extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void b_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_addActionPerformed
-        Navigator.push(new AddSiswaPage(repository, null));
+        Navigator.push(new AddSiswaPage(repository));
     }//GEN-LAST:event_b_addActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

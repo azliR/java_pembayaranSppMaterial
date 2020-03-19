@@ -28,7 +28,7 @@ public interface SiswaRepository {
 
     public abstract BufferedImage getImageFromDisk(int width, int height);
 
-    public abstract void insertSiswa(AddSiswaPage context);
+    public abstract void insertOrUpdateSiswa(AddSiswaPage context);
 
     public abstract void deleteSiswa(int id);
 

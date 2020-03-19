@@ -1,6 +1,7 @@
 package features.petugas.data.repositories;
 
 import cores.entities.Petugas;
+import features.petugas.presentation.pages.AddPetugasPage;
 import java.util.List;
 
 /**
@@ -12,9 +13,9 @@ public interface PetugasRepository {
 
     public abstract Petugas getPetugas(int id);
 
-    public abstract void insertPetugas(Petugas petugas);
-
-    public abstract void updatePetugas(Petugas petugas);
+    public abstract void insertOrUpdatePetugas(AddPetugasPage context);
 
     public abstract void deletePetugas(int id);
+
+    public abstract void clear(AddPetugasPage context);
 }

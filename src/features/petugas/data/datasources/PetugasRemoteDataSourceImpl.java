@@ -6,6 +6,7 @@ import cores.exceptions.IllegalOrphanException;
 import cores.exceptions.NonexistentEntityException;
 import cores.exceptions.ServerException;
 import cores.styles.Strings;
+import features.auth.data.datasources.AuthRemoteDataSource;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -18,9 +19,12 @@ import javax.persistence.EntityNotFoundException;
  */
 public class PetugasRemoteDataSourceImpl implements PetugasRemoteDataSource {
     final EntityManagerFactory entityManagerFactory;
+    final AuthRemoteDataSource authRemoteDataSource;
 
-    public PetugasRemoteDataSourceImpl(EntityManagerFactory entityManagerFactory) {
+    public PetugasRemoteDataSourceImpl(EntityManagerFactory entityManagerFactory,
+            AuthRemoteDataSource authRemoteDataSource) {
         this.entityManagerFactory = entityManagerFactory;
+        this.authRemoteDataSource = authRemoteDataSource;
     }
 
     @Override
@@ -118,6 +122,12 @@ public class PetugasRemoteDataSourceImpl implements PetugasRemoteDataSource {
             IllegalOrphanException, NonexistentEntityException, ServerException {
         EntityManager entityManager = null;
         var petugas = petugasValue;
+        final var result = authRemoteDataSource.login(petugas.getNamaPengguna(),
+                petugas.getKataSandi());
+        if (result == null) {
+            throw new NonexistentEntityException(
+                    Strings.ERROR_DIALOG_WRONG_PASSWORD);
+        }
         try {
             entityManager = entityManagerFactory.createEntityManager();
             entityManager.getTransaction().begin();

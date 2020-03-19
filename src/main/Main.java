@@ -46,7 +46,7 @@ public class Main {
         siswaRemoteDataSource = new SiswaRemoteDataSourceImpl(
                 entityManagerFactory);
         petugasRemoteDataSource = new PetugasRemoteDataSourceImpl(
-                entityManagerFactory);
+                entityManagerFactory, authRemoteDataSource);
 
         authRepository = new AuthRepositoryImpl(authRemoteDataSource);
         siswaRepository = new SiswaRepositoryImpl(siswaRemoteDataSource,

@@ -36,6 +36,13 @@ public class AddSiswaPage extends javax.swing.JPanel {
         init();
     }
 
+    public AddSiswaPage(SiswaRepository repository) {
+        this.repository = repository;
+        this.siswa = null;
+        initComponents();
+        init();
+    }
+
     private void init() {
         initDropdownJenisKelamin();
         initDropdownKelas();
@@ -264,7 +271,7 @@ public class AddSiswaPage extends javax.swing.JPanel {
         jLabel2.setText("Tipe SPP");
 
         jPanel1.setBackground(Colors.BACKGROUND_COLOR);
-        jPanel1.setLayout(new java.awt.GridLayout(0, 2, 8, 4));
+        jPanel1.setLayout(new java.awt.GridLayout(0, 2, 8, 6));
 
         et_nisn.setBackground(Colors.BACKGROUND_COLOR);
         et_nisn.setFont(Fonts.ROBOTO_REGULAR.deriveFont(16f)
@@ -346,7 +353,7 @@ public class AddSiswaPage extends javax.swing.JPanel {
                     .addComponent(b_addImage, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(4, 4, 4)
+                        .addGap(6, 6, 6)
                         .addComponent(et_alamat, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(20, 20, 20)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -393,7 +400,7 @@ public class AddSiswaPage extends javax.swing.JPanel {
     }//GEN-LAST:event_b_clearActionPerformed
 
     private void b_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_saveActionPerformed
-        repository.insertSiswa(this);
+        repository.insertOrUpdateSiswa(this);
     }//GEN-LAST:event_b_saveActionPerformed
 
     private void b_addImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_addImageActionPerformed

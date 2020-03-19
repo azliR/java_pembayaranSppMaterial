@@ -587,7 +587,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/assets/images/a_ logo.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Fragile"/>
+                <Property name="text" type="java.lang.String" value="azliR"/>
                 <Property name="iconTextGap" type="int" value="12"/>
               </Properties>
             </Component>
