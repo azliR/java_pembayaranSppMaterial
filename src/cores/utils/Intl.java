@@ -1,5 +1,6 @@
 package cores.utils;
 
+import java.awt.Color;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
@@ -14,6 +15,7 @@ import java.util.logging.Logger;
 public class Intl {
     private static final Logger LOG = Logger.getLogger(Intl.class.getName());
     private static final TreeMap<Integer, String> MAP = new TreeMap<>();
+    private static final double COLOR_FACTOR = 0.88;
 
     static {
         MAP.put(1000, "M");
@@ -117,6 +119,47 @@ public class Intl {
             return MAP.get(number);
         }
         return MAP.get(l) + toRoman(number - l);
+    }
+
+    public static Color getDarker(Color color) {
+        if (color == null) {
+            return null;
+        }
+        return new Color(
+                Math.max((int) (color.getRed() * COLOR_FACTOR), 0),
+                Math.max((int) (color.getGreen() * COLOR_FACTOR), 0),
+                Math.max((int) (color.getBlue() * COLOR_FACTOR), 0),
+                color.getAlpha());
+    }
+
+    public static Color getBrighter(Color color) {
+        if (color == null) {
+            return null;
+        }
+        int r = color.getRed();
+        int g = color.getGreen();
+        int b = color.getBlue();
+        int alpha = color.getAlpha();
+
+        int i = (int) (1.0 / (1.0 - COLOR_FACTOR));
+        if (r == 0 && g == 0 && b == 0) {
+            return new Color(i, i, i, alpha);
+        }
+        if (r > 0 && r < i) {
+            r = i;
+        }
+        if (g > 0 && g < i) {
+            g = i;
+        }
+        if (b > 0 && b < i) {
+            b = i;
+        }
+
+        return new Color(
+                Math.min((int) (r / COLOR_FACTOR), 255),
+                Math.min((int) (g / COLOR_FACTOR), 255),
+                Math.min((int) (b / COLOR_FACTOR), 255),
+                alpha);
     }
 
     private Intl() {

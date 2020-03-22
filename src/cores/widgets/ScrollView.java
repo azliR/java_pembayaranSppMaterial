@@ -25,7 +25,7 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
  *
  * @author a_lpha
  */
-public class a_ScrollPane extends JScrollPane {
+public class ScrollView extends JScrollPane {
 
     private static final long serialVersionUID = 8607734981506765935L;
 
@@ -44,21 +44,21 @@ public class a_ScrollPane extends JScrollPane {
         content.setBackground(Color.WHITE);
         content.setPreferredSize(new Dimension(500, 500));
         content.add(new JLabel("test"));
-        frame.add(new a_ScrollPane(content));
+        frame.add(new ScrollView(content));
 
         frame.pack();
         frame.setVisible(true);
     }
 
-    public a_ScrollPane(Component view) {
+    public ScrollView(Component view) {
         this(view, VERTICAL_SCROLLBAR_AS_NEEDED, HORIZONTAL_SCROLLBAR_AS_NEEDED);
     }
 
-    public a_ScrollPane(int vsbPolicy, int hsbPolicy) {
+    public ScrollView(int vsbPolicy, int hsbPolicy) {
         this(null, vsbPolicy, hsbPolicy);
     }
 
-    public a_ScrollPane(Component view, int vsbPolicy, int hsbPolicy) {
+    public ScrollView(Component view, int vsbPolicy, int hsbPolicy) {
 
         setBorder(null);
 
@@ -138,7 +138,7 @@ public class a_ScrollPane extends JScrollPane {
 
         private final JScrollPane sp;
 
-        ModernScrollBarUI(a_ScrollPane sp) {
+        ModernScrollBarUI(ScrollView sp) {
             this.sp = sp;
         }
 

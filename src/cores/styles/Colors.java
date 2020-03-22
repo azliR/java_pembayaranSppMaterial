@@ -24,6 +24,9 @@ public class Colors {
     public static final Color ACTIVE_TEXT_COLOR = new Color(26, 115, 232);
     public static final Color GREY_TEXT_COLOR = new Color(95, 99, 104);
     public static final Color WHITE_TEXT_COLOR = Color.WHITE;
+    public static final Color ERROR_TEXT_COLOR = new Color(217, 48, 37);
+    public static final Color LABEL_TEXT_FIELD_LOST_FOCUS_COLOR = new Color(128,
+            134, 139);
 
     private Colors() {
     }

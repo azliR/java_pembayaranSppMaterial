@@ -12,7 +12,7 @@ import cores.styles.Strings;
 import cores.utils.AlertDialog;
 import cores.utils.Navigator;
 import cores.utils.Scalr;
-import cores.widgets.RoundedBorder;
+import cores.widgets.RoundedRectangleBorder;
 import features.siswa.data.datasources.SiswaLocalDataSource;
 import features.siswa.data.datasources.SiswaRemoteDataSource;
 import features.siswa.presentation.pages.AddSiswaPage;
@@ -231,7 +231,7 @@ public class SiswaRepositoryImpl implements SiswaRepository {
     @Override
     public void clear(AddSiswaPage context) {
         context.b_addImage.setText("Tambah foto");
-        context.b_addImage.setBorder(new RoundedBorder());
+        context.b_addImage.setBorder(new RoundedRectangleBorder());
         context.b_addImage.setIcon(null);
         context.siswa = null;
 

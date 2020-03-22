@@ -36,7 +36,7 @@ public class Main {
     public static PetugasRepository petugasRepository;
 
     public static void main(String[] args) {
-        Fonts.registerFont(Main.class);
+        Fonts.registerAllFont(Main.class);
         entityManagerFactory = PersistenceManager.instance
                 .getEntityManagerFactory();
 

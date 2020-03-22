@@ -49,7 +49,7 @@
         <Property name="text" type="java.lang.String" value="jLabel1"/>
       </Properties>
     </Component>
-    <Component class="cores.widgets.RoundedButton" name="roundedButton1">
+    <Component class="cores.widgets.MaterialButton" name="roundedButton1">
       <Properties>
         <Property name="borderRadius" type="int" value="18"/>
         <Property name="text" type="java.lang.String" value="roundedButton1"/>

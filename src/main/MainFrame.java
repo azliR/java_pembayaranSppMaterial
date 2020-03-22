@@ -1,12 +1,11 @@
 package main;
 
+import cores.entities.Petugas;
 import cores.styles.Colors;
-import cores.styles.Constants;
 import cores.styles.Fonts;
 import cores.styles.Strings;
 import cores.utils.Navigator;
 import cores.widgets.RoundedPanel;
-import cores.widgets.a_SideNavigation;
 import features.auth.data.repositories.AuthRepository;
 import features.auth.presentation.pages.LoginPage;
 import features.home.pages.HomePage;
@@ -28,7 +27,9 @@ public class MainFrame extends javax.swing.JFrame {
     private final SiswaRepository siswaRepository;
     private final PetugasRepository petugasRepository;
 
-    boolean isSearchFilled = false;
+    private boolean isSearchFilled = false;
+
+    public static Petugas loggedInPetugas;
 
     public MainFrame(AuthRepository authRepository,
             SiswaRepository siswaRepository,
@@ -47,7 +48,9 @@ public class MainFrame extends javax.swing.JFrame {
 
     @Override
     public void dispose() {
-        authRepository.updateStatus(Strings.DATABASE_TIDAK_AKTIF);
+        if (loggedInPetugas != null) {
+            authRepository.updateStatus(Strings.DATABASE_TIDAK_AKTIF);
+        }
         super.dispose();
     }
 
@@ -56,7 +59,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         sideBarGroup = new javax.swing.ButtonGroup();
-        jPanel1 = new javax.swing.JPanel();
+        mainPage = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
@@ -64,14 +67,14 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         content = new javax.swing.JPanel();
         sideBar = new javax.swing.JPanel();
-        nav_beranda = new a_SideNavigation(sideBarGroup);
-        nav_kelas = new a_SideNavigation(sideBarGroup);
-        nav_siswa = new a_SideNavigation(sideBarGroup);
-        nav_spp = new a_SideNavigation(sideBarGroup);
-        nav_petugas = new a_SideNavigation(sideBarGroup);
-        nav_laporan = new a_SideNavigation(sideBarGroup);
+        nav_beranda = new cores.widgets.AppDrawer(sideBarGroup);
+        nav_kelas = new cores.widgets.AppDrawer(sideBarGroup);
+        nav_siswa = new cores.widgets.AppDrawer(sideBarGroup);
+        nav_spp = new cores.widgets.AppDrawer(sideBarGroup);
+        nav_petugas = new cores.widgets.AppDrawer(sideBarGroup);
+        nav_laporan = new cores.widgets.AppDrawer(sideBarGroup);
         topBar = new javax.swing.JPanel();
-        jPanel3 = new RoundedPanel(Constants.LARGE_BORDER_RADIUS);
+        jPanel3 = new RoundedPanel(cores.styles.Consts.MEDIUM_BORDER_RADIUS);
         jLabel1 = new javax.swing.JLabel();
         et_search = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
@@ -163,9 +166,10 @@ public class MainFrame extends javax.swing.JFrame {
 
         nav_beranda.setBackground(Colors.BLUE_BACKGROUND_COLOR);
         sideBarGroup.add(nav_beranda);
+        nav_beranda.setForeground(Colors.ACTIVE_TEXT_COLOR);
         nav_beranda.setSelected(true);
         nav_beranda.setText("Beranda");
-        nav_beranda.setBorder(null);
+        nav_beranda.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 36, 0, 0, Colors.BLUE_BACKGROUND_COLOR));
         nav_beranda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_home-variant-outline_grey.png"))); // NOI18N
         nav_beranda.setIconTextGap(20);
         nav_beranda.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_home-variant.png"))); // NOI18N
@@ -179,7 +183,7 @@ public class MainFrame extends javax.swing.JFrame {
         sideBarGroup.add(nav_kelas);
         nav_kelas.setForeground(Colors.GREY_TEXT_COLOR);
         nav_kelas.setText("Kelas");
-        nav_kelas.setBorder(null);
+        nav_kelas.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 36, 0, 0, Colors.BACKGROUND_COLOR));
         nav_kelas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_google-classroom_grey.png"))); // NOI18N
         nav_kelas.setIconTextGap(20);
         nav_kelas.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_google-classroom.png"))); // NOI18N
@@ -193,7 +197,7 @@ public class MainFrame extends javax.swing.JFrame {
         sideBarGroup.add(nav_siswa);
         nav_siswa.setForeground(Colors.GREY_TEXT_COLOR);
         nav_siswa.setText("Siswa");
-        nav_siswa.setBorder(null);
+        nav_siswa.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 36, 0, 0, Colors.BACKGROUND_COLOR));
         nav_siswa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_account-group-outline_grey.png"))); // NOI18N
         nav_siswa.setIconTextGap(20);
         nav_siswa.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_account-group.png"))); // NOI18N
@@ -207,7 +211,7 @@ public class MainFrame extends javax.swing.JFrame {
         sideBarGroup.add(nav_spp);
         nav_spp.setForeground(Colors.GREY_TEXT_COLOR);
         nav_spp.setText("Spp");
-        nav_spp.setBorder(null);
+        nav_spp.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 36, 0, 0, Colors.BACKGROUND_COLOR));
         nav_spp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_text-box-check-outline_grey.png"))); // NOI18N
         nav_spp.setIconTextGap(20);
         nav_spp.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_text-box-check.png"))); // NOI18N
@@ -221,7 +225,7 @@ public class MainFrame extends javax.swing.JFrame {
         sideBarGroup.add(nav_petugas);
         nav_petugas.setForeground(Colors.GREY_TEXT_COLOR);
         nav_petugas.setText("Petugas");
-        nav_petugas.setBorder(null);
+        nav_petugas.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 36, 0, 0, Colors.BACKGROUND_COLOR));
         nav_petugas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_card-account-details-outline_grey.png"))); // NOI18N
         nav_petugas.setIconTextGap(20);
         nav_petugas.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_card-account-details_grey.png"))); // NOI18N
@@ -235,7 +239,7 @@ public class MainFrame extends javax.swing.JFrame {
         sideBarGroup.add(nav_laporan);
         nav_laporan.setForeground(Colors.GREY_TEXT_COLOR);
         nav_laporan.setText("Laporan");
-        nav_laporan.setBorder(null);
+        nav_laporan.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 36, 0, 0, Colors.BACKGROUND_COLOR));
         nav_laporan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_poll-box-outline_grey.png"))); // NOI18N
         nav_laporan.setIconTextGap(20);
         nav_laporan.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_poll-box.png"))); // NOI18N
@@ -274,7 +278,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(nav_petugas, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(nav_laporan, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(106, Short.MAX_VALUE))
+                .addContainerGap(366, Short.MAX_VALUE))
         );
 
         topBar.setBackground(Colors.BACKGROUND_COLOR);
@@ -324,7 +328,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addComponent(jLabel1)
                 .addGap(10, 10, 10)
-                .addComponent(et_search)
+                .addComponent(et_search, javax.swing.GroupLayout.DEFAULT_SIZE, 1085, Short.MAX_VALUE)
                 .addGap(16, 16, 16)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
@@ -345,7 +349,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         jLabel2.setForeground(Colors.TEXT_COLOR);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/a_ logo.png"))); // NOI18N
-        jLabel2.setText("azliR");
+        jLabel2.setText("αzliR");
         jLabel2.setIconTextGap(12);
 
         javax.swing.GroupLayout topBarLayout = new javax.swing.GroupLayout(topBar);
@@ -354,8 +358,8 @@ public class MainFrame extends javax.swing.JFrame {
             topBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator1)
             .addGroup(topBarLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(64, 64, 64))
@@ -371,25 +375,25 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout mainPageLayout = new javax.swing.GroupLayout(mainPage);
+        mainPage.setLayout(mainPageLayout);
+        mainPageLayout.setHorizontalGroup(
+            mainPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(mainPageLayout.createSequentialGroup()
                 .addComponent(sideBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE))
+                .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(topBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+        mainPageLayout.setVerticalGroup(
+            mainPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPageLayout.createSequentialGroup()
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(topBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(mainPageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(sideBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
@@ -401,11 +405,11 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mainPage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mainPage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -496,11 +500,11 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JPanel mainPage;
     private javax.swing.JRadioButton nav_beranda;
     private javax.swing.JRadioButton nav_kelas;
     private javax.swing.JRadioButton nav_laporan;

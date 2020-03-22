@@ -1,7 +1,7 @@
 package cores.widgets;
 
 import cores.styles.Colors;
-import cores.styles.Constants;
+import cores.styles.Consts;
 import cores.styles.Fonts;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -19,14 +19,14 @@ import main.MainFrame;
  *
  * @author a_lpha
  */
-public class a_SideNavigation extends JRadioButton {
+public class AppDrawer extends JRadioButton {
     private static final long serialVersionUID = 1L;
 
-    private final int borderRadius = Constants.SIDEBAR_RADIUS;
+    private final int borderRadius = Consts.SIDEBAR_RADIUS;
 
     private final ButtonGroup sideBarGroup;
 
-    public a_SideNavigation(ButtonGroup sideBarGroup) {
+    public AppDrawer(ButtonGroup sideBarGroup) {
         super();
         this.sideBarGroup = sideBarGroup;
         init();

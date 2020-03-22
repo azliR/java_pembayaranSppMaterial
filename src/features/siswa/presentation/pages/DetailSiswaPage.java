@@ -2,15 +2,13 @@ package features.siswa.presentation.pages;
 
 import cores.entities.Siswa;
 import cores.styles.Colors;
-import cores.styles.Constants;
+import cores.styles.Consts;
 import cores.styles.Fonts;
 import cores.utils.ImageProcessor;
 import cores.utils.Intl;
 import cores.utils.Navigator;
-import cores.widgets.RoundedButton;
-import cores.widgets.a_ScrollPane;
 import features.siswa.data.repositories.SiswaRepository;
-import java.awt.Color;
+import java.awt.Insets;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -36,7 +34,7 @@ public class DetailSiswaPage extends javax.swing.JPanel {
         if (siswa.getFoto() != null) {
             final var roundedImage = ImageProcessor.roundImage(ImageProcessor
                     .byteArrayToBufferedImage(siswa.getFoto()),
-                    Constants.BORDER_RADIUS);
+                    Consts.BORDER_RADIUS);
             tv_foto.setIcon(new ImageIcon(roundedImage));
         }
         tv_namaSiswa.setText(siswa.getNama());
@@ -55,12 +53,12 @@ public class DetailSiswaPage extends javax.swing.JPanel {
     private void initComponents() {
 
         appbar = new javax.swing.JPanel();
-        b_edit = new RoundedButton(Constants.XLARGE_BORDER_RADIUS);
         jSeparator1 = new javax.swing.JSeparator();
-        b_back = new RoundedButton(Constants.XLARGE_BORDER_RADIUS);
         tv_title = new javax.swing.JLabel();
-        b_delete = new RoundedButton(Constants.XLARGE_BORDER_RADIUS);
-        jScrollPane1 = new a_ScrollPane(jPanel1);
+        b_back = new cores.widgets.MaterialButton();
+        b_edit = new cores.widgets.MaterialButton();
+        b_delete = new cores.widgets.MaterialButton();
+        jScrollPane1 = new cores.widgets.ScrollView(jPanel1);
         jPanel1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         tv_alamat = new javax.swing.JLabel();
@@ -92,68 +90,35 @@ public class DetailSiswaPage extends javax.swing.JPanel {
 
         appbar.setBackground(Colors.BACKGROUND_COLOR);
 
-        b_edit.setBackground(Colors.PRIMARY_COLOR);
-        b_edit.setFont(Fonts.PRODUCT_SANS_MEDIUM.deriveFont(14f)
-        );
-        b_edit.setForeground(Colors.WHITE_TEXT_COLOR);
-        b_edit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_pencil-outline_white.png"))); // NOI18N
-        b_edit.setText("Edit");
-        b_edit.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 8, 0, 16));
-        b_edit.setBorderPainted(false);
-        b_edit.setContentAreaFilled(false);
-        b_edit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        b_edit.setFocusPainted(false);
-        b_edit.setIconTextGap(8);
-        b_edit.setMinimumSize(new java.awt.Dimension(120, 24));
-        b_edit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_editActionPerformed(evt);
-            }
-        });
-
         jSeparator1.setForeground(Colors.BORDER_COLOR);
 
-        b_back.setBackground(Colors.BACKGROUND_COLOR);
-        b_back.setFont(Fonts.PRODUCT_SANS_MEDIUM.deriveFont(14f)
+        tv_title.setFont(Fonts.GOOGLE_SANS.deriveFont(16f)
         );
-        b_back.setForeground(Colors.WHITE_TEXT_COLOR);
+        tv_title.setText("Detail Siswa");
+
+        b_back.setBorder(new cores.widgets.RoundedRectangleBorder(36, new Insets(0,0,0,0), Colors.BACKGROUND_COLOR));
+        b_back.setBorderRadius(36);
         b_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_arrow-left_grey.png"))); // NOI18N
-        b_back.setBorder(null);
-        b_back.setBorderPainted(false);
-        b_back.setContentAreaFilled(false);
-        b_back.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        b_back.setFocusPainted(false);
-        b_back.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_arrow-left_black.png"))); // NOI18N
-        b_back.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                b_backMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                b_backMouseExited(evt);
-            }
-        });
         b_back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_backActionPerformed(evt);
             }
         });
 
-        tv_title.setFont(Fonts.GOOGLE_SANS.deriveFont(16f)
-        );
-        tv_title.setText("Detail Siswa");
+        b_edit.setBorder(new cores.widgets.RoundedRectangleBorder());
+        b_edit.setForeground(Colors.PRIMARY_COLOR);
+        b_edit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_account-edit-outline.png"))); // NOI18N
+        b_edit.setText("Edit");
+        b_edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_editActionPerformed(evt);
+            }
+        });
 
-        b_delete.setBackground(Color.RED);
-        b_delete.setFont(Fonts.PRODUCT_SANS_MEDIUM.deriveFont(14f)
-        );
-        b_delete.setForeground(Colors.WHITE_TEXT_COLOR);
-        b_delete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_trash-can-outline_white.png"))); // NOI18N
+        b_delete.setBorder(new cores.widgets.RoundedRectangleBorder());
+        b_delete.setForeground(Colors.ERROR_TEXT_COLOR);
+        b_delete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_trash-can-outline_red.png"))); // NOI18N
         b_delete.setText("Hapus");
-        b_delete.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 8, 0, 16));
-        b_delete.setBorderPainted(false);
-        b_delete.setContentAreaFilled(false);
-        b_delete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        b_delete.setFocusPainted(false);
-        b_delete.setIconTextGap(8);
         b_delete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_deleteActionPerformed(evt);
@@ -170,20 +135,22 @@ public class DetailSiswaPage extends javax.swing.JPanel {
                 .addGap(10, 10, 10)
                 .addComponent(tv_title)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(b_delete)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(b_delete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8)
                 .addComponent(b_edit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(16, 16, 16))
         );
         appbarLayout.setVerticalGroup(
             appbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(appbarLayout.createSequentialGroup()
                 .addGap(6, 6, 6)
-                .addGroup(appbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(b_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(b_back, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tv_title, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(b_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(appbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(appbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(b_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(appbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tv_title, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(b_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(b_back, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(6, 6, 6)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
@@ -428,25 +395,17 @@ public class DetailSiswaPage extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(appbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void b_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editActionPerformed
-        Navigator.push(new AddSiswaPage(repository, siswa));
-    }//GEN-LAST:event_b_editActionPerformed
-
-    private void b_backMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_b_backMouseEntered
-        b_back.setBackground(Colors.GREY_BACKGROUND_COLOR);
-    }//GEN-LAST:event_b_backMouseEntered
-
-    private void b_backMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_b_backMouseExited
-        b_back.setBackground(Colors.BACKGROUND_COLOR);
-    }//GEN-LAST:event_b_backMouseExited
 
     private void b_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_backActionPerformed
         Navigator.push(new ListSiswaPage(repository));
     }//GEN-LAST:event_b_backActionPerformed
+
+    private void b_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editActionPerformed
+        Navigator.push(new AddSiswaPage(repository, siswa));
+    }//GEN-LAST:event_b_editActionPerformed
 
     private void b_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_deleteActionPerformed
         final var result = JOptionPane.showConfirmDialog(null, "Hapus "
@@ -461,9 +420,9 @@ public class DetailSiswaPage extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel appbar;
-    private javax.swing.JButton b_back;
-    private javax.swing.JButton b_delete;
-    private javax.swing.JButton b_edit;
+    private cores.widgets.MaterialButton b_back;
+    private cores.widgets.MaterialButton b_delete;
+    private cores.widgets.MaterialButton b_edit;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
