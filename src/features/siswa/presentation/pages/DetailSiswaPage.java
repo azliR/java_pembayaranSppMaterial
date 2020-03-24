@@ -4,13 +4,13 @@ import cores.entities.Siswa;
 import cores.styles.Colors;
 import cores.styles.Consts;
 import cores.styles.Fonts;
+import cores.styles.Strings;
+import cores.utils.AlertDialog;
 import cores.utils.ImageProcessor;
 import cores.utils.Intl;
 import cores.utils.Navigator;
 import features.siswa.data.repositories.SiswaRepository;
-import java.awt.Insets;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -96,9 +96,9 @@ public class DetailSiswaPage extends javax.swing.JPanel {
         );
         tv_title.setText("Detail Siswa");
 
-        b_back.setBorder(new cores.widgets.RoundedRectangleBorder(36, new Insets(0,0,0,0), Colors.BACKGROUND_COLOR));
         b_back.setBorderRadius(36);
         b_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_arrow-left_grey.png"))); // NOI18N
+        b_back.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_arrow-left_black.png"))); // NOI18N
         b_back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_backActionPerformed(evt);
@@ -408,11 +408,12 @@ public class DetailSiswaPage extends javax.swing.JPanel {
     }//GEN-LAST:event_b_editActionPerformed
 
     private void b_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_deleteActionPerformed
-        final var result = JOptionPane.showConfirmDialog(null, "Hapus "
+        final var result = AlertDialog.showConfirmDialog(
+                Strings.DIALOG_DELETE_TITLE,
+                "Hapus "
                 + siswa.getNama()
-                + " dari database secara permanen? Tindakan ini tidak dapat diurungkan.",
-                "Hapus data?", JOptionPane.YES_NO_OPTION);
-        if (result == 0) {
+                + " dari database secara permanen? Tindakan ini tidak dapat diurungkan.");
+        if (result) {
             repository.deleteSiswa(siswa.getId());
             Navigator.push(new ListSiswaPage(repository));
         }

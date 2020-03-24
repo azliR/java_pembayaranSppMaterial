@@ -1,4 +1,4 @@
-package cores.connection;
+package cores.provider;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

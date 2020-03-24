@@ -27,6 +27,15 @@ public class AlertDialog {
         );
     }
 
+    public static boolean showConfirmDialog(String title, String message) {
+        final var result = JOptionPane.showConfirmDialog(null,
+                message,
+                title,
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+        return result == 0;
+    }
+
     private AlertDialog() {
     }
 }

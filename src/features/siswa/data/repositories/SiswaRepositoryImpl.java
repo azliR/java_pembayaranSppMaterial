@@ -163,10 +163,10 @@ public class SiswaRepositoryImpl implements SiswaRepository {
         final var foto = context.foto;
         final var nisn = context.et_nisn.getText();
         final var nis = context.et_nis.getText();
-        final var nama = context.et_namaSiswa.getText();
-        final var noTelepon = context.et_noTelepon.getText();
+        final var nama = context.et_namaSiswa.getText().strip();
+        final var noTelepon = context.et_noTelepon.getText().strip();
 
-        final var alamat = context.et_alamat.getText();
+        final var alamat = context.et_alamat.getText().strip();
         final var kelas = (Kelas) context.cb_kelas.getSelectedItem();
         final var spp = (Spp) context.cb_spp.getSelectedItem();
         final var jenisKelamin = context.cb_jenisKelamin.getSelectedItem()
@@ -182,7 +182,8 @@ public class SiswaRepositoryImpl implements SiswaRepository {
         }
 
         if (nisn.length() < 10 || nis.length() < 8) {
-
+            AlertDialog.showErrorDialog(Strings.ERROR_DIALOG_NISN_NIS_LENGTH);
+            return;
         }
 
         try {
@@ -200,7 +201,7 @@ public class SiswaRepositoryImpl implements SiswaRepository {
             siswa.setSppBulanIni(context.siswa == null ? "Belum dibayar"
                     : context.siswa.getSppBulanIni());
 
-            if (context.siswa == null) {
+            if (id == null) {
                 remoteDataSource.insertSiswa(siswa);
 
                 clear(context);
@@ -211,7 +212,7 @@ public class SiswaRepositoryImpl implements SiswaRepository {
                 Navigator.push(new DetailSiswaPage(this, siswa));
             }
         } catch (PreexistingEntityException | ServerException
-                | IllegalOrphanException | NonexistentEntityException ex) {
+                | NonexistentEntityException ex) {
             AlertDialog.showErrorDialog(ex.getMessage());
             LOG.log(Level.SEVERE, null, ex);
         }

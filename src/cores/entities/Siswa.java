@@ -15,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -33,6 +35,22 @@ import javax.xml.bind.annotation.XmlTransient;
         = {@UniqueConstraint(columnNames = {"nis"}),
             @UniqueConstraint(columnNames = {"nisn"})})
 @XmlRootElement
+@NamedQueries({@NamedQuery(name = "Siswa.findAll", query
+            = "SELECT s FROM Siswa s"),
+    @NamedQuery(name = "Siswa.findById", query
+            = "SELECT s FROM Siswa s WHERE s.id = :id"),
+    @NamedQuery(name = "Siswa.findByNisn", query
+            = "SELECT s FROM Siswa s WHERE s.nisn = :nisn"),
+    @NamedQuery(name = "Siswa.findByNis", query
+            = "SELECT s FROM Siswa s WHERE s.nis = :nis"),
+    @NamedQuery(name = "Siswa.findByNama", query
+            = "SELECT s FROM Siswa s WHERE s.nama = :nama"),
+    @NamedQuery(name = "Siswa.findByJenisKelamin", query
+            = "SELECT s FROM Siswa s WHERE s.jenisKelamin = :jenisKelamin"),
+    @NamedQuery(name = "Siswa.findByNoTelepon", query
+            = "SELECT s FROM Siswa s WHERE s.noTelepon = :noTelepon"),
+    @NamedQuery(name = "Siswa.findBySppBulanIni", query
+            = "SELECT s FROM Siswa s WHERE s.sppBulanIni = :sppBulanIni")})
 public class Siswa implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -220,12 +238,16 @@ public class Siswa implements Serializable {
             return false;
         }
         Siswa other = (Siswa) object;
-        return !((this.id == null && other.id != null) || (this.id != null
-                && !this.id.equals(other.id)));
+        if ((this.id == null && other.id != null) || (this.id != null
+                && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
         return "cores.entities.Siswa[ id=" + id + " ]";
     }
+
 }

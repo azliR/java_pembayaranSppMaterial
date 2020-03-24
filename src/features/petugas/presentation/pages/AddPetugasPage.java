@@ -1,11 +1,16 @@
 package features.petugas.presentation.pages;
 
 import cores.entities.Petugas;
+import cores.provider.SharedPreferences;
 import cores.styles.Colors;
+import cores.styles.Consts;
 import cores.styles.Fonts;
 import cores.styles.Strings;
+import cores.utils.ImageProcessor;
 import cores.utils.Navigator;
 import features.petugas.data.repositories.PetugasRepository;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -15,28 +20,49 @@ public class AddPetugasPage extends javax.swing.JPanel {
     private static final long serialVersionUID = 1L;
 
     private final PetugasRepository repository;
+    private final SharedPreferences preferences;
 
-    public Petugas petugas;
+    public final Petugas petugas;
 
-    public AddPetugasPage(PetugasRepository repository, Petugas petugas) {
+    public AddPetugasPage(PetugasRepository repository,
+            SharedPreferences preferences, Petugas petugas) {
         this.repository = repository;
+        this.preferences = preferences;
         this.petugas = petugas;
         initComponents();
         init();
     }
 
-    public AddPetugasPage(PetugasRepository repository) {
+    public AddPetugasPage(PetugasRepository repository,
+            SharedPreferences preferences) {
+        this.preferences = preferences;
         this.repository = repository;
-        this.petugas = null;
+        this.petugas = new Petugas();
         initComponents();
         init();
     }
 
     private void init() {
-        if (petugas != null) {
+        tv_title.setText(petugas.getId() == null ? "Tambah Petugas"
+                : "Edit Petugas");
+        b_ubahKataSandi.setVisible(petugas.getId() != null);
+        p_ubahKataSandi.setVisible(petugas.getId() == null);
+        tv_hakAkses.setVisible(preferences.isAdministrator());
+        cb_hakAkses.setVisible(preferences.isAdministrator());
+
+        if (petugas.getId() != null) {
+            if (petugas.getFoto() != null) {
+                final var roundedImage = ImageProcessor.roundImage(ImageProcessor
+                        .byteArrayToBufferedImage(petugas.getFoto()),
+                        Consts.BORDER_RADIUS);
+                b_addImage.setIcon(new ImageIcon(roundedImage));
+                b_addImage.setText(null);
+                b_addImage.setBorder(null);
+            }
             et_namaPetugas.setText(petugas.getNamaPetugas());
             et_namaPengguna.setText(petugas.getNamaPengguna());
-            cb_jenisKelamin.setSelectedItem(petugas.getHakAkses());
+            et_noTelepon.setText(petugas.getNoTelepon());
+            cb_hakAkses.setSelectedItem(petugas.getHakAkses());
             b_save.setText("Perbarui");
         }
     }
@@ -45,18 +71,23 @@ public class AddPetugasPage extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        appbar = new javax.swing.JPanel();
+        p_appbar = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
         tv_title = new javax.swing.JLabel();
         b_back = new cores.widgets.MaterialButton();
         jScrollPane1 = new cores.widgets.ScrollView(jPanel2);
         jPanel2 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        cb_jenisKelamin = new javax.swing.JComboBox<>();
+        tv_hakAkses = new javax.swing.JLabel();
+        cb_hakAkses = new javax.swing.JComboBox<>();
         b_save = new cores.widgets.MaterialButton();
         b_clear = new cores.widgets.MaterialButton();
+        b_addImage = new cores.widgets.MaterialButton();
+        et_noTelepon = new cores.widgets.TextField();
+        b_ubahKataSandi = new cores.widgets.MaterialButton();
+        jPanel1 = new javax.swing.JPanel();
         et_namaPetugas = new cores.widgets.TextField();
         et_namaPengguna = new cores.widgets.TextField();
+        p_ubahKataSandi = new javax.swing.JPanel();
         et_kataSandi = new cores.widgets.PasswordField();
         et_konfirmasiKataSandi = new cores.widgets.PasswordField();
 
@@ -67,38 +98,39 @@ public class AddPetugasPage extends javax.swing.JPanel {
             }
         });
 
-        appbar.setBackground(Colors.BACKGROUND_COLOR);
+        p_appbar.setBackground(Colors.BACKGROUND_COLOR);
 
         jSeparator1.setForeground(Colors.BORDER_COLOR);
 
         tv_title.setFont(Fonts.GOOGLE_SANS.deriveFont(16f)
         );
-        tv_title.setText(petugas == null ? "Tambah Petugas" : "Edit Petugas");
+        tv_title.setText("Tambah Petugas");
 
         b_back.setBorderRadius(36);
         b_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_arrow-left_grey.png"))); // NOI18N
+        b_back.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_arrow-left_black.png"))); // NOI18N
         b_back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_backActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout appbarLayout = new javax.swing.GroupLayout(appbar);
-        appbar.setLayout(appbarLayout);
-        appbarLayout.setHorizontalGroup(
-            appbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout p_appbarLayout = new javax.swing.GroupLayout(p_appbar);
+        p_appbar.setLayout(p_appbarLayout);
+        p_appbarLayout.setHorizontalGroup(
+            p_appbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator1)
-            .addGroup(appbarLayout.createSequentialGroup()
+            .addGroup(p_appbarLayout.createSequentialGroup()
                 .addComponent(b_back, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(tv_title)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        appbarLayout.setVerticalGroup(
-            appbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(appbarLayout.createSequentialGroup()
+        p_appbarLayout.setVerticalGroup(
+            p_appbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(p_appbarLayout.createSequentialGroup()
                 .addGap(6, 6, 6)
-                .addGroup(appbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(p_appbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(tv_title, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(b_back, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(6, 6, 6)
@@ -113,17 +145,17 @@ public class AddPetugasPage extends javax.swing.JPanel {
         jPanel2.setBackground(Colors.BACKGROUND_COLOR
         );
 
-        jLabel4.setFont(Fonts.ROBOTO_MEDIUM.deriveFont(14f)
+        tv_hakAkses.setFont(Fonts.ROBOTO_MEDIUM.deriveFont(14f)
         );
-        jLabel4.setForeground(Colors.GREY_TEXT_COLOR);
-        jLabel4.setText(Strings.HAK_AKSES);
+        tv_hakAkses.setForeground(Colors.GREY_TEXT_COLOR);
+        tv_hakAkses.setText(Strings.HAK_AKSES);
 
-        cb_jenisKelamin.setBackground(Colors.BACKGROUND_COLOR);
-        cb_jenisKelamin.setFont(Fonts.ROBOTO_MEDIUM.deriveFont(14f)
+        cb_hakAkses.setBackground(Colors.BACKGROUND_COLOR);
+        cb_hakAkses.setFont(Fonts.ROBOTO_MEDIUM.deriveFont(14f)
         );
-        cb_jenisKelamin.setForeground(Colors.TEXT_COLOR);
-        cb_jenisKelamin.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { Strings.PETUGAS, Strings.ADMINISTRATOR }));
-        cb_jenisKelamin.setBorder(null);
+        cb_hakAkses.setForeground(Colors.TEXT_COLOR);
+        cb_hakAkses.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { Strings.PETUGAS, Strings.ADMINISTRATOR }));
+        cb_hakAkses.setBorder(null);
 
         b_save.setBackground(Colors.PRIMARY_COLOR);
         b_save.setForeground(Colors.WHITE_TEXT_COLOR);
@@ -142,52 +174,102 @@ public class AddPetugasPage extends javax.swing.JPanel {
             }
         });
 
+        b_addImage.setBorder(new cores.widgets.RoundedRectangleBorder());
+        b_addImage.setText("Tambah Foto");
+        b_addImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_addImageActionPerformed(evt);
+            }
+        });
+
+        et_noTelepon.setIsDigitOnly(true);
+        et_noTelepon.setLabel("No. Telepon");
+        et_noTelepon.setMaxLength(13);
+
+        b_ubahKataSandi.setBorder(new cores.widgets.RoundedRectangleBorder());
+        b_ubahKataSandi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_lock-open-outline.png"))); // NOI18N
+        b_ubahKataSandi.setText("Ubah kata sandi");
+        b_ubahKataSandi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_ubahKataSandiActionPerformed(evt);
+            }
+        });
+
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new java.awt.GridLayout(0, 2, 8, 16));
+
         et_namaPetugas.setLabel("Nama Petugas");
         et_namaPetugas.setMaxLength(36);
+        jPanel1.add(et_namaPetugas);
 
         et_namaPengguna.setLabel("Nama Pengguna");
         et_namaPengguna.setMaxLength(26);
+        jPanel1.add(et_namaPengguna);
+
+        p_ubahKataSandi.setOpaque(false);
+        p_ubahKataSandi.setLayout(new java.awt.GridLayout(0, 2, 16, 8));
 
         et_kataSandi.setLabel("Kata Sandi");
+        p_ubahKataSandi.add(et_kataSandi);
 
         et_konfirmasiKataSandi.setLabel("Konfirmasi Kata Sandi");
+        et_konfirmasiKataSandi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                et_konfirmasiKataSandiActionPerformed(evt);
+            }
+        });
+        p_ubahKataSandi.add(et_konfirmasiKataSandi);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(b_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(b_save, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel4)
-                        .addComponent(cb_jenisKelamin, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(et_namaPetugas, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
-                        .addComponent(et_namaPengguna, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
-                        .addComponent(et_kataSandi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(et_konfirmasiKataSandi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(0, 270, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(b_addImage, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(b_ubahKataSandi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(36, 36, 36)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(tv_hakAkses)
+                                            .addComponent(cb_hakAkses, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(0, 347, Short.MAX_VALUE))
+                                    .addComponent(p_ubahKataSandi, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(et_noTelepon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                .addGap(54, 54, 54))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(et_namaPetugas, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8)
-                .addComponent(et_namaPengguna, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8)
-                .addComponent(et_kataSandi, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8)
-                .addComponent(et_konfirmasiKataSandi, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(8, 8, 8)
+                        .addComponent(et_noTelepon, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(b_ubahKataSandi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(p_ubahKataSandi, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(b_addImage, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16)
-                .addComponent(jLabel4)
+                .addComponent(tv_hakAkses)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cb_jenisKelamin, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
+                .addComponent(cb_hakAkses, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(b_save, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(b_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -200,13 +282,13 @@ public class AddPetugasPage extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
-            .addComponent(appbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 770, Short.MAX_VALUE)
+            .addComponent(p_appbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(appbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(p_appbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
@@ -218,31 +300,65 @@ public class AddPetugasPage extends javax.swing.JPanel {
     }//GEN-LAST:event_formComponentResized
 
     private void b_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_backActionPerformed
-        Navigator.push(new ListPetugasPage(repository));
+        Navigator.push(new ListPetugasPage(repository, preferences));
     }//GEN-LAST:event_b_backActionPerformed
 
     private void b_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_saveActionPerformed
-        repository.insertOrUpdatePetugas(this);
+        if (petugas.getId() != null) {
+            final var kataSandi = JOptionPane.showInputDialog(null,
+                    Strings.DIALOG_ENTER_PASSWORD_MESSAGE,
+                    Strings.EDIT_PETUGAS,
+                    JOptionPane.INFORMATION_MESSAGE);
+            repository.updatePetugas(this, kataSandi);
+        } else {
+            repository.insertPetugas(this);
+        }
     }//GEN-LAST:event_b_saveActionPerformed
 
     private void b_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_clearActionPerformed
         repository.clear(this);
     }//GEN-LAST:event_b_clearActionPerformed
 
+    private void b_addImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_addImageActionPerformed
+        final var result = repository.getImageFromDisk(144, 192);
+        if (result != null) {
+            b_addImage.setIcon(new ImageIcon(ImageProcessor.roundImage(result,
+                    Consts.BORDER_RADIUS)));
+            b_addImage.setText(null);
+            b_addImage.setBorder(null);
+
+            petugas.setFoto(ImageProcessor.toByteArray(result));
+        }
+    }//GEN-LAST:event_b_addImageActionPerformed
+
+    private void b_ubahKataSandiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_ubahKataSandiActionPerformed
+        Navigator.push(new EditPetugasPasswordPage(repository, preferences,
+                petugas), true, false);
+    }//GEN-LAST:event_b_ubahKataSandiActionPerformed
+
+    private void et_konfirmasiKataSandiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_et_konfirmasiKataSandiActionPerformed
+        b_save.doClick();
+    }//GEN-LAST:event_et_konfirmasiKataSandiActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel appbar;
+    public cores.widgets.MaterialButton b_addImage;
     private cores.widgets.MaterialButton b_back;
     private cores.widgets.MaterialButton b_clear;
     private cores.widgets.MaterialButton b_save;
-    public javax.swing.JComboBox<String> cb_jenisKelamin;
+    public cores.widgets.MaterialButton b_ubahKataSandi;
+    public javax.swing.JComboBox<String> cb_hakAkses;
     public cores.widgets.PasswordField et_kataSandi;
     public cores.widgets.PasswordField et_konfirmasiKataSandi;
     public cores.widgets.TextField et_namaPengguna;
     public cores.widgets.TextField et_namaPetugas;
-    private javax.swing.JLabel jLabel4;
+    public cores.widgets.TextField et_noTelepon;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JPanel p_appbar;
+    private javax.swing.JPanel p_ubahKataSandi;
+    private javax.swing.JLabel tv_hakAkses;
     private javax.swing.JLabel tv_title;
     // End of variables declaration//GEN-END:variables
 }

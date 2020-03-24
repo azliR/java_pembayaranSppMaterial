@@ -1,11 +1,14 @@
 package main;
 
-import cores.connection.PersistenceManager;
+import cores.provider.PersistenceManager;
+import cores.provider.SharedPreferences;
 import cores.styles.Fonts;
 import features.auth.data.datasources.AuthRemoteDataSource;
 import features.auth.data.datasources.AuthRemoteDataSourceImpl;
 import features.auth.data.repositories.AuthRepository;
 import features.auth.data.repositories.AuthRepositoryImpl;
+import features.petugas.data.datasources.PetugasLocalDataSource;
+import features.petugas.data.datasources.PetugasLocalDataSourceImpl;
 import features.petugas.data.datasources.PetugasRemoteDataSource;
 import features.petugas.data.datasources.PetugasRemoteDataSourceImpl;
 import features.petugas.data.repositories.PetugasRepository;
@@ -24,21 +27,26 @@ import javax.swing.UIManager;
  * @author rizal
  */
 public class Main {
-    public static EntityManagerFactory entityManagerFactory;
+    private static EntityManagerFactory entityManagerFactory;
 
-    public static AuthRemoteDataSource authRemoteDataSource;
-    public static SiswaLocalDataSource siswaLocalDataSource;
-    public static SiswaRemoteDataSource siswaRemoteDataSource;
-    public static PetugasRemoteDataSource petugasRemoteDataSource;
+    private static SharedPreferences preferences;
 
-    public static AuthRepository authRepository;
-    public static SiswaRepository siswaRepository;
-    public static PetugasRepository petugasRepository;
+    private static AuthRemoteDataSource authRemoteDataSource;
+    private static SiswaLocalDataSource siswaLocalDataSource;
+    private static SiswaRemoteDataSource siswaRemoteDataSource;
+    private static PetugasRemoteDataSource petugasRemoteDataSource;
+    private static PetugasLocalDataSource petugasLocalDataSource;
+
+    private static AuthRepository authRepository;
+    private static SiswaRepository siswaRepository;
+    private static PetugasRepository petugasRepository;
 
     public static void main(String[] args) {
         Fonts.registerAllFont(Main.class);
         entityManagerFactory = PersistenceManager.instance
                 .getEntityManagerFactory();
+
+        preferences = new SharedPreferences();
 
         authRemoteDataSource = new AuthRemoteDataSourceImpl(
                 entityManagerFactory);
@@ -46,15 +54,18 @@ public class Main {
         siswaRemoteDataSource = new SiswaRemoteDataSourceImpl(
                 entityManagerFactory);
         petugasRemoteDataSource = new PetugasRemoteDataSourceImpl(
-                entityManagerFactory, authRemoteDataSource);
+                entityManagerFactory, authRemoteDataSource, preferences);
+        petugasLocalDataSource = new PetugasLocalDataSourceImpl();
 
-        authRepository = new AuthRepositoryImpl(authRemoteDataSource);
+        authRepository = new AuthRepositoryImpl(authRemoteDataSource,
+                preferences);
         siswaRepository = new SiswaRepositoryImpl(siswaRemoteDataSource,
                 siswaLocalDataSource);
-        petugasRepository = new PetugasRepositoryImpl(petugasRemoteDataSource);
+        petugasRepository = new PetugasRepositoryImpl(petugasRemoteDataSource,
+                petugasLocalDataSource, preferences);
 
-        new MainFrame(authRepository, siswaRepository, petugasRepository)
-                .setVisible(true);
+        new MainFrame(authRepository, siswaRepository, petugasRepository,
+                preferences).setVisible(true);
 
         try {
             for (UIManager.LookAndFeelInfo info : UIManager

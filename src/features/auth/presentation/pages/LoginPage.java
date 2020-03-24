@@ -127,9 +127,9 @@ public class LoginPage extends javax.swing.JPanel {
                 .addComponent(et_kataSandi, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(8, 8, 8)
                 .addComponent(tv_error)
-                .addGap(36, 36, 36)
+                .addGap(24, 24, 24)
                 .addComponent(b_login, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(117, Short.MAX_VALUE))
+                .addContainerGap(129, Short.MAX_VALUE))
         );
 
         tv_error.setVisible(false);
@@ -155,11 +155,11 @@ public class LoginPage extends javax.swing.JPanel {
     private void b_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_loginActionPerformed
         tv_error.setVisible(false);
 
-        final var namaPengguna = et_namaPengguna.getText();
+        final var namaPengguna = et_namaPengguna.getText().strip();
         final var kataSandi = String.valueOf(et_kataSandi.getPassword());
 
         if (authRepository.login(namaPengguna, kataSandi)) {
-            Navigator.push(new HomePage(), true);
+            Navigator.push(new HomePage(), true, true);
 
         } else {
             tv_error.setVisible(true);

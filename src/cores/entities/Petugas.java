@@ -12,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -31,6 +33,24 @@ import javax.xml.bind.annotation.XmlTransient;
         uniqueConstraints
         = {@UniqueConstraint(columnNames = {"nama_pengguna"})})
 @XmlRootElement
+@NamedQueries({@NamedQuery(name = "Petugas.findAll", query
+            = "SELECT p FROM Petugas p"),
+    @NamedQuery(name = "Petugas.findById", query
+            = "SELECT p FROM Petugas p WHERE p.id = :id"),
+    @NamedQuery(name = "Petugas.findByNamaPetugas", query
+            = "SELECT p FROM Petugas p WHERE p.namaPetugas = :namaPetugas"),
+    @NamedQuery(name = "Petugas.findByNamaPengguna", query
+            = "SELECT p FROM Petugas p WHERE p.namaPengguna = :namaPengguna"),
+    @NamedQuery(name = "Petugas.findByHakAkses", query
+            = "SELECT p FROM Petugas p WHERE p.hakAkses = :hakAkses"),
+    @NamedQuery(name = "Petugas.findByNoTelepon", query
+            = "SELECT p FROM Petugas p WHERE p.noTelepon = :noTelepon"),
+    @NamedQuery(name = "Petugas.findByDibuatPada", query
+            = "SELECT p FROM Petugas p WHERE p.dibuatPada = :dibuatPada"),
+    @NamedQuery(name = "Petugas.findByTerakhirMasuk", query
+            = "SELECT p FROM Petugas p WHERE p.terakhirMasuk = :terakhirMasuk"),
+    @NamedQuery(name = "Petugas.findByStatus", query
+            = "SELECT p FROM Petugas p WHERE p.status = :status")})
 public class Petugas implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -38,6 +58,9 @@ public class Petugas implements Serializable {
     @Basic(optional = false)
     @Column(name = "id", nullable = false)
     private Integer id;
+    @Lob
+    @Column(name = "foto")
+    private byte[] foto;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 36)
@@ -59,6 +82,11 @@ public class Petugas implements Serializable {
     @Size(min = 1, max = 13)
     @Column(name = "hak_akses", nullable = false, length = 13)
     private String hakAkses;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 13)
+    @Column(name = "no_telepon", nullable = false, length = 13)
+    private String noTelepon;
     @Basic(optional = false)
     @NotNull
     @Column(name = "dibuat_pada", nullable = false)
@@ -86,13 +114,14 @@ public class Petugas implements Serializable {
     }
 
     public Petugas(Integer id, String namaPetugas, String namaPengguna,
-            String kataSandi, String hakAkses, Date dibuatPada,
+            String kataSandi, String hakAkses, String noTelepon, Date dibuatPada,
             Date terakhirMasuk, String status) {
         this.id = id;
         this.namaPetugas = namaPetugas;
         this.namaPengguna = namaPengguna;
         this.kataSandi = kataSandi;
         this.hakAkses = hakAkses;
+        this.noTelepon = noTelepon;
         this.dibuatPada = dibuatPada;
         this.terakhirMasuk = terakhirMasuk;
         this.status = status;
@@ -104,6 +133,14 @@ public class Petugas implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public byte[] getFoto() {
+        return foto;
+    }
+
+    public void setFoto(byte[] foto) {
+        this.foto = foto;
     }
 
     public String getNamaPetugas() {
@@ -136,6 +173,14 @@ public class Petugas implements Serializable {
 
     public void setHakAkses(String hakAkses) {
         this.hakAkses = hakAkses;
+    }
+
+    public String getNoTelepon() {
+        return noTelepon;
+    }
+
+    public void setNoTelepon(String noTelepon) {
+        this.noTelepon = noTelepon;
     }
 
     public Date getDibuatPada() {
@@ -185,12 +230,16 @@ public class Petugas implements Serializable {
             return false;
         }
         Petugas other = (Petugas) object;
-        return !((this.id == null && other.id != null) || (this.id != null
-                && !this.id.equals(other.id)));
+        if ((this.id == null && other.id != null) ||
+                (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
         return "cores.entities.Petugas[ id=" + id + " ]";
     }
+
 }

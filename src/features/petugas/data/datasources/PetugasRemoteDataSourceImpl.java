@@ -1,10 +1,10 @@
 package features.petugas.data.datasources;
 
-import cores.entities.Pembayaran;
 import cores.entities.Petugas;
 import cores.exceptions.IllegalOrphanException;
 import cores.exceptions.NonexistentEntityException;
 import cores.exceptions.ServerException;
+import cores.provider.SharedPreferences;
 import cores.styles.Strings;
 import features.auth.data.datasources.AuthRemoteDataSource;
 import java.util.ArrayList;
@@ -18,13 +18,22 @@ import javax.persistence.EntityNotFoundException;
  * @author rizal
  */
 public class PetugasRemoteDataSourceImpl implements PetugasRemoteDataSource {
-    final EntityManagerFactory entityManagerFactory;
-    final AuthRemoteDataSource authRemoteDataSource;
+    private final EntityManagerFactory entityManagerFactory;
+    private final AuthRemoteDataSource authRemoteDataSource;
+    private final SharedPreferences preferences;
 
     public PetugasRemoteDataSourceImpl(EntityManagerFactory entityManagerFactory,
-            AuthRemoteDataSource authRemoteDataSource) {
+            AuthRemoteDataSource authRemoteDataSource,
+            SharedPreferences preferences) {
         this.entityManagerFactory = entityManagerFactory;
         this.authRemoteDataSource = authRemoteDataSource;
+        this.preferences = preferences;
+    }
+
+    @Override
+    public Petugas login(String namaPengguna, String kataSandi) throws
+            NonexistentEntityException, ServerException {
+        return authRemoteDataSource.login(namaPengguna, kataSandi);
     }
 
     @Override
@@ -68,45 +77,11 @@ public class PetugasRemoteDataSourceImpl implements PetugasRemoteDataSource {
 
     @Override
     public void insertPetugas(Petugas petugas) throws ServerException {
-        if (petugas.getPembayaranList() == null) {
-            petugas.setPembayaranList(new ArrayList<>());
-        }
         EntityManager entityManager = null;
         try {
             entityManager = entityManagerFactory.createEntityManager();
             entityManager.getTransaction().begin();
-
-            final var attachedPembayaranList = new ArrayList<Pembayaran>();
-
-            for (final var pembayaran : petugas.getPembayaranList()) {
-                var pembayaranListPembayaranToAttach = pembayaran;
-
-                pembayaranListPembayaranToAttach
-                        = entityManager.getReference(
-                                pembayaranListPembayaranToAttach.getClass(),
-                                pembayaranListPembayaranToAttach.getId());
-                attachedPembayaranList.add(pembayaranListPembayaranToAttach);
-            }
-            petugas.setPembayaranList(attachedPembayaranList);
             entityManager.persist(petugas);
-
-            for (final var pembayaran : petugas.getPembayaranList()) {
-                var pembayaranListPembayaran = pembayaran;
-                var oldIdPetugasOfPembayaranListPembayaran
-                        = pembayaranListPembayaran.getIdPetugas();
-
-                pembayaranListPembayaran.setIdPetugas(petugas);
-                pembayaranListPembayaran = entityManager.merge(
-                        pembayaranListPembayaran);
-
-                if (oldIdPetugasOfPembayaranListPembayaran != null) {
-                    oldIdPetugasOfPembayaranListPembayaran.getPembayaranList()
-                            .remove(pembayaranListPembayaran);
-                    oldIdPetugasOfPembayaranListPembayaran
-                            = entityManager.merge(
-                                    oldIdPetugasOfPembayaranListPembayaran);
-                }
-            }
             entityManager.getTransaction().commit();
         } catch (Exception ex) {
             throw new ServerException(Strings.ERROR_DIALOG_CONNECTION, ex);
@@ -118,73 +93,15 @@ public class PetugasRemoteDataSourceImpl implements PetugasRemoteDataSource {
     }
 
     @Override
-    public void updatePetugas(Petugas petugasValue) throws
-            IllegalOrphanException, NonexistentEntityException, ServerException {
+    public void updatePetugas(Petugas petugas) throws
+            NonexistentEntityException, ServerException {
         EntityManager entityManager = null;
-        var petugas = petugasValue;
-        final var result = authRemoteDataSource.login(petugas.getNamaPengguna(),
-                petugas.getKataSandi());
-        if (result == null) {
-            throw new NonexistentEntityException(
-                    Strings.ERROR_DIALOG_WRONG_PASSWORD);
-        }
         try {
             entityManager = entityManagerFactory.createEntityManager();
             entityManager.getTransaction().begin();
-
-            final var illegalOrphanMessages = new ArrayList<String>();
-            final var persistentPetugas
-                    = entityManager.find(Petugas.class, petugas.getId());
-            final var pembayaranListOld
-                    = persistentPetugas.getPembayaranList();
-            var pembayaranListNew = petugas.getPembayaranList();
-
-            for (Pembayaran pembayaranListOldPembayaran : pembayaranListOld) {
-                if (!pembayaranListNew.contains(pembayaranListOldPembayaran)) {
-                    illegalOrphanMessages.add("You must retain Pembayaran "
-                            + pembayaranListOldPembayaran
-                            + " since its idPetugas field is not nullable.");
-                }
-            }
-            if (!illegalOrphanMessages.isEmpty()) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-
-            final var attachedPembayaranListNew = new ArrayList<Pembayaran>();
-            for (final var pembayaran : pembayaranListNew) {
-                final var pembayaranListNewPembayaranToAttach
-                        = entityManager.getReference(
-                                pembayaran.getClass(),
-                                pembayaran.getId());
-                attachedPembayaranListNew.add(
-                        pembayaranListNewPembayaranToAttach);
-            }
-            pembayaranListNew = attachedPembayaranListNew;
-            petugas.setPembayaranList(pembayaranListNew);
-            petugas = entityManager.merge(petugas);
-
-            for (final var pembayaran : pembayaranListNew) {
-                var pembayaranListNewPembayaran = pembayaran;
-                if (!pembayaranListOld.contains(pembayaranListNewPembayaran)) {
-                    var oldIdPetugasOfPembayaranListNewPembayaran
-                            = pembayaranListNewPembayaran.getIdPetugas();
-                    pembayaranListNewPembayaran.setIdPetugas(petugas);
-                    pembayaranListNewPembayaran = entityManager.merge(
-                            pembayaranListNewPembayaran);
-                    if (oldIdPetugasOfPembayaranListNewPembayaran != null
-                            && !oldIdPetugasOfPembayaranListNewPembayaran
-                                    .equals(petugas)) {
-                        oldIdPetugasOfPembayaranListNewPembayaran
-                                .getPembayaranList()
-                                .remove(pembayaranListNewPembayaran);
-                        oldIdPetugasOfPembayaranListNewPembayaran
-                                = entityManager.merge(
-                                        oldIdPetugasOfPembayaranListNewPembayaran);
-                    }
-                }
-            }
+            entityManager.merge(petugas);
             entityManager.getTransaction().commit();
-        } catch (IllegalOrphanException ex) {
+        } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = petugas.getId();
@@ -195,6 +112,34 @@ public class PetugasRemoteDataSourceImpl implements PetugasRemoteDataSource {
             }
             if (ex instanceof IllegalOrphanException) {
                 throw ex;
+            }
+            throw new ServerException(Strings.ERROR_DIALOG_CONNECTION, ex);
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
+    }
+
+    @Override
+    public void updatePassword(int id, String kataSandi) throws
+            NonexistentEntityException, ServerException {
+        EntityManager entityManager = null;
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+
+            final var petugas = entityManager.find(Petugas.class, id);
+            petugas.setKataSandi(kataSandi);
+
+            entityManager.getTransaction().commit();
+        } catch (Exception ex) {
+            String msg = ex.getLocalizedMessage();
+            if (msg == null || msg.length() == 0) {
+                if (getPetugas(id) == null) {
+                    throw new NonexistentEntityException("Petugas dengan ID "
+                            + id + " tidak tersedia.");
+                }
             }
             throw new ServerException(Strings.ERROR_DIALOG_CONNECTION, ex);
         } finally {
@@ -219,18 +164,20 @@ public class PetugasRemoteDataSourceImpl implements PetugasRemoteDataSource {
                 throw new NonexistentEntityException("Petugas dengan ID " + id
                         + " tidak tersedia.", enfe);
             }
-            final var illegalOrphanMessages = new ArrayList<String>();
+            final var illegalOrphanIds = new ArrayList<Integer>();
             final var pembayaranListOrphanCheck = petugas.getPembayaranList();
 
             pembayaranListOrphanCheck.forEach(
                     (pembayaranListOrphanCheckPembayaran) -> {
-                illegalOrphanMessages.add("This Petugas (" + petugas
-                        + ") cannot be destroyed since the Pembayaran "
-                        + pembayaranListOrphanCheckPembayaran
-                        + " in its pembayaranList field has a non-nullable idPetugas field.");
+                illegalOrphanIds
+                        .add(pembayaranListOrphanCheckPembayaran.getId());
             });
-            if (!illegalOrphanMessages.isEmpty()) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
+            if (!illegalOrphanIds.isEmpty()) {
+                throw new IllegalOrphanException("Petugas " + petugas
+                        .getNamaPetugas()
+                        + " tidak dapat dihapus karena data pembayaran dengan ID "
+                        + illegalOrphanIds.toString()
+                        + " masih tersedia. Silahkan hapus semua data pembayaran untuk siswa ini terlebih dahulu untuk melanjutkan.");
             }
             entityManager.remove(petugas);
             entityManager.getTransaction().commit();

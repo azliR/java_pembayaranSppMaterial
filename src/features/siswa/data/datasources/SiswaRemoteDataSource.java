@@ -32,7 +32,7 @@ public interface SiswaRemoteDataSource {
     public abstract void insertSiswa(Siswa siswa) throws
             PreexistingEntityException, ServerException;
 
-    public abstract void updateSiswa(Siswa siswa) throws IllegalOrphanException,
+    public abstract void updateSiswa(Siswa siswa) throws
             NonexistentEntityException, ServerException;
 
     public abstract void deleteSiswa(int id) throws IllegalOrphanException,

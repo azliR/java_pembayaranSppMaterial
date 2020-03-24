@@ -27,6 +27,7 @@ public class TextField extends JTextField {
     private String label = "Label";
     private int maxLength = Integer.MAX_VALUE;
     private boolean isDigitOnly = false;
+    private boolean isWhiteSpace = true;
 
     public TextField() {
         init();
@@ -52,6 +53,12 @@ public class TextField extends JTextField {
                 if (isDigitOnly) {
                     char newChar = e.getKeyChar();
                     if (!(Character.isDigit(newChar))) {
+                        e.consume();
+                    }
+                }
+                if (!isWhiteSpace) {
+                    char newChar = e.getKeyChar();
+                    if ((Character.isWhitespace(newChar))) {
                         e.consume();
                     }
                 }
@@ -91,6 +98,13 @@ public class TextField extends JTextField {
         this.isDigitOnly = isDigitOnly;
         final var oldValue = this.isDigitOnly;
         firePropertyChange("isDigitOnly", oldValue, isDigitOnly);
+    }
+
+    @BeanProperty(preferred = true, visualUpdate = false)
+    public void setIsWhiteSpace(boolean isWhiteSpace) {
+        this.isDigitOnly = isWhiteSpace;
+        final var oldValue = this.isDigitOnly;
+        firePropertyChange("isWhiteSpace", oldValue, isWhiteSpace);
     }
 
     private void borderFocusGained() {

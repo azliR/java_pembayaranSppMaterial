@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -24,6 +26,14 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "jurusan", catalog = "pembayaran_spp", schema = "")
 @XmlRootElement
+@NamedQueries({@NamedQuery(name = "Jurusan.findAll", query
+            = "SELECT j FROM Jurusan j"),
+    @NamedQuery(name = "Jurusan.findById", query
+            = "SELECT j FROM Jurusan j WHERE j.id = :id"),
+    @NamedQuery(name = "Jurusan.findByNamaJurusan", query
+            = "SELECT j FROM Jurusan j WHERE j.namaJurusan = :namaJurusan"),
+    @NamedQuery(name = "Jurusan.findByAkronim", query
+            = "SELECT j FROM Jurusan j WHERE j.akronim = :akronim")})
 public class Jurusan implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -105,12 +115,16 @@ public class Jurusan implements Serializable {
             return false;
         }
         Jurusan other = (Jurusan) object;
-        return !((this.id == null && other.id != null) || (this.id != null
-                && !this.id.equals(other.id)));
+        if ((this.id == null && other.id != null) ||
+                (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
         return "cores.entities.Jurusan[ id=" + id + " ]";
     }
+
 }

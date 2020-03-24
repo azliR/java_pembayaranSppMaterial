@@ -2,14 +2,12 @@ package features.siswa.data.datasources;
 
 import cores.entities.Kelas;
 import cores.entities.Kelas_;
-import cores.entities.Pembayaran;
 import cores.entities.Siswa;
 import static cores.entities.Siswa_.*;
 import cores.entities.Spp;
 import cores.entities.Spp_;
 import cores.exceptions.IllegalOrphanException;
 import cores.exceptions.NonexistentEntityException;
-import cores.exceptions.PreexistingEntityException;
 import cores.exceptions.ServerException;
 import cores.styles.Strings;
 import java.util.ArrayList;
@@ -193,171 +191,42 @@ public class SiswaRemoteDataSourceImpl implements SiswaRemoteDataSource {
     }
 
     @Override
-    public void insertSiswa(Siswa siswa) throws PreexistingEntityException,
-            ServerException {
-        if (siswa.getPembayaranList() == null) {
-            siswa.setPembayaranList(new ArrayList<>());
-        }
-        EntityManager em = null;
+    public void insertSiswa(Siswa siswa) throws ServerException {
+        EntityManager entityManager = null;
         try {
-            em = entityManagerFactory.createEntityManager();
-            em.getTransaction().begin();
-            Kelas idKelas = siswa.getIdKelas();
-            if (idKelas != null) {
-                idKelas = em.getReference(idKelas.getClass(), idKelas.getId());
-                siswa.setIdKelas(idKelas);
-            }
-            Spp idSpp = siswa.getIdSpp();
-            if (idSpp != null) {
-                idSpp = em.getReference(idSpp.getClass(), idSpp.getId());
-                siswa.setIdSpp(idSpp);
-            }
-            List<Pembayaran> attachedPembayaranList
-                    = new ArrayList<Pembayaran>();
-            for (Pembayaran pembayaranListPembayaranToAttach : siswa
-                    .getPembayaranList()) {
-                pembayaranListPembayaranToAttach
-                        = em.getReference(pembayaranListPembayaranToAttach
-                                .getClass(),
-                                pembayaranListPembayaranToAttach.getId());
-                attachedPembayaranList.add(pembayaranListPembayaranToAttach);
-            }
-            siswa.setPembayaranList(attachedPembayaranList);
-            em.persist(siswa);
-            if (idKelas != null) {
-                idKelas.getSiswaList().add(siswa);
-                idKelas = em.merge(idKelas);
-            }
-            if (idSpp != null) {
-                idSpp.getSiswaList().add(siswa);
-                idSpp = em.merge(idSpp);
-            }
-            for (Pembayaran pembayaranListPembayaran : siswa.getPembayaranList()) {
-                Siswa oldIdSiswaOfPembayaranListPembayaran
-                        = pembayaranListPembayaran.getIdSiswa();
-                pembayaranListPembayaran.setIdSiswa(siswa);
-                pembayaranListPembayaran = em.merge(pembayaranListPembayaran);
-                if (oldIdSiswaOfPembayaranListPembayaran != null) {
-                    oldIdSiswaOfPembayaranListPembayaran.getPembayaranList()
-                            .remove(pembayaranListPembayaran);
-                    oldIdSiswaOfPembayaranListPembayaran
-                            = em.merge(oldIdSiswaOfPembayaranListPembayaran);
-                }
-            }
-            em.getTransaction().commit();
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            entityManager.persist(siswa);
+            entityManager.getTransaction().commit();
         } finally {
-            if (em != null) {
-                em.close();
+            if (entityManager != null) {
+                entityManager.close();
             }
         }
     }
 
     @Override
-    public void updateSiswa(Siswa siswa) throws IllegalOrphanException,
-            NonexistentEntityException, ServerException {
-        if (siswa.getPembayaranList() == null) {
-            siswa.setPembayaranList(new ArrayList<>());
-        }
-        EntityManager em = null;
+    public void updateSiswa(Siswa siswa) throws NonexistentEntityException,
+            ServerException {
+        EntityManager entityManager = null;
         try {
-            em = entityManagerFactory.createEntityManager();
-            em.getTransaction().begin();
-            Siswa persistentSiswa = em.find(Siswa.class, siswa.getId());
-            Kelas idKelasOld = persistentSiswa.getIdKelas();
-            Kelas idKelasNew = siswa.getIdKelas();
-            Spp idSppOld = persistentSiswa.getIdSpp();
-            Spp idSppNew = siswa.getIdSpp();
-            List<Pembayaran> pembayaranListOld
-                    = persistentSiswa.getPembayaranList();
-            List<Pembayaran> pembayaranListNew = siswa.getPembayaranList();
-            List<String> illegalOrphanMessages = null;
-            for (Pembayaran pembayaranListOldPembayaran : pembayaranListOld) {
-                if (!pembayaranListNew.contains(pembayaranListOldPembayaran)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Pembayaran "
-                            + pembayaranListOldPembayaran
-                            + " since its idSiswa field is not nullable.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            if (idKelasNew != null) {
-                idKelasNew
-                        = em.getReference(idKelasNew.getClass(),
-                                idKelasNew.getId());
-                siswa.setIdKelas(idKelasNew);
-            }
-            if (idSppNew != null) {
-                idSppNew
-                        = em.getReference(idSppNew.getClass(), idSppNew.getId());
-                siswa.setIdSpp(idSppNew);
-            }
-            List<Pembayaran> attachedPembayaranListNew
-                    = new ArrayList<Pembayaran>();
-            for (Pembayaran pembayaranListNewPembayaranToAttach
-                    : pembayaranListNew) {
-                pembayaranListNewPembayaranToAttach
-                        = em.getReference(pembayaranListNewPembayaranToAttach
-                                .getClass(),
-                                pembayaranListNewPembayaranToAttach.getId());
-                attachedPembayaranListNew.add(
-                        pembayaranListNewPembayaranToAttach);
-            }
-            pembayaranListNew = attachedPembayaranListNew;
-            siswa.setPembayaranList(pembayaranListNew);
-            siswa = em.merge(siswa);
-            if (idKelasOld != null && !idKelasOld.equals(idKelasNew)) {
-                idKelasOld.getSiswaList().remove(siswa);
-                idKelasOld = em.merge(idKelasOld);
-            }
-            if (idKelasNew != null && !idKelasNew.equals(idKelasOld)) {
-                idKelasNew.getSiswaList().add(siswa);
-                idKelasNew = em.merge(idKelasNew);
-            }
-            if (idSppOld != null && !idSppOld.equals(idSppNew)) {
-                idSppOld.getSiswaList().remove(siswa);
-                idSppOld = em.merge(idSppOld);
-            }
-            if (idSppNew != null && !idSppNew.equals(idSppOld)) {
-                idSppNew.getSiswaList().add(siswa);
-                idSppNew = em.merge(idSppNew);
-            }
-            for (Pembayaran pembayaranListNewPembayaran : pembayaranListNew) {
-                if (!pembayaranListOld.contains(pembayaranListNewPembayaran)) {
-                    Siswa oldIdSiswaOfPembayaranListNewPembayaran
-                            = pembayaranListNewPembayaran.getIdSiswa();
-                    pembayaranListNewPembayaran.setIdSiswa(siswa);
-                    pembayaranListNewPembayaran
-                            = em.merge(pembayaranListNewPembayaran);
-                    if (oldIdSiswaOfPembayaranListNewPembayaran != null
-                            && !oldIdSiswaOfPembayaranListNewPembayaran.equals(
-                                    siswa)) {
-                        oldIdSiswaOfPembayaranListNewPembayaran
-                                .getPembayaranList()
-                                .remove(pembayaranListNewPembayaran);
-                        oldIdSiswaOfPembayaranListNewPembayaran
-                                = em.merge(
-                                        oldIdSiswaOfPembayaranListNewPembayaran);
-                    }
-                }
-            }
-            em.getTransaction().commit();
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            entityManager.merge(siswa);
+            entityManager.getTransaction().commit();
         } catch (Exception ex) {
-            String msg = ex.getLocalizedMessage();
+            final var msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = siswa.getId();
+                final var id = siswa.getId();
                 if (getSiswa(id) == null) {
-                    throw new NonexistentEntityException("The siswa with id "
-                            + id + " no longer exists.");
+                    throw new NonexistentEntityException("Siswa dengan ID "
+                            + id + " tidak tersedia.");
                 }
             }
             throw ex;
         } finally {
-            if (em != null) {
-                em.close();
+            if (entityManager != null) {
+                entityManager.close();
             }
         }
     }
@@ -365,49 +234,42 @@ public class SiswaRemoteDataSourceImpl implements SiswaRemoteDataSource {
     @Override
     public void deleteSiswa(int id) throws IllegalOrphanException,
             NonexistentEntityException, ServerException {
-        EntityManager em = null;
+        EntityManager entityManager = null;
         try {
-            em = entityManagerFactory.createEntityManager();
-            em.getTransaction().begin();
+            entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
             Siswa siswa;
             try {
-                siswa = em.getReference(Siswa.class, id);
+                siswa = entityManager.getReference(Siswa.class, id);
                 siswa.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The siswa with id " + id
-                        + " no longer exists.", enfe);
+                throw new NonexistentEntityException("Siswa dengan ID " + id
+                        + " tidak tersedia.", enfe);
             }
-            List<String> illegalOrphanMessages = null;
-            List<Pembayaran> pembayaranListOrphanCheck
-                    = siswa.getPembayaranList();
-            for (Pembayaran pembayaranListOrphanCheckPembayaran
-                    : pembayaranListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Siswa (" + siswa
-                        + ") cannot be destroyed since the Pembayaran "
-                        + pembayaranListOrphanCheckPembayaran
-                        + " in its pembayaranList field has a non-nullable idSiswa field.");
+            final var illegalOrphanIds = new ArrayList<Integer>();
+            final var pembayaranListOrphanCheck = siswa.getPembayaranList();
+            pembayaranListOrphanCheck.forEach((
+                    pembayaranListOrphanCheckPembayaran) -> {
+                illegalOrphanIds
+                        .add(pembayaranListOrphanCheckPembayaran.getId());
+            });
+            if (!illegalOrphanIds.isEmpty()) {
+                throw new IllegalOrphanException("Siswa " + siswa.getNama()
+                        + " tidak dapat dihapus karena data pembayaran dengan ID "
+                        + illegalOrphanIds.toString()
+                        + " masih tersedia. Silahkan hapus semua data pembayaran untuk siswa ini terlebih dahulu untuk melanjutkan.");
             }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
+            entityManager.remove(siswa);
+            entityManager.getTransaction().commit();
+        } catch (IllegalOrphanException | NonexistentEntityException ex) {
+            if (ex instanceof NonexistentEntityException
+                    || ex instanceof IllegalOrphanException) {
+                throw ex;
             }
-            Kelas idKelas = siswa.getIdKelas();
-            if (idKelas != null) {
-                idKelas.getSiswaList().remove(siswa);
-                idKelas = em.merge(idKelas);
-            }
-            Spp idSpp = siswa.getIdSpp();
-            if (idSpp != null) {
-                idSpp.getSiswaList().remove(siswa);
-                idSpp = em.merge(idSpp);
-            }
-            em.remove(siswa);
-            em.getTransaction().commit();
+            throw new ServerException(Strings.ERROR_DIALOG_CONNECTION, ex);
         } finally {
-            if (em != null) {
-                em.close();
+            if (entityManager != null) {
+                entityManager.close();
             }
         }
     }

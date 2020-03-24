@@ -98,12 +98,12 @@
         </Component>
         <Component class="cores.widgets.MaterialButton" name="b_back">
           <Properties>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="new cores.widgets.RoundedRectangleBorder(36, new Insets(0,0,0,0), Colors.BACKGROUND_COLOR)" type="code"/>
-            </Property>
             <Property name="borderRadius" type="int" value="36"/>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/assets/images/ic_arrow-left_grey.png"/>
+            </Property>
+            <Property name="pressedIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/assets/images/ic_arrow-left_black.png"/>
             </Property>
           </Properties>
           <Events>

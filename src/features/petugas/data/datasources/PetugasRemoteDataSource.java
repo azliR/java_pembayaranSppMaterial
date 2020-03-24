@@ -11,6 +11,9 @@ import java.util.List;
  * @author rizal
  */
 public interface PetugasRemoteDataSource {
+    public abstract Petugas login(String namaPengguna, String kataSandi) throws
+            NonexistentEntityException, ServerException;
+
     public abstract List<Petugas> getListPetugas(int maxResults, int firstResult)
             throws ServerException;
 
@@ -19,7 +22,9 @@ public interface PetugasRemoteDataSource {
     public abstract void insertPetugas(Petugas petugas) throws ServerException;
 
     public abstract void updatePetugas(Petugas petugas) throws
-            IllegalOrphanException,
+            NonexistentEntityException, ServerException;
+
+    public abstract void updatePassword(int id, String kataSandi) throws
             NonexistentEntityException, ServerException;
 
     public abstract void deletePetugas(int id) throws IllegalOrphanException,

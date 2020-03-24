@@ -19,20 +19,30 @@ public class Strings {
             = "NISN ini sudah dipakai oleh siswa lain.";
 
     public static final String ERROR_DIALOG_FAILED_GET_IMAGE_FROM_DISK
-            = "Terjadi kesalahan ketika mengambil gambar dari penyimpanan Anda.";
+            = "Terjadi kesalahan ketika mengambil gambar dari penyimpanan Anda. Silahkan coba kembali.";
     public static final String ERROR_DIALOG_EMPTY_FIELD
             = "Isi semua kolom yang dibutuhkan!";
     public static final String ERROR_DIALOG_NISN_NIS_LENGTH
-            = "Isi NISN atau NIS Anda dengan benar!";
+            = "NISN atau NIS yang Anda masukkan tidak sesuai standar. NISN harus memiliki 10 karakter dan NIS 8 karakter";
     public static final String ERROR_DIALOG_PASSWORD_LENGTH
             = "Kata sandi Anda terlalu lemah. Gunakan setidaknya 8 karakter dengan kombinasi huruf dan simbol.";
     public static final String ERROR_DIALOG_PASSWORD_NOT_MATCH
-            = "Kata sandi yang Anda masukkan tidak cocok. Silahkan periksa dan coba lagi.";
+            = "Kata sandi tidak cocok.";
     public static final String ERROR_DIALOG_NULL_DATA
-            = "Data yang diminta tidak ada, silahkan coba kembali atau hubungi Admin untuk tindak lanjut";
+            = "Data yang diminta tidak ada, silahkan coba kembali atau hubungi Admin untuk tindak lanjut.";
+    public static final String ERROR_DIALOG_ID_IS_NOT_NULL
+            = "Terdapat ID yang tersisa dari petugas sebelumnya. Silahkan mulai ulang aplikasi dan coba lagi.";
+    public static final String ERROR_DIALOG_ID_IS_NULL
+            = "Tidak dapat mengubah data ini karena ID tidak ditemukan. Silahkan mulai ulang aplikasi atau hubungi Admin untuk tindak lanjut.";
+    public static final String ERROR_DIALOG_NO_SESSION
+            = "Anda belum melakukan sesi masuk. Anda akan dialihkan ke halaman masuk.";
 
     public static final String SUCCESS_DIALOG_DEFAULT = "Berhasil";
     public static final String SUCCESS_DIALOG_INSERT = "Data berhasil disimpan!";
+
+    public static final String DIALOG_ENTER_PASSWORD_MESSAGE
+            = "Masukkan kata sandi akun Anda saat ini";
+    public static final String DIALOG_DELETE_TITLE = "Hapus data?";
 
     public static final char DATABASE_JENIS_KELAMIN_L = 'L';
     public static final char DATABASE_JENIS_KELAMIN_P = 'p';

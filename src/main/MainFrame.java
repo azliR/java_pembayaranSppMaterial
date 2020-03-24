@@ -1,19 +1,25 @@
 package main;
 
-import cores.entities.Petugas;
+import cores.provider.SharedPreferences;
 import cores.styles.Colors;
 import cores.styles.Fonts;
 import cores.styles.Strings;
+import cores.utils.ImageProcessor;
 import cores.utils.Navigator;
+import cores.utils.Scalr;
 import cores.widgets.RoundedPanel;
 import features.auth.data.repositories.AuthRepository;
 import features.auth.presentation.pages.LoginPage;
 import features.home.pages.HomePage;
 import features.petugas.data.repositories.PetugasRepository;
+import features.petugas.presentation.pages.DetailPetugasPage;
 import features.petugas.presentation.pages.ListPetugasPage;
 import features.siswa.data.repositories.SiswaRepository;
 import features.siswa.presentation.pages.ListSiswaPage;
+import java.awt.Color;
 import java.awt.Frame;
+import java.util.Random;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 /**
@@ -26,17 +32,18 @@ public class MainFrame extends javax.swing.JFrame {
     private final AuthRepository authRepository;
     private final SiswaRepository siswaRepository;
     private final PetugasRepository petugasRepository;
+    private final SharedPreferences preferences;
 
     private boolean isSearchFilled = false;
 
-    public static Petugas loggedInPetugas;
-
     public MainFrame(AuthRepository authRepository,
             SiswaRepository siswaRepository,
-            PetugasRepository petugasRepository) {
+            PetugasRepository petugasRepository,
+            SharedPreferences preferences) {
         this.authRepository = authRepository;
         this.siswaRepository = siswaRepository;
         this.petugasRepository = petugasRepository;
+        this.preferences = preferences;
         initComponents();
         init();
     }
@@ -46,9 +53,40 @@ public class MainFrame extends javax.swing.JFrame {
         content.add(new LoginPage(authRepository));
     }
 
+    public void setProfile() {
+        final var petugas = preferences.getLoggedInPetugas();
+        if (petugas == null) {
+            return;
+        }
+        if (petugas.getFoto() == null) {
+            final var random = new Random();
+            final var red = random.nextInt(256);
+            final var green = random.nextInt(256);
+            final var blue = random.nextInt(256);
+            final var color = new Color(red, green, blue);
+            p_profile.setBackground(color.darker());
+            tv_profile.setText(String
+                    .valueOf(petugas.getNamaPetugas().charAt(0)).toUpperCase());
+            return;
+        }
+        final var maxWidth = 38;
+        final var maxHeight = 38;
+
+        var image = ImageProcessor.byteArrayToBufferedImage(petugas.getFoto());
+        if (image.getWidth(null) > maxWidth || image.getHeight(null) > maxHeight) {
+            image = Scalr.resize(image, Scalr.Mode.FIT_TO_WIDTH, maxWidth,
+                    maxHeight);
+        }
+        final var croppedImage = Scalr.crop(image, maxWidth, maxHeight);
+        final var roundedImage = ImageProcessor.roundImage(croppedImage,
+                maxWidth);
+
+        tv_profile.setIcon(new ImageIcon(roundedImage));
+    }
+
     @Override
     public void dispose() {
-        if (loggedInPetugas != null) {
+        if (preferences.isLoggedIn()) {
             authRepository.updateStatus(Strings.DATABASE_TIDAK_AKTIF);
         }
         super.dispose();
@@ -80,6 +118,8 @@ public class MainFrame extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
+        p_profile = new RoundedPanel(46);
+        tv_profile = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -278,10 +318,15 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(nav_petugas, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(nav_laporan, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(366, Short.MAX_VALUE))
+                .addContainerGap(364, Short.MAX_VALUE))
         );
 
         topBar.setBackground(Colors.BACKGROUND_COLOR);
+        topBar.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                topBarComponentShown(evt);
+            }
+        });
 
         jPanel3.setBackground(new java.awt.Color(241, 243, 244));
 
@@ -328,7 +373,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addComponent(jLabel1)
                 .addGap(10, 10, 10)
-                .addComponent(et_search, javax.swing.GroupLayout.DEFAULT_SIZE, 1085, Short.MAX_VALUE)
+                .addComponent(et_search, javax.swing.GroupLayout.DEFAULT_SIZE, 1031, Short.MAX_VALUE)
                 .addGap(16, 16, 16)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
@@ -347,31 +392,51 @@ public class MainFrame extends javax.swing.JFrame {
 
         jLabel2.setFont(Fonts.PRODUCT_SANS_REGULAR.deriveFont(24f)
         );
-        jLabel2.setForeground(Colors.TEXT_COLOR);
+        jLabel2.setForeground(Colors.GREY_TEXT_COLOR);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/a_ logo.png"))); // NOI18N
         jLabel2.setText("αzliR");
         jLabel2.setIconTextGap(12);
+
+        p_profile.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                p_profileMouseClicked(evt);
+            }
+        });
+        p_profile.setLayout(new java.awt.CardLayout());
+
+        tv_profile.setFont(Fonts.ROBOTO_MEDIUM.deriveFont(18f)
+        );
+        tv_profile.setForeground(Colors.WHITE_TEXT_COLOR);
+        tv_profile.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        p_profile.add(tv_profile, "card2");
 
         javax.swing.GroupLayout topBarLayout = new javax.swing.GroupLayout(topBar);
         topBar.setLayout(topBarLayout);
         topBarLayout.setHorizontalGroup(
             topBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1)
             .addGroup(topBarLayout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(64, 64, 64))
+                .addGap(24, 24, 24)
+                .addComponent(p_profile, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24))
+            .addComponent(jSeparator1)
         );
         topBarLayout.setVerticalGroup(
             topBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(topBarLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addGroup(topBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(topBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(topBarLayout.createSequentialGroup()
+                        .addGroup(topBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(8, 8, 8))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, topBarLayout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addComponent(p_profile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(12, 12, 12)))
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -489,8 +554,17 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void nav_petugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nav_petugasActionPerformed
-        Navigator.push(new ListPetugasPage(petugasRepository));
+        Navigator.push(new ListPetugasPage(petugasRepository, preferences));
     }//GEN-LAST:event_nav_petugasActionPerformed
+
+    private void topBarComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_topBarComponentShown
+        setProfile();
+    }//GEN-LAST:event_topBarComponentShown
+
+    private void p_profileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_p_profileMouseClicked
+        Navigator.push(new DetailPetugasPage(petugasRepository, preferences,
+                preferences.getLoggedInPetugas()));
+    }//GEN-LAST:event_p_profileMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JPanel content;
@@ -511,9 +585,11 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton nav_petugas;
     private javax.swing.JRadioButton nav_siswa;
     private javax.swing.JRadioButton nav_spp;
+    private javax.swing.JPanel p_profile;
     public static javax.swing.JPanel sideBar;
     private javax.swing.ButtonGroup sideBarGroup;
     public static javax.swing.JPanel topBar;
+    private javax.swing.JLabel tv_profile;
     public static javax.swing.JLabel tv_title;
     // End of variables declaration//GEN-END:variables
 }

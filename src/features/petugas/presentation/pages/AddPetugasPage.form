@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <Properties>
     <Property name="background" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
       <Connection code="Colors.BACKGROUND_COLOR" type="code"/>
@@ -24,14 +24,14 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jScrollPane1" max="32767" attributes="0"/>
-          <Component id="appbar" max="32767" attributes="0"/>
+          <Component id="jScrollPane1" pref="770" max="32767" attributes="0"/>
+          <Component id="p_appbar" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="appbar" min="-2" max="-2" attributes="0"/>
+              <Component id="p_appbar" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
               <Component id="jScrollPane1" pref="522" max="32767" attributes="0"/>
               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
@@ -40,7 +40,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JPanel" name="appbar">
+    <Container class="javax.swing.JPanel" name="p_appbar">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="Colors.BACKGROUND_COLOR" type="code"/>
@@ -87,9 +87,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="Fonts.GOOGLE_SANS.deriveFont(16f)&#xa;    " type="code"/>
             </Property>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="petugas == null ? &quot;Tambah Petugas&quot; : &quot;Edit Petugas&quot;" type="code"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Tambah Petugas"/>
           </Properties>
         </Component>
         <Component class="cores.widgets.MaterialButton" name="b_back">
@@ -97,6 +95,9 @@
             <Property name="borderRadius" type="int" value="36"/>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/assets/images/ic_arrow-left_grey.png"/>
+            </Property>
+            <Property name="pressedIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/assets/images/ic_arrow-left_black.png"/>
             </Property>
           </Properties>
           <Events>
@@ -130,43 +131,65 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" attributes="0">
+                              <EmptySpace max="32767" attributes="0"/>
                               <Component id="b_clear" min="-2" pref="102" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="b_save" min="-2" pref="88" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                              <Component id="cb_jenisKelamin" alignment="0" min="-2" pref="200" max="-2" attributes="0"/>
-                              <Component id="et_namaPetugas" alignment="0" pref="360" max="32767" attributes="0"/>
-                              <Component id="et_namaPengguna" alignment="0" pref="360" max="32767" attributes="0"/>
-                              <Component id="et_kataSandi" alignment="0" max="32767" attributes="0"/>
-                              <Component id="et_konfirmasiKataSandi" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                              <Component id="b_addImage" min="-2" pref="144" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="b_ubahKataSandi" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="36" pref="36" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" attributes="0">
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Component id="tv_hakAkses" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="cb_hakAkses" alignment="0" min="-2" pref="200" max="-2" attributes="0"/>
+                                              </Group>
+                                              <EmptySpace min="0" pref="347" max="32767" attributes="0"/>
+                                          </Group>
+                                          <Component id="p_ubahKataSandi" alignment="1" max="32767" attributes="0"/>
+                                          <Component id="et_noTelepon" alignment="1" max="32767" attributes="0"/>
+                                          <Component id="jPanel1" max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                              </Group>
                           </Group>
                       </Group>
-                      <EmptySpace min="0" pref="270" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                      <Component id="et_namaPetugas" min="-2" pref="64" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                      <Component id="et_namaPengguna" min="-2" pref="64" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                      <Component id="et_kataSandi" min="-2" pref="64" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                      <Component id="et_konfirmasiKataSandi" min="-2" pref="64" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jPanel1" min="-2" pref="64" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                              <Component id="et_noTelepon" min="-2" pref="64" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="b_ubahKataSandi" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="p_ubahKataSandi" min="-2" pref="64" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="b_addImage" alignment="0" min="-2" pref="192" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
-                      <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                      <Component id="tv_hakAkses" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="cb_jenisKelamin" min="-2" pref="38" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                      <Component id="cb_hakAkses" min="-2" pref="38" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="b_save" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
                           <Component id="b_clear" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
@@ -177,7 +200,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="jLabel4">
+            <Component class="javax.swing.JLabel" name="tv_hakAkses">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="Fonts.ROBOTO_MEDIUM.deriveFont(14f)&#xa;    " type="code"/>
@@ -190,7 +213,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="cb_jenisKelamin">
+            <Component class="javax.swing.JComboBox" name="cb_hakAkses">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="Colors.BACKGROUND_COLOR" type="code"/>
@@ -238,40 +261,112 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="b_clearActionPerformed"/>
               </Events>
             </Component>
-            <Component class="cores.widgets.TextField" name="et_namaPetugas">
+            <Component class="cores.widgets.MaterialButton" name="b_addImage">
               <Properties>
-                <Property name="label" type="java.lang.String" value="Nama Petugas"/>
-                <Property name="maxLength" type="int" value="36"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                    <PropertyBean type="cores.widgets.RoundedRectangleBorder"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Tambah Foto"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="b_addImageActionPerformed"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+              </AuxValues>
+            </Component>
+            <Component class="cores.widgets.TextField" name="et_noTelepon">
+              <Properties>
+                <Property name="isDigitOnly" type="boolean" value="true"/>
+                <Property name="label" type="java.lang.String" value="No. Telepon"/>
+                <Property name="maxLength" type="int" value="13"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
               </AuxValues>
             </Component>
-            <Component class="cores.widgets.TextField" name="et_namaPengguna">
+            <Component class="cores.widgets.MaterialButton" name="b_ubahKataSandi">
               <Properties>
-                <Property name="label" type="java.lang.String" value="Nama Pengguna"/>
-                <Property name="maxLength" type="int" value="26"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                    <PropertyBean type="cores.widgets.RoundedRectangleBorder"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/assets/images/ic_lock-open-outline.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Ubah kata sandi"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="b_ubahKataSandiActionPerformed"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
               </AuxValues>
             </Component>
-            <Component class="cores.widgets.PasswordField" name="et_kataSandi">
+            <Container class="javax.swing.JPanel" name="jPanel1">
               <Properties>
-                <Property name="label" type="java.lang.String" value="Kata Sandi"/>
+                <Property name="opaque" type="boolean" value="false"/>
               </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
-              </AuxValues>
-            </Component>
-            <Component class="cores.widgets.PasswordField" name="et_konfirmasiKataSandi">
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                <Property name="columns" type="int" value="2"/>
+                <Property name="horizontalGap" type="int" value="8"/>
+                <Property name="rows" type="int" value="0"/>
+                <Property name="verticalGap" type="int" value="16"/>
+              </Layout>
+              <SubComponents>
+                <Component class="cores.widgets.TextField" name="et_namaPetugas">
+                  <Properties>
+                    <Property name="label" type="java.lang.String" value="Nama Petugas"/>
+                    <Property name="maxLength" type="int" value="36"/>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+                  </AuxValues>
+                </Component>
+                <Component class="cores.widgets.TextField" name="et_namaPengguna">
+                  <Properties>
+                    <Property name="label" type="java.lang.String" value="Nama Pengguna"/>
+                    <Property name="maxLength" type="int" value="26"/>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+                  </AuxValues>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Container class="javax.swing.JPanel" name="p_ubahKataSandi">
               <Properties>
-                <Property name="label" type="java.lang.String" value="Konfirmasi Kata Sandi"/>
+                <Property name="opaque" type="boolean" value="false"/>
               </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
-              </AuxValues>
-            </Component>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                <Property name="columns" type="int" value="2"/>
+                <Property name="horizontalGap" type="int" value="16"/>
+                <Property name="rows" type="int" value="0"/>
+                <Property name="verticalGap" type="int" value="8"/>
+              </Layout>
+              <SubComponents>
+                <Component class="cores.widgets.PasswordField" name="et_kataSandi">
+                  <Properties>
+                    <Property name="label" type="java.lang.String" value="Kata Sandi"/>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+                  </AuxValues>
+                </Component>
+                <Component class="cores.widgets.PasswordField" name="et_konfirmasiKataSandi">
+                  <Properties>
+                    <Property name="label" type="java.lang.String" value="Konfirmasi Kata Sandi"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="et_konfirmasiKataSandiActionPerformed"/>
+                  </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+                  </AuxValues>
+                </Component>
+              </SubComponents>
+            </Container>
           </SubComponents>
         </Container>
       </SubComponents>

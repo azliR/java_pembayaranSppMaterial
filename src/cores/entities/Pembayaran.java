@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -24,6 +26,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "pembayaran", catalog = "pembayaran_spp", schema = "")
 @XmlRootElement
+@NamedQueries({@NamedQuery(name = "Pembayaran.findAll", query
+            = "SELECT p FROM Pembayaran p"),
+    @NamedQuery(name = "Pembayaran.findById", query
+            = "SELECT p FROM Pembayaran p WHERE p.id = :id"),
+    @NamedQuery(name = "Pembayaran.findByTanggalBayar", query
+            = "SELECT p FROM Pembayaran p WHERE p.tanggalBayar = :tanggalBayar"),
+    @NamedQuery(name = "Pembayaran.findByJumlahBayar", query
+            = "SELECT p FROM Pembayaran p WHERE p.jumlahBayar = :jumlahBayar")})
 public class Pembayaran implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -126,12 +136,16 @@ public class Pembayaran implements Serializable {
             return false;
         }
         Pembayaran other = (Pembayaran) object;
-        return !((this.id == null && other.id != null) || (this.id != null
-                && !this.id.equals(other.id)));
+        if ((this.id == null && other.id != null) ||
+                (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
         return "cores.entities.Pembayaran[ id=" + id + " ]";
     }
+
 }
