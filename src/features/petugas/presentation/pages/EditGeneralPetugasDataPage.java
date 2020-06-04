@@ -25,6 +25,7 @@ public class EditGeneralPetugasDataPage extends javax.swing.JPanel {
             tv_desc.setText(properties.getDecription());
             et_data.setText(properties.getInitialValue());
             et_data.setLabel(properties.getLabel());
+            et_data.setMaxLength(properties.getMaxLength());
             et_data.setIsDigitOnly(properties.isIsDigitOnly());
             et_data.setIsWhiteSpace(properties.isIsWhiteSpace());
         }
@@ -42,6 +43,11 @@ public class EditGeneralPetugasDataPage extends javax.swing.JPanel {
         et_data = new cores.widgets.TextField();
 
         setOpaque(false);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                formComponentResized(evt);
+            }
+        });
         setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 24));
 
         jPanel1.setBackground(Colors.BACKGROUND_COLOR);
@@ -52,7 +58,7 @@ public class EditGeneralPetugasDataPage extends javax.swing.JPanel {
         tv_desc.setText("Perubahan nama akan diterapkan di Akun Anda.");
         tv_desc.setMinimumSize(new java.awt.Dimension(231, 200));
 
-        tv_title.setFont(Fonts.PRODUCT_SANS_REGULAR.deriveFont(21f)
+        tv_title.setFont(Fonts.PRODUCT_SANS_REGULAR.deriveFont(20f)
         );
         tv_title.setForeground(Colors.TEXT_COLOR);
         tv_title.setText("Ubah Nama");
@@ -76,6 +82,11 @@ public class EditGeneralPetugasDataPage extends javax.swing.JPanel {
         });
 
         et_data.setLabel("Nama");
+        et_data.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                et_dataActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -88,7 +99,7 @@ public class EditGeneralPetugasDataPage extends javax.swing.JPanel {
                 .addContainerGap(379, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(b_save, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(b_save, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(tv_desc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -124,6 +135,14 @@ public class EditGeneralPetugasDataPage extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_b_saveActionPerformed
 
+    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
+        et_data.requestFocus();
+    }//GEN-LAST:event_formComponentResized
+
+    private void et_dataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_et_dataActionPerformed
+        b_save.doClick();
+    }//GEN-LAST:event_et_dataActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private cores.widgets.MaterialButton b_back;
     private cores.widgets.MaterialButton b_save;
@@ -140,8 +159,9 @@ public class EditGeneralPetugasDataPage extends javax.swing.JPanel {
         private String initialValue;
         private Consumer<String> onSave;
         private Runnable onBack;
-        private boolean isDigitOnly;
-        private boolean isWhiteSpace;
+        private Integer maxLength = Integer.MAX_VALUE;
+        private boolean isDigitOnly = false;
+        private boolean isWhiteSpace = true;
 
         public String getTitle() {
             return title;
@@ -189,6 +209,14 @@ public class EditGeneralPetugasDataPage extends javax.swing.JPanel {
 
         public void setOnBack(Runnable onBack) {
             this.onBack = onBack;
+        }
+
+        public Integer getMaxLength() {
+            return maxLength;
+        }
+
+        public void setMaxLength(Integer maxLength) {
+            this.maxLength = maxLength;
         }
 
         public boolean isIsDigitOnly() {

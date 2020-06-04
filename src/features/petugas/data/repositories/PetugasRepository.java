@@ -2,7 +2,7 @@ package features.petugas.data.repositories;
 
 import cores.entities.Petugas;
 import features.petugas.presentation.pages.AddPetugasPage;
-import features.petugas.presentation.pages.EditPetugasPasswordPage;
+import features.petugas.presentation.pages.DetailPetugasPage;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
@@ -19,9 +19,8 @@ public interface PetugasRepository {
 
     public abstract void insertPetugas(AddPetugasPage context);
 
-    public abstract void updatePetugas(AddPetugasPage context, String kataSandi);
-
-    public abstract void updatePassword(EditPetugasPasswordPage context);
+    public abstract boolean updatePetugas(DetailPetugasPage context,
+            Petugas petugas);
 
     public abstract boolean deletePetugas(int id);
 

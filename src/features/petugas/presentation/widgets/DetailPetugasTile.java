@@ -3,6 +3,7 @@ package features.petugas.presentation.widgets;
 import cores.styles.Colors;
 import cores.styles.Fonts;
 import features.petugas.presentation.pages.DetailPetugasPage;
+import java.awt.Cursor;
 
 /**
  *
@@ -12,31 +13,74 @@ public class DetailPetugasTile extends javax.swing.JPanel {
     private static final long serialVersionUID = 1L;
 
     private final DetailPetugasPage context;
-    private final int index;
     private final String title;
-    private final String content;
-    private final Runnable onPressed;
+    private String content;
+    private Runnable onPressed;
+    private int index;
+    private boolean isLastIndex = false;
 
-    public DetailPetugasTile(DetailPetugasPage context, int index, String title,
-            String content, Runnable onPressed) {
+    public DetailPetugasTile(DetailPetugasPage context, String title,
+            String content) {
         this.context = context;
-        this.index = index;
         this.title = title.toUpperCase();
         this.content = content;
-        this.onPressed = onPressed;
         initComponents();
         init();
     }
 
     private void init() {
         s_full.setVisible(false);
+        tv_icon.setVisible(false);
         tv_title.setText(title);
         tv_content.setText(content);
     }
 
+    private void onMouseEntered() {
+        setSeparatorLength(true);
+        setBackground(Colors.GREY_BACKGROUND_COLOR);
+
+        final var result = context.getLastDetailTile(index);
+        if (result != null) {
+            result.setSeparatorLength(true);
+        }
+    }
+
+    private void onMouseExited() {
+        setSeparatorLength(false);
+        setBackground(Colors.BACKGROUND_COLOR);
+
+        final var result = context.getLastDetailTile(index);
+        if (result != null) {
+            result.setSeparatorLength(false);
+        }
+    }
+
     public void setSeparatorLength(boolean isFull) {
-        s_half.setVisible(!isFull);
-        s_full.setVisible(isFull);
+        if (!isLastIndex) {
+            s_half.setVisible(!isFull);
+            s_full.setVisible(isFull);
+        }
+    }
+
+    public void markAsLastIndex() {
+        s_full.setVisible(false);
+        s_half.setVisible(false);
+        isLastIndex = true;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+        tv_content.setText(content);
+    }
+
+    public void setOnPressed(Runnable onPressed) {
+        this.onPressed = onPressed;
+        tv_icon.setVisible(true);
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
     @SuppressWarnings("unchecked")
@@ -47,10 +91,10 @@ public class DetailPetugasTile extends javax.swing.JPanel {
         tv_content = new javax.swing.JLabel();
         s_half = new javax.swing.JSeparator();
         s_full = new javax.swing.JSeparator();
-        jLabel1 = new javax.swing.JLabel();
+        tv_icon = new javax.swing.JLabel();
 
         setBackground(Colors.BACKGROUND_COLOR);
-        setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 formMouseClicked(evt);
@@ -78,7 +122,7 @@ public class DetailPetugasTile extends javax.swing.JPanel {
 
         s_full.setForeground(Colors.BORDER_COLOR);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_chevron-right_grey.png"))); // NOI18N
+        tv_icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_chevron-right_grey.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -94,7 +138,7 @@ public class DetailPetugasTile extends javax.swing.JPanel {
                         .addGap(16, 16, 16)
                         .addComponent(tv_content, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
                         .addGap(8, 8, 8)
-                        .addComponent(jLabel1)
+                        .addComponent(tv_icon)
                         .addGap(24, 24, 24))))
         );
         layout.setVerticalGroup(
@@ -103,7 +147,7 @@ public class DetailPetugasTile extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tv_content, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tv_title, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tv_icon, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
                 .addComponent(s_half, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
@@ -112,36 +156,29 @@ public class DetailPetugasTile extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseEntered
-        setSeparatorLength(true);
-        setBackground(Colors.GREY_BACKGROUND_COLOR);
-
-        final var result = context.getLastDetailTile(index);
-        if (result != null) {
-            result.setSeparatorLength(true);
+        if (onPressed != null) {
+            onMouseEntered();
         }
     }//GEN-LAST:event_formMouseEntered
 
     private void formMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseExited
-        setSeparatorLength(false);
-        setBackground(Colors.BACKGROUND_COLOR);
-
-        final var result = context.getLastDetailTile(index);
-        if (result != null) {
-            result.setSeparatorLength(false);
+        if (onPressed != null) {
+            onMouseExited();
         }
     }//GEN-LAST:event_formMouseExited
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         if (onPressed != null) {
+            onMouseExited();
             onPressed.run();
         }
     }//GEN-LAST:event_formMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JSeparator s_full;
     private javax.swing.JSeparator s_half;
     private javax.swing.JLabel tv_content;
+    private javax.swing.JLabel tv_icon;
     private javax.swing.JLabel tv_title;
     // End of variables declaration//GEN-END:variables
 }

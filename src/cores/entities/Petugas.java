@@ -49,6 +49,8 @@ import javax.xml.bind.annotation.XmlTransient;
             = "SELECT p FROM Petugas p WHERE p.dibuatPada = :dibuatPada"),
     @NamedQuery(name = "Petugas.findByTerakhirMasuk", query
             = "SELECT p FROM Petugas p WHERE p.terakhirMasuk = :terakhirMasuk"),
+    @NamedQuery(name = "Petugas.findByTerakhirUbahSandi", query
+            = "SELECT p FROM Petugas p WHERE p.terakhirUbahSandi = :terakhirUbahSandi"),
     @NamedQuery(name = "Petugas.findByStatus", query
             = "SELECT p FROM Petugas p WHERE p.status = :status")})
 public class Petugas implements Serializable {
@@ -99,6 +101,11 @@ public class Petugas implements Serializable {
     private Date terakhirMasuk;
     @Basic(optional = false)
     @NotNull
+    @Column(name = "terakhir_ubah_sandi", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date terakhirUbahSandi;
+    @Basic(optional = false)
+    @NotNull
     @Size(min = 1, max = 12)
     @Column(name = "status", nullable = false, length = 12)
     private String status;
@@ -115,7 +122,7 @@ public class Petugas implements Serializable {
 
     public Petugas(Integer id, String namaPetugas, String namaPengguna,
             String kataSandi, String hakAkses, String noTelepon, Date dibuatPada,
-            Date terakhirMasuk, String status) {
+            Date terakhirMasuk, Date terakhirUbahSandi, String status) {
         this.id = id;
         this.namaPetugas = namaPetugas;
         this.namaPengguna = namaPengguna;
@@ -124,6 +131,7 @@ public class Petugas implements Serializable {
         this.noTelepon = noTelepon;
         this.dibuatPada = dibuatPada;
         this.terakhirMasuk = terakhirMasuk;
+        this.terakhirUbahSandi = terakhirUbahSandi;
         this.status = status;
     }
 
@@ -197,6 +205,14 @@ public class Petugas implements Serializable {
 
     public void setTerakhirMasuk(Date terakhirMasuk) {
         this.terakhirMasuk = terakhirMasuk;
+    }
+
+    public Date getTerakhirUbahSandi() {
+        return terakhirUbahSandi;
+    }
+
+    public void setTerakhirUbahSandi(Date terakhirUbahSandi) {
+        this.terakhirUbahSandi = terakhirUbahSandi;
     }
 
     public String getStatus() {

@@ -16,7 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
 import javax.swing.ScrollPaneLayout;
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -51,7 +50,7 @@ public class ScrollView extends JScrollPane {
     }
 
     public ScrollView(Component view) {
-        this(view, VERTICAL_SCROLLBAR_AS_NEEDED, HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        this(view, VERTICAL_SCROLLBAR_AS_NEEDED, HORIZONTAL_SCROLLBAR_NEVER);
     }
 
     public ScrollView(int vsbPolicy, int hsbPolicy) {
@@ -102,15 +101,15 @@ public class ScrollView extends JScrollPane {
                     vsb.setBounds(vsbR);
                 }
 
-                // horizontal scroll bar
-                Rectangle hsbR = new Rectangle();
-                hsbR.height = SB_SIZE;
-                hsbR.width = availR.width - (vsbNeeded ? hsbR.height : 0);
-                hsbR.x = availR.x;
-                hsbR.y = availR.y + availR.height - hsbR.height;
-                if (hsb != null) {
-                    hsb.setBounds(hsbR);
-                }
+//                // horizontal scroll bar
+//                Rectangle hsbR = new Rectangle();
+//                hsbR.height = SB_SIZE;
+//                hsbR.width = availR.width - (vsbNeeded ? hsbR.height : 0);
+//                hsbR.x = availR.x;
+//                hsbR.y = availR.y + availR.height - hsbR.height;
+//                if (hsb != null) {
+//                    hsb.setBounds(hsbR);
+//                }
             }
         });
 

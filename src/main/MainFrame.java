@@ -50,7 +50,10 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void init() {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        content.add(new LoginPage(authRepository));
+        Navigator.push(new LoginPage(authRepository, () -> {
+            setProfile();
+            Navigator.push(new HomePage());
+        }), false, false);
     }
 
     public void setProfile() {
@@ -322,11 +325,6 @@ public class MainFrame extends javax.swing.JFrame {
         );
 
         topBar.setBackground(Colors.BACKGROUND_COLOR);
-        topBar.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                topBarComponentShown(evt);
-            }
-        });
 
         jPanel3.setBackground(new java.awt.Color(241, 243, 244));
 
@@ -338,6 +336,7 @@ public class MainFrame extends javax.swing.JFrame {
         et_search.setForeground(Colors.GREY_TEXT_COLOR);
         et_search.setText(Strings.SEARCH_HINT);
         et_search.setBorder(null);
+        et_search.setFocusable(false);
         et_search.setOpaque(false);
         et_search.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -392,7 +391,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jLabel2.setFont(Fonts.PRODUCT_SANS_REGULAR.deriveFont(24f)
         );
-        jLabel2.setForeground(Colors.GREY_TEXT_COLOR);
+        jLabel2.setForeground(Colors.DARKER_GREY_TEXT_COLOR);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/a_ logo.png"))); // NOI18N
         jLabel2.setText("αzliR");
         jLabel2.setIconTextGap(12);
@@ -557,12 +556,8 @@ public class MainFrame extends javax.swing.JFrame {
         Navigator.push(new ListPetugasPage(petugasRepository, preferences));
     }//GEN-LAST:event_nav_petugasActionPerformed
 
-    private void topBarComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_topBarComponentShown
-        setProfile();
-    }//GEN-LAST:event_topBarComponentShown
-
     private void p_profileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_p_profileMouseClicked
-        Navigator.push(new DetailPetugasPage(petugasRepository, preferences,
+        Navigator.push(new DetailPetugasPage(petugasRepository, authRepository,
                 preferences.getLoggedInPetugas()));
     }//GEN-LAST:event_p_profileMouseClicked
 

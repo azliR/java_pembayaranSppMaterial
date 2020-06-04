@@ -506,8 +506,7 @@ public class ListPetugasPage extends javax.swing.JPanel {
     }//GEN-LAST:event_b_addActionPerformed
 
     private void b_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editActionPerformed
-        Navigator.push(new AddPetugasPage(repository, preferences,
-                selectedPetugas));
+        Navigator.push(new AddPetugasPage(repository, preferences));
     }//GEN-LAST:event_b_editActionPerformed
 
     private void b_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_deleteActionPerformed

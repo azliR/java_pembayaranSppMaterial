@@ -102,8 +102,8 @@ public class TextField extends JTextField {
 
     @BeanProperty(preferred = true, visualUpdate = false)
     public void setIsWhiteSpace(boolean isWhiteSpace) {
-        this.isDigitOnly = isWhiteSpace;
-        final var oldValue = this.isDigitOnly;
+        this.isWhiteSpace = isWhiteSpace;
+        final var oldValue = this.isWhiteSpace;
         firePropertyChange("isWhiteSpace", oldValue, isWhiteSpace);
     }
 

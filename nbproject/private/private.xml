@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/Projects/Java%20Applications/pembayaran_spp/src/cores/entities/Kelas.java</file>
+            <file>file:/D:/Projects/Java%20Applications/pembayaran_spp/src/features/petugas/data/repositories/PetugasRepository.java</file>
+            <file>file:/D:/Projects/Java%20Applications/pembayaran_spp/src/features/petugas/data/datasources/PetugasRemoteDataSourceImpl.java</file>
+            <file>file:/D:/Projects/Java%20Applications/pembayaran_spp/src/features/petugas/data/repositories/PetugasRepositoryImpl.java</file>
+            <file>file:/D:/Projects/Java%20Applications/pembayaran_spp/src/cores/entities/Siswa.java</file>
+            <file>file:/D:/Projects/Java%20Applications/pembayaran_spp/src/features/petugas/presentation/widgets/DetailPetugasTile.java</file>
+            <file>file:/D:/Projects/Java%20Applications/pembayaran_spp/src/cores/styles/Colors.java</file>
+            <file>file:/D:/Projects/Java%20Applications/pembayaran_spp/src/cores/entities/Petugas.java</file>
+            <file>file:/D:/Projects/Java%20Applications/pembayaran_spp/src/features/petugas/presentation/pages/DetailPetugasPage.java</file>
+            <file>file:/D:/Projects/Java%20Applications/pembayaran_spp/src/cores/widgets/ScrollView.java</file>
+            <file>file:/D:/Projects/Java%20Applications/pembayaran_spp/src/cores/widgets/TextField.java</file>
+            <file>file:/D:/Projects/Java%20Applications/pembayaran_spp/src/cores/entities/Pembayaran.java</file>
+            <file>file:/D:/Projects/Java%20Applications/pembayaran_spp/src/cores/entities/Spp.java</file>
+            <file>file:/D:/Projects/Java%20Applications/pembayaran_spp/src/features/petugas/presentation/widgets/ListPetugasTile.java</file>
+            <file>file:/D:/Projects/Java%20Applications/pembayaran_spp/src/features/petugas/presentation/pages/EditPetugasPasswordPage.java</file>
+        </group>
+    </open-files>
+</project-private>

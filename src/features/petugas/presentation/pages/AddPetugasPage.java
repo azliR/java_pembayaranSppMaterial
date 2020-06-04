@@ -10,7 +10,6 @@ import cores.utils.ImageProcessor;
 import cores.utils.Navigator;
 import features.petugas.data.repositories.PetugasRepository;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -25,15 +24,6 @@ public class AddPetugasPage extends javax.swing.JPanel {
     public final Petugas petugas;
 
     public AddPetugasPage(PetugasRepository repository,
-            SharedPreferences preferences, Petugas petugas) {
-        this.repository = repository;
-        this.preferences = preferences;
-        this.petugas = petugas;
-        initComponents();
-        init();
-    }
-
-    public AddPetugasPage(PetugasRepository repository,
             SharedPreferences preferences) {
         this.preferences = preferences;
         this.repository = repository;
@@ -43,28 +33,7 @@ public class AddPetugasPage extends javax.swing.JPanel {
     }
 
     private void init() {
-        tv_title.setText(petugas.getId() == null ? "Tambah Petugas"
-                : "Edit Petugas");
-        b_ubahKataSandi.setVisible(petugas.getId() != null);
-        p_ubahKataSandi.setVisible(petugas.getId() == null);
-        tv_hakAkses.setVisible(preferences.isAdministrator());
-        cb_hakAkses.setVisible(preferences.isAdministrator());
-
-        if (petugas.getId() != null) {
-            if (petugas.getFoto() != null) {
-                final var roundedImage = ImageProcessor.roundImage(ImageProcessor
-                        .byteArrayToBufferedImage(petugas.getFoto()),
-                        Consts.BORDER_RADIUS);
-                b_addImage.setIcon(new ImageIcon(roundedImage));
-                b_addImage.setText(null);
-                b_addImage.setBorder(null);
-            }
-            et_namaPetugas.setText(petugas.getNamaPetugas());
-            et_namaPengguna.setText(petugas.getNamaPengguna());
-            et_noTelepon.setText(petugas.getNoTelepon());
-            cb_hakAkses.setSelectedItem(petugas.getHakAkses());
-            b_save.setText("Perbarui");
-        }
+        tv_title.setText("Tambah Petugas");
     }
 
     @SuppressWarnings("unchecked")
@@ -83,7 +52,6 @@ public class AddPetugasPage extends javax.swing.JPanel {
         b_clear = new cores.widgets.MaterialButton();
         b_addImage = new cores.widgets.MaterialButton();
         et_noTelepon = new cores.widgets.TextField();
-        b_ubahKataSandi = new cores.widgets.MaterialButton();
         jPanel1 = new javax.swing.JPanel();
         et_namaPetugas = new cores.widgets.TextField();
         et_namaPengguna = new cores.widgets.TextField();
@@ -186,15 +154,6 @@ public class AddPetugasPage extends javax.swing.JPanel {
         et_noTelepon.setLabel("No. Telepon");
         et_noTelepon.setMaxLength(13);
 
-        b_ubahKataSandi.setBorder(new cores.widgets.RoundedRectangleBorder());
-        b_ubahKataSandi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/ic_lock-open-outline.png"))); // NOI18N
-        b_ubahKataSandi.setText("Ubah kata sandi");
-        b_ubahKataSandi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_ubahKataSandiActionPerformed(evt);
-            }
-        });
-
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridLayout(0, 2, 8, 16));
 
@@ -234,21 +193,16 @@ public class AddPetugasPage extends javax.swing.JPanel {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addComponent(b_addImage, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(b_ubahKataSandi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(36, 36, 36)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(tv_hakAkses)
-                                            .addComponent(cb_hakAkses, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(0, 347, Short.MAX_VALUE))
-                                    .addComponent(p_ubahKataSandi, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(et_noTelepon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                    .addComponent(tv_hakAkses)
+                                    .addComponent(cb_hakAkses, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 347, Short.MAX_VALUE))
+                            .addComponent(p_ubahKataSandi, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(et_noTelepon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(54, 54, 54))
         );
         jPanel2Layout.setVerticalGroup(
@@ -260,9 +214,7 @@ public class AddPetugasPage extends javax.swing.JPanel {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(8, 8, 8)
                         .addComponent(et_noTelepon, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(b_ubahKataSandi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(16, 16, 16)
                         .addComponent(p_ubahKataSandi, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(b_addImage, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16)
@@ -273,7 +225,7 @@ public class AddPetugasPage extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(b_save, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(b_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(139, Short.MAX_VALUE))
         );
 
         jScrollPane1.setViewportView(jPanel2);
@@ -304,15 +256,7 @@ public class AddPetugasPage extends javax.swing.JPanel {
     }//GEN-LAST:event_b_backActionPerformed
 
     private void b_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_saveActionPerformed
-        if (petugas.getId() != null) {
-            final var kataSandi = JOptionPane.showInputDialog(null,
-                    Strings.DIALOG_ENTER_PASSWORD_MESSAGE,
-                    Strings.EDIT_PETUGAS,
-                    JOptionPane.INFORMATION_MESSAGE);
-            repository.updatePetugas(this, kataSandi);
-        } else {
-            repository.insertPetugas(this);
-        }
+        repository.insertPetugas(this);
     }//GEN-LAST:event_b_saveActionPerformed
 
     private void b_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_clearActionPerformed
@@ -331,11 +275,6 @@ public class AddPetugasPage extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_b_addImageActionPerformed
 
-    private void b_ubahKataSandiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_ubahKataSandiActionPerformed
-        Navigator.push(new EditPetugasPasswordPage(repository, preferences,
-                petugas), true, false);
-    }//GEN-LAST:event_b_ubahKataSandiActionPerformed
-
     private void et_konfirmasiKataSandiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_et_konfirmasiKataSandiActionPerformed
         b_save.doClick();
     }//GEN-LAST:event_et_konfirmasiKataSandiActionPerformed
@@ -345,7 +284,6 @@ public class AddPetugasPage extends javax.swing.JPanel {
     private cores.widgets.MaterialButton b_back;
     private cores.widgets.MaterialButton b_clear;
     private cores.widgets.MaterialButton b_save;
-    public cores.widgets.MaterialButton b_ubahKataSandi;
     public javax.swing.JComboBox<String> cb_hakAkses;
     public cores.widgets.PasswordField et_kataSandi;
     public cores.widgets.PasswordField et_konfirmasiKataSandi;

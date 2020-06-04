@@ -3,9 +3,7 @@ package features.auth.presentation.pages;
 import cores.styles.Colors;
 import cores.styles.Fonts;
 import cores.styles.Strings;
-import cores.utils.Navigator;
 import features.auth.data.repositories.AuthRepository;
-import features.home.pages.HomePage;
 
 /**
  *
@@ -14,10 +12,12 @@ import features.home.pages.HomePage;
 public class LoginPage extends javax.swing.JPanel {
     private static final long serialVersionUID = 1L;
 
-    final AuthRepository authRepository;
+    private final AuthRepository authRepository;
+    private final Runnable onSuccess;
 
-    public LoginPage(AuthRepository authRepository) {
+    public LoginPage(AuthRepository authRepository, Runnable onSuccess) {
         this.authRepository = authRepository;
+        this.onSuccess = onSuccess;
         initComponents();
     }
 
@@ -159,7 +159,9 @@ public class LoginPage extends javax.swing.JPanel {
         final var kataSandi = String.valueOf(et_kataSandi.getPassword());
 
         if (authRepository.login(namaPengguna, kataSandi)) {
-            Navigator.push(new HomePage(), true, true);
+            if (onSuccess != null) {
+                onSuccess.run();
+            }
 
         } else {
             tv_error.setVisible(true);

@@ -61,13 +61,45 @@ public class Strings {
     public static final String EDIT_PETUGAS = "Edit Petugas";
     public static final String NAMA_LENGKAP = "Nama Lengkap";
     public static final String NAMA_PENGGUNA = "Nama Pengguna";
+    public static final String NOMOR_TELEPON = "No. Telepon";
     public static final String KATA_SANDI = "Kata Sandi";
     public static final String KONFIRMASI_KATA_SANDI = "Konfirmasi Kata Sandi";
-    public static final String KATA_SANDI_BARU = "Kata Sandi Baru";
-    public static final String KATA_SANDI_LAMA = "Kata Sandi Lama";
     public static final String HAK_AKSES = "Hak Akses";
     public static final String PETUGAS = "Petugas";
     public static final String ADMINISTRATOR = "Administrator";
+    public static final String NAMA_BARU = "Nama Baru";
+    public static final String UBAH_NAMA = "Ubah Nama";
+    public static final String UBAH_NAMA_DESC
+            = "Perubahan nama akan diterapkan di akun Anda.";
+    public static final String NAMA_PENGGUNA_BARU = "Nama Pengguna Baru";
+    public static final String UBAH_NAMA_PENGGUNA = "Ubah Nama Pengguna";
+    public static final String UBAH_NAMA_PENGGUNA_DESC
+            = "Perubahan nama pengguna akan diterapkan di akun Anda.";
+    public static final String NOMOR_TELEPON_BARU = "No. Telepon Baru";
+    public static final String UBAH_NOMOR_TELEPON = "Ubah Nomor Telepon";
+    public static final String UBAH_NOMOR_TELEPON_DESC
+            = "Perubahan nomor telepon akan diterapkan di akun Anda.";
+    public static final String KATA_SANDI_BARU = "Sandi Baru";
+    public static final String KONFIRMASI_KATA_SANDI_BARU
+            = "Konfirmasi Sandi Baru";
+    public static final String UBAH_KATA_SANDI = "Ubah Sandi";
+    public static final String UBAH_KATA_SANDI_DESC
+            = "Untuk keamanan, pilih sandi yang kuat dan jangan gunakan lagi untuk akun lain.";
+    public static final String KERUMITAN_KATA_SANDI = "Kerumitan sandi";
+    public static final String KERUMITAN_KATA_SANDI_CONTENT
+            = "Gunakan sedikitnya 8 karakter. Jangan gunakan sandi dari situs lain atau sesuatu yang mudah ditebak seperti nama hewan peliharaan Anda.";
+
+    public static final String PROFIL = "Profil";
+    public static final String PROFIL_DESC
+            = "Info ini akan ditampilkan ketika Anda melakukan transaksi pembayaran.";
+    public static final String INFO_LAINNYA = "Info lainnya";
+    public static final String INFO_LAINNYA_DESC
+            = "Info ini tidak dapat dilihat oleh siapapun. Hanya Anda dan Administrator yang dapat melihat info ini.";
+
+    public static final String DIBUAT_PADA = "Dibuat pada";
+    public static final String TERAKHIR_MASUK = "Terakhir masuk";
+    public static final String TERAKHIR_UBAH_SANDI = "Terakhir sandi diubah";
+    public static final String STATUS = "Status";
 
     private Strings() {
     }
